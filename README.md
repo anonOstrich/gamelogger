@@ -28,4 +28,4 @@ Linkkejä:
 
 [Tietokantakaavio](https://github.com/anonOstrich/peliloki/tree/master/documentation/Tietokantakaavio.png)
 
-[Käyttötapaukset](https://github.com/anonOstrich/peliloki/tree/masterdocumentation/Käyttötapaukset.md)
+[Käyttötapaukset](https://github.com/anonOstrich/peliloki/tree/master/documentation/Käyttötapaukset.md)
