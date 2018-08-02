@@ -9,5 +9,6 @@ db = SQLAlchemy(app)
 
 from application import views
 from application.movies import models
+from application.movies import views
 
 db.create_all()
