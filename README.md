@@ -1,7 +1,7 @@
 peliloki
 ========
 
-Rekisteröityneet käyttäjät voivat kirjata pelaamiansa pelejä ja antaa näille tähti- ja tekstiarvion (vertaa elokuvien Letterboxd). He voivat myös lisätä peleille tageja, joiden perusteella he voivat tehdä omia pelilistojaan (esim. “Keskiajalle sijoittuvat”). Kirjautuneet käyttäjät voivat myös lisätä järjestelmään uusia pelejä ja näiden kuvauksia. Kirjautuneena pystyy myös reagoimaan muiden arvioihin: niistä voi näyttää pitävänsä tai päinvastoin. Reagointien määrä näkyy kaikille arvostelun yhteydessä.  
+Rekisteröityneet käyttäjät voivat kirjata pelaamiansa pelejä ja antaa näille tähti- ja tekstiarvion (vertaa elokuvien Letterboxd). He voivat myös lisätä peleille omia henkilökohtaisia tagejaan , joiden perusteella he voivat tehdä omia pelilistojaan (esim. “Keskiajalle sijoittuvat”). Kirjautuneet käyttäjät voivat myös lisätä järjestelmään uusia pelejä ja näiden kuvauksia. Kirjautuneena pystyy myös reagoimaan muiden arvioihin: niistä voi näyttää pitävänsä tai päinvastoin. Reagointien määrä näkyy kaikille arvostelun yhteydessä.  
 
 Kaikki sivuston käyttäjät pystyvät selaamaan tietokannassa olevia pelejä ja niihin liittyviä arvosteluja. Oletuksena etusivulla näytetään äskettäin lisättyjä arvosteluja. Pelejä voi etsiä esimerkiksi kehittäjän, nimen tai julkaisuvuoden mukaan. Klikkaamalla käyttäjätunnusta pääsee tutkailemaan tämän käyttäjän arvioimia pelejä ja tagien perusteella luotuja listoja.
 
@@ -26,6 +26,6 @@ Linkkejä:
 
 [Sovellus herokussa](https://peliloki.herokuapp.com/)
 
-[Tietokantakaavio](https://github.com/anonOstrich/peliloki/tree/master/documentation/Tietokantakaavio.svg)
+[Tietokantakaavio](https://github.com/anonOstrich/peliloki/tree/master/documentation/Tietokantakaavio.png)
 
 [Käyttötapaukset](https://github.com/anonOstrich/peliloki/tree/master/documentation/Käyttötapaukset.md)
