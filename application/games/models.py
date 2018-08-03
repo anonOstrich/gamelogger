@@ -6,9 +6,13 @@ class Game(db.Model):
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
     onupdate=db.func.current_timestamp())
 
-    name = db.Column(db.String(144), nullable=False)
-    done = db.Column(db.Boolean, nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    developer = db.Column(db.String(255), nullable=False)
+    year = db.Column(db.Integer, nullable=False) 
 
-    def __init__(self, name):
+
+    def __init__(self, name, developer, year):
         self.name = name
-        self.done = False
+        self.developer = developer
+        self.year = year
+

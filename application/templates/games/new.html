@@ -4,6 +4,9 @@
 <h1>Lisää uusi peli</h1>
 <form method="POST" action="{{ url_for('games_create') }}">
     Nimi: <input type="text" name="name" /><br>
+    Kehittäjä: <input type="text" name="developer" /> <br>
+    Julkaisuvuosi: <input type="text" name="year" /> <br>
+    <input type="submit" value="Lisää peli!" /> 
 </form>
 
 

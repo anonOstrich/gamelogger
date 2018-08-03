@@ -9,8 +9,8 @@ def games_form():
 
 @app.route("/games/", methods=["POST"])
 def games_create():                 
-    t = Game(request.form.get("name"))
-    db.session.add(t)
+    g = Game(request.form.get("name"), request.form.get("developer"), int(request.form.get("year")))
+    db.session.add(g)
     db.session.commit()
     
-    return "Jotain on tehty tiedoillasi ;)"
+    return "Peli on tallennettu järjestelmään!"
