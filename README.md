@@ -26,6 +26,6 @@ Linkkejä:
 
 [Sovellus herokussa](https://peliloki.herokuapp.com/)
 
-[Tietokantakaavio](https://github.com/anonOstrich/peliloki/tree/master/documentation/Tietokantakaavio.png)
+[Tietokantakaavio](https://github.com/anonOstrich/peliloki/tree/master/documentation/Tietokantakaavio.svg)
 
 [Käyttötapaukset](https://github.com/anonOstrich/peliloki/tree/master/documentation/Käyttötapaukset.md)
