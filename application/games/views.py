@@ -21,7 +21,7 @@ def games_set_completed(game_id):
 
 @app.route("/games/", methods=["POST"])
 def games_create():                 
-    g = Game(request.form.get("name"), request.form.get("developer"), int(request.form.get("year")))
+    g = Game(request.form.get("name"), request.form.get("developer"), request.form.get("description"),  int(request.form.get("year")))
     db.session.add(g)
     db.session.commit()
     
