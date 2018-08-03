@@ -11,13 +11,12 @@ class Movie(db.Model):
     year=db.Column(db.Integer, nullable=False)
     
     
-    # To be considered: synopsis, genre, tags, related reviews...
-    
-    def __init__(self, name, director, year, runtime):
-        self.name = name
-        self.director = director
-        self.year = year
-        self.runtime = runtime
+    # To be considered: synopsis, genre, tags, related reviews...    
+    def __init__(self):
+        self.name ="A"
+        self.director = "B"
+        self.year = 1990
+        self.runtime = 120
         
                        
     

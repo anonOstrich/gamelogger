@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1>Lisää uusi peli</h1>
+<form method="POST" action="{{ url_for('games_create') }}">
+    Nimi: <input type="text" name="name" /><br>
+</form>
+
+
+{% endblock %}

@@ -2,13 +2,13 @@ from flask import Flask
 app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movies.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///games.db"
 app.config["SQLALCHEMY_ECHO"] = True
 
 db = SQLAlchemy(app)
 
 from application import views
-from application.movies import models
-from application.movies import views
+from application.games import models
+from application.games import views
 
 db.create_all()
