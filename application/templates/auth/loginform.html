@@ -3,6 +3,7 @@
 {% block body %}
 {{ notfound_error }}
 <form method="POST" action="{{ url_for('auth_login') }}">
+    <input type="hidden" name="next_address" value="{{ request.args.get('next') }}" />
     <table>
         <tr>
             <td>{{ form.username.label }}</td>

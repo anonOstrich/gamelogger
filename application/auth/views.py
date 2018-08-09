@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user
 
 from application import app, db
@@ -22,7 +22,9 @@ def auth_login():
         return render_template("auth/loginform.html", form = form, notfound_error = "Virheellinen käyttäjätunnus tai salasana")
     
     login_user(user)
-    return redirect(url_for("index"))
+    # ohjataan sinne minne oltiin menossa tai etusivulle
+    next = request.form.get("next_address")
+    return redirect(next or url_for("index"))
           
 
 
