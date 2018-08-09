@@ -1,4 +1,6 @@
 from flask import render_template, request, redirect, url_for
+from flask_login import login_required
+
 from application import app, db
 from application.games.models import Game
 from application.games.forms import GameForm
@@ -6,6 +8,7 @@ from application.games.forms import GameForm
 
 
 @app.route("/games/new")
+@login_required
 def games_form():
     return render_template("games/new.html", form = GameForm())
 
@@ -15,6 +18,7 @@ def games_index():
     return render_template("games/list.html", games = Game.query.all())
 
 @app.route("/games/<game_id>", methods=["POST"])
+@login_required
 def games_set_completed(game_id):
     g = Game.query.get(game_id)
     g.completed = True
@@ -22,6 +26,7 @@ def games_set_completed(game_id):
     return redirect(url_for("games_index"))
 
 @app.route("/games/", methods=["POST"])
+@login_required
 def games_create():  
     form = GameForm(request.form)
     
