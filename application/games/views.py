@@ -33,8 +33,16 @@ def games_create():
     if not form.validate(): 
         return render_template("/games/new.html", form = form)
     
-    g = Game(form.name.data, form.developer.data, form.developer.description,  form.year.data)
+    g = Game(form.name.data, form.developer.data, form.description.data,  form.year.data)
     db.session.add(g)
     db.session.commit()
     
     return redirect(url_for("games_index"))
+
+@app.route("/games/<game_id>", methods=["GET"])
+def games_view(game_id): 
+    g = Game.query.get(game_id) 
+    if not g: 
+        return render_template("error.html", error = "Peliä ei ole olemassa")
+    return render_template("/games/single.html", game = g)
+    

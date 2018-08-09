@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>{{ game.name }}</h1>
+<ul>
+    <li>Kehittäjä: {{ game.developer }}</li>
+    <li>Julkaisuvuosi: {{ game.year }}</li>
+</ul>
+<p>{{ game.description }}</p>
+
+{% endblock %}
