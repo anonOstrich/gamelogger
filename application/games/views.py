@@ -1,11 +1,13 @@
-from application import app, db
 from flask import render_template, request, redirect, url_for
+from application import app, db
 from application.games.models import Game
+from application.games.forms import GameForm
+
 
 
 @app.route("/games/new")
-def games_form(): 
-    return render_template("games/new.html")
+def games_form():
+    return render_template("games/new.html", form = GameForm())
 
 
 @app.route("/games/", methods=["GET"])
@@ -20,8 +22,9 @@ def games_set_completed(game_id):
     return redirect(url_for("games_index"))
 
 @app.route("/games/", methods=["POST"])
-def games_create():                 
-    g = Game(request.form.get("name"), request.form.get("developer"), request.form.get("description"),  int(request.form.get("year")))
+def games_create():  
+    form = GameForm(request.form)
+    g = Game(form.name.data, form.developer.data, form.developer.description,  form.year.data)
     db.session.add(g)
     db.session.commit()
     

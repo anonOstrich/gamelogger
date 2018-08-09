@@ -3,14 +3,29 @@
 {% block body %}
 <h1>Lisää uusi peli</h1>
 <form method="POST" action="{{ url_for('games_create') }}">
-    Nimi: <input type="text" name="name" /><br>
-    Kehittäjä: <input type="text" name="developer" /> <br>
-    Julkaisuvuosi: <input type="text" name="year" /> <br>
-    <textarea name="description" rows="10" cols="30">
-    Kuvaus (max 500 merkkiä)
-    </textarea>
-    
-    <input type="submit" value="Lisää peli!" /> 
+    <table>
+        <tr>
+            <td>{{ form.name.label }} </td>
+            <td>{{ form.name }} </td>
+        </tr>
+        <tr>
+            <td>{{ form.developer.label }}</td>
+            <td>{{ form.developer }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.year.label }}</td>
+            <td>{{ form.year }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.description.label }}</td>
+            <td>{{ form.description }}</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Lisää peli!" />
+            </td>
+        </tr>
+    </table>
 </form>
 
 
