@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ notfound_error }}
+<form method="POST" action="{{ url_for('auth_login') }}">
+    <table>
+        <tr>
+            <td>{{ form.username.label }}</td>
+            <td>{{ form.username }}    </td>
+            <td>
+                <ul>
+                    {%for error in form.username.errors %}
+                    <li>{{ error }} </li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label }}</td>
+            <td>{{ form.password }} </td>
+            <td>
+                <ul>
+                {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="submit" value="Kirjaudu sisään" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+
+
+{% endblock %}

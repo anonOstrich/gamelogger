@@ -8,7 +8,11 @@ app.config["SQLALCHEMY_ECHO"] = True
 db = SQLAlchemy(app)
 
 from application import views
+
 from application.games import models
 from application.games import views
+
+from application.auth import models
+from application.auth import views
 
 db.create_all()
