@@ -24,6 +24,10 @@ def games_set_completed(game_id):
 @app.route("/games/", methods=["POST"])
 def games_create():  
     form = GameForm(request.form)
+    
+    if not form.validate(): 
+        return render_template("/games/new.html", form = form)
+    
     g = Game(form.name.data, form.developer.data, form.developer.description,  form.year.data)
     db.session.add(g)
     db.session.commit()
