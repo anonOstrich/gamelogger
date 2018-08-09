@@ -47,6 +47,7 @@ def games_view(game_id):
     return render_template("/games/single.html", game = g)
     
 @app.route("/games/<game_id>/modify", methods=["GET", "POST"])
+@login_required
 def games_modify(game_id):
     g = Game.query.get(game_id)
     if not g: 
@@ -69,9 +70,12 @@ def games_modify(game_id):
     db.session.commit()
     return redirect(url_for("index"))
 
-
-    
-def games_delete():
-    return ":)" 
+@app.route("/games/<game_id>/delete", methods=["POST"])
+@login_required
+def games_delete(game_id):
+    poistettava = Game.query.get(game_id)
+    db.session.delete(poistettava)
+    db.session.commit()
+    return redirect(url_for("index")) 
 
 

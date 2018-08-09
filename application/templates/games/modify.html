@@ -50,4 +50,8 @@
     </table>
 </form>
 
+<form method="POST" action="{{ url_for('games_delete', game_id = id) }}">
+    <input type="submit" value="Poista peli järjestelmästä" />
+</form>
+
 {% endblock %}
