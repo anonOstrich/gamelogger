@@ -2,12 +2,28 @@
 {% block body %}
 <h1>{{ game.name }}</h1> 
 {% if current_user.is_authenticated %}
-<a href="{{ url_for('games_modify', game_id=game.id) }}">Muokkaa pelin tietoja </a>
+<a href="{{ url_for('games_modify', game_id=game.id) }}">Muokkaa pelin tietoja </a></br>
+<a href="{{ url_for('reviews_create', game_id=game.id) }}">Arvioi peli</a>
 {% endif %}
 <ul>
     <li>Kehittäjä: {{ game.developer }}</li>
     <li>Julkaisuvuosi: {{ game.year }}</li>
 </ul>
 <p>{{ game.description }}</p>
+
+<table>
+    <tr>
+        <th>Arvio</th>
+        <th>Pistemäärä /10</th>
+        <th>Kirjoittaja</th>
+    </tr>
+    {% for review in reviews %}
+    <tr>
+        <td>{{ review.text }}</td>
+        <td>{{ review.points }}</td>
+        <td>{{ review.account.username }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}

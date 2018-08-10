@@ -24,6 +24,9 @@ from application.games import views
 from application.auth import models
 from application.auth import views
 
+from application.reviews import models
+from application.reviews import views
+
 #kirjautuminen
 from application.auth.models import User
 from os import urandom

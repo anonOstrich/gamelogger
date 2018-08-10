@@ -12,6 +12,7 @@ class Game(db.Model):
     year = db.Column(db.Integer, nullable=False) 
     completed=db.Column(db.Boolean, nullable=False)
 
+    reviews = db.relationship("Review", backref="game", lazy=True)
 
     def __init__(self, name, developer, description, year):
         self.name = name

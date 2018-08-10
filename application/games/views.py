@@ -4,6 +4,7 @@ from flask_login import login_required
 from application import app, db
 from application.games.models import Game
 from application.games.forms import GameForm
+from application.reviews.models import Review
 
 
 
@@ -42,9 +43,15 @@ def games_create():
 @app.route("/games/<game_id>", methods=["GET"])
 def games_view(game_id): 
     g = Game.query.get(game_id) 
+    reviews = Review.query.filter_by(game_id = game_id).all()
+    print("*****************")
+    for review in reviews:
+        print(review)
+    print("******************")
     if not g: 
         return render_template("error.html", error = "Peliä ei ole olemassa")
-    return render_template("/games/single.html", game = g)
+    return render_template("/games/single.html", game = g, reviews = reviews)
+
     
 @app.route("/games/<game_id>/modify", methods=["GET", "POST"])
 @login_required

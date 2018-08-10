@@ -24,7 +24,11 @@ def auth_login():
     login_user(user)
     # ohjataan sinne minne oltiin menossa tai etusivulle
     next = request.form.get("next_address")
-    return redirect(next or url_for("index"))
+    
+    if next == "None": 
+        return redirect(url_for("index"))
+    
+    return redirect(next)
           
 
 

@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<!-- Tähän tietoja pelistä, jota ollaan arvioimassa -->
+<h1>{{ game.name }} ( {{ game.year }} )</h1>
+
+<form method="POST" action="{{ url_for('reviews_create', game_id=game.id) }}">
+    <table>
+        <tr>
+            <td>{{ form.text.label }}</td>
+            <td>{{ form.text }}</td>
+            <td>
+                <ul>
+                    {% for error in form.text.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>{{ form.points.label }}</td>
+            <td>{{ form.points }}</td>
+            <td>
+                <ul>
+                    {% for error in form.points.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Tallenna arvostelu" /> </td>
+            <td><a href="{{ url_for('index') }}">Peruuta</a></td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
