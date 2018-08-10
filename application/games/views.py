@@ -18,13 +18,6 @@ def games_form():
 def games_index(): 
     return render_template("games/list.html", games = Game.query.all())
 
-@app.route("/games/<game_id>", methods=["POST"])
-@login_required
-def games_set_completed(game_id):
-    g = Game.query.get(game_id)
-    g.completed = True
-    db.session.commit()
-    return redirect(url_for("games_index"))
 
 @app.route("/games/", methods=["POST"])
 @login_required

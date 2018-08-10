@@ -22,13 +22,12 @@ def auth_login():
         return render_template("auth/loginform.html", form = form, notfound_error = "Virheellinen käyttäjätunnus tai salasana")
     
     login_user(user)
-    # ohjataan sinne minne oltiin menossa tai etusivulle
+    # ohjataan sinne minne oltiin menossa
     next = request.form.get("next_address")
+    if next != "None": 
+        return redirect(next)
     
-    if next == "None": 
-        return redirect(url_for("index"))
-    
-    return redirect(next)
+    return redirect(url_for("index"))
           
 
 
