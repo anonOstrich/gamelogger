@@ -23,8 +23,10 @@ Toimintoja:
   * Muiden käyttäjien seuraaminen(mahdollinen toteutettava ajan salliessa) 
 
 Testitunnus: testi 
+
 Tesisalasana: salasana
-Voit myös rekisteröidä oman testikäyttäjän. 
+
+Voit myös rekisteröidä oman testikäyttäjän. Älä käytä salasanoja, jotka ovat muualla käytössä tai joita et haluaisi muiden tietoon: ne tallennetaan tällä hetkellä sellaisinaan tietokantaan.
 
 Linkkejä: 
 
