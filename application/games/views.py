@@ -44,10 +44,6 @@ def games_create():
 def games_view(game_id): 
     g = Game.query.get(game_id) 
     reviews = Review.query.filter_by(game_id = game_id).all()
-    print("*****************")
-    for review in reviews:
-        print(review)
-    print("******************")
     if not g: 
         return render_template("error.html", error = "Peliä ei ole olemassa")
     return render_template("/games/single.html", game = g, reviews = reviews)
@@ -81,6 +77,7 @@ def games_modify(game_id):
 @login_required
 def games_delete(game_id):
     poistettava = Game.query.get(game_id)
+    db.session.query(Review).filter(Review.game_id == game_id).delete()
     db.session.delete(poistettava)
     db.session.commit()
     return redirect(url_for("index")) 

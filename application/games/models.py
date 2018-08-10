@@ -10,7 +10,6 @@ class Game(db.Model):
     developer = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(500), nullable=False)
     year = db.Column(db.Integer, nullable=False) 
-    completed=db.Column(db.Boolean, nullable=False)
 
     reviews = db.relationship("Review", backref="game", lazy=True)
 
@@ -19,6 +18,6 @@ class Game(db.Model):
         self.developer = developer
         self.description = description
         self.year = year
-        self.completed = False
+        
         
 
