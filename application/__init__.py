@@ -46,5 +46,9 @@ def load_user(user_id):
 
 try: 
     db.create_all()
+    from application.auth.models import User
+    u = User("Testi Käytäjä", "testi", "salasana")
+    db.session.add(u)
+    db.session.commit()
 except: 
     pass

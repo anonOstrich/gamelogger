@@ -22,6 +22,10 @@ Toimintoja:
   * Muiden arvioiden kommentoiminen (mahdollinen toteutettava ajan salliessa)
   * Muiden käyttäjien seuraaminen(mahdollinen toteutettava ajan salliessa) 
 
+Testitunnus: testi 
+Tesisalasana: salasana
+Voit myös rekisteröidä oman testikäyttäjän. 
+
 Linkkejä: 
 
 [Sovellus herokussa](https://peliloki.herokuapp.com/)
