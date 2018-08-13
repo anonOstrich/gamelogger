@@ -1,11 +1,7 @@
 from application import db
+from application.models import Base
 
-class Game(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
-    onupdate=db.func.current_timestamp())
-
+class Game(Base):
     name = db.Column(db.String(255), nullable=False)
     developer = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(500), nullable=False)

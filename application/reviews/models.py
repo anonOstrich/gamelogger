@@ -1,9 +1,7 @@
 from application import db
+from application.models import Base
 
-class Review(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    date_created=db.Column(db.DateTime, default=db.func.current_timestamp())
-    date_modified=db.Column(db.DateTime, default=db.func.current_timestamp())
+class Review(Base):
     
     text = db.Column(db.String(2000), nullable=False)
     points = db.Column(db.Integer, nullable=False)
