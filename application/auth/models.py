@@ -1,5 +1,6 @@
 from application import db 
 from application.models import Base
+from application.reviews.models import Review
 
 class User(Base):
 
@@ -15,6 +16,11 @@ class User(Base):
         self.name = name
         self.username = username
         self.password = password
+        
+        
+    def has_reviewed(self, game_id):
+        return Review.query.filter_by(account_id=self.id, game_id=game_id).first() is not None
+        
         
     def get_id(self):
         return self.id

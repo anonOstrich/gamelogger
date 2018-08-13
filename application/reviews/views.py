@@ -18,6 +18,8 @@ def reviews_create(game_id):
     if not form.validate(): 
         return render_template("reviews/new.html", form=form, game = game)
    
+    if current_user.has_reviewed(game_id):
+        return render_template("error.html", error="Et voi arvioida samaa peliä uudelleen!")
     
     review = Review(form.text.data, form.points.data)
     review.game_id = game_id

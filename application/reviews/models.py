@@ -1,5 +1,6 @@
 from application import db
 from application.models import Base
+from sqlalchemy.schema import UniqueConstraint
 
 class Review(Base):
     
@@ -9,8 +10,11 @@ class Review(Base):
     account_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable=False)
     game_id = db.Column(db.Integer, db.ForeignKey("game.id"), nullable=False)
     
+    one_review_rule = UniqueConstraint(account_id, game_id)
+    
     def __init__(self, text, points):
         self.text = text
         self.points = points
+    
     
     
