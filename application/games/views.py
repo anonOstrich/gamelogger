@@ -17,7 +17,7 @@ def games_form():
 
 @app.route("/games/", methods=["GET"])
 def games_index(): 
-    return render_template("games/list.html", games = Game.query.all())
+    return render_template("games/list.html", games = Game.query.all(), review_numbers = Game.find_all_number_of_reviews())
 
 
 @app.route("/games/", methods=["POST"])
