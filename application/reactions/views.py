@@ -23,5 +23,5 @@ def reactions_create(review_id):
     r.review_id = review_id
     db.session.add(r)
     db.session.commit()
-    return redirect(url_for("games_view"), game_id=Review.query.get(review_id).game_id)
+    return redirect(url_for("games_view", game_id=Review.query.get(review_id).game_id))
     

@@ -28,6 +28,7 @@ Olet jo arvioinut!!1
         <td>{{ review.points }}</td>
         <td>{{ review.account.username }}</td>
         <td>
+        {% if current_user.is_authenticated %}
             {% if current_user.has_reacted(review.id) %}
             Olet jo reagoinut
             {% else %}
@@ -36,6 +37,7 @@ Olet jo arvioinut!!1
                 <input type="submit" value="Reagoi" />
             </form>
             {% endif %}
+        {% endif %}
         </td>
     </tr>
     {% endfor %}
