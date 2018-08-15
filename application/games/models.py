@@ -27,6 +27,17 @@ class Game(Base):
             review_numbers[row[0]] = row[1]
             
         return review_numbers
+    
+    @staticmethod
+    def find_all_averages_of_reviews():
+        stmt = text("SELECT Game.id, AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id;")
+        res = db.engine.execute(stmt)
+        
+        review_averages = {}
+        
+        for row in res: 
+            review_averages[row[0]] = row[1]
+        return review_averages
         
         
         
