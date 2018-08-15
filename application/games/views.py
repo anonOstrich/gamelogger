@@ -57,7 +57,7 @@ def games_modify(game_id):
         form.year.data = g.year
         form.description.data = g.description
         form.developer.data = g.developer
-        return render_template("/games/modify.html", form = form, id=game_id)
+        return render_template("/games/modify.html", form = form, id  =game_id)
     
     form = GameForm(request.form)
     if not form.validate():
@@ -67,7 +67,7 @@ def games_modify(game_id):
     g.description = form.description.data
     g.developer = form.developer.data
     db.session.commit()
-    return redirect(url_for("index"))
+    return redirect(url_for("games_view", game_id = game_id))
 
 @app.route("/games/<game_id>/delete", methods=["POST"])
 @login_required
@@ -76,6 +76,6 @@ def games_delete(game_id):
     db.session.query(Review).filter(Review.game_id == game_id).delete()
     db.session.delete(poistettava)
     db.session.commit()
-    return redirect(url_for("index")) 
+    return redirect(url_for("games_index")) 
 
 

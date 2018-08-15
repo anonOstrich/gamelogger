@@ -23,6 +23,7 @@ def auth_login():
     
     login_user(user)
     # ohjataan sinne minne oltiin menossa
+    #todo? ohjataan ehkä sinne mistä klikattu "kirjaudu"?
     next = request.form.get("next_address")
     if next != "None": 
         return redirect(next)

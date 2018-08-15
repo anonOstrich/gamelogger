@@ -26,7 +26,7 @@ def reviews_create(game_id):
     review.account_id = current_user.id
     db.session().add(review)
     db.session().commit()    
-    return redirect(url_for("index"))
+    return redirect(url_for("games_view", game_id = game_id))
 
 
 @app.route("/review/<game_id>", methods=["GET"])
