@@ -36,7 +36,14 @@ class Game(Base):
         review_averages = {}
         
         for row in res: 
-            review_averages[row[0]] = row[1]
+            avg = row[1]
+            if avg is None: 
+                avg = ""
+            elif avg.is_integer():
+                avg = int(avg)
+            else:
+                avg = format(row[1], ".2f")
+            review_averages[row[0]] = avg
         return review_averages
         
         
