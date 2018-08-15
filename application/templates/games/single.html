@@ -20,12 +20,23 @@ Olet jo arvioinut!!1
         <th>Arvio</th>
         <th>Pistemäärä /10</th>
         <th>Kirjoittaja</th>
+        <th>Reagointi</th>
     </tr>
     {% for review in reviews %}
     <tr>
         <td>{{ review.text }}</td>
         <td>{{ review.points }}</td>
         <td>{{ review.account.username }}</td>
+        <td>
+            {% if current_user.has_reacted(review.id) %}
+            Olet jo reagoinut
+            {% else %}
+            <form method="POST" action="{{ url_for('reactions_create', review_id=review.id) }}">
+            {{ form.positivity }}
+                <input type="submit" value="Reagoi" />
+            </form>
+            {% endif %}
+        </td>
     </tr>
     {% endfor %}
 </table>

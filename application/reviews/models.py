@@ -12,6 +12,8 @@ class Review(Base):
     
     one_review_rule = UniqueConstraint(account_id, game_id)
     
+    reactions = db.relationship("Reaction", backref="review", lazy=True)
+    
     def __init__(self, text, points):
         self.text = text
         self.points = points
