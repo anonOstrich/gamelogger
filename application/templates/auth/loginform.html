@@ -3,37 +3,34 @@
 {% block body %}
 {{ notfound_error }}
 <form method="POST" action="{{ url_for('auth_login') }}">
-    <input type="hidden" name="next_address" value="{{ request.args.get('next') }}" />   
-    <table>
-        <tr>
-            <td>{{ form.username.label }}</td>
-            <td>{{ form.username }}    </td>
-            <td>
-                <ul>
-                    {%for error in form.username.errors %}
-                    <li>{{ error }} </li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label }}</td>
-            <td>{{ form.password }} </td>
-            <td>
-                <ul>
-                {% for error in form.password.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                <input type="submit" value="Kirjaudu sisään" />
-            </td>
-        </tr>
-    </table>
-</form>
+    <!--TODO: Heitä hidden field osaksi LoginForm-luokkaa -->
+    <input type="hidden" name="next_address" value="{{ request.args.get('next') }}" /> 
+    <div class="form-group">
+        {{ form.username.label(for="username") }}
+        {{ form.username(class="form-control", autofocus=True) }}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {%for error in form.username.errors %}
+            <li class="list-inline-item">{{ error }} </li>
+            {% endfor %}
+        </ul>      
+    </div>
+    
+    <div class="form-group">
+        {{ form.password.label(for="password", class="control-label") }}
+        {{ form.password(class="form-control") }}
+
+    </div>
+    <div class="container text-danger no-gutters">
+        <ul>
+        {% for error in form.password.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    <button type="submit" class="btn btn-info">Kirjaudu sisään</button>
+    </form>
 
 
 

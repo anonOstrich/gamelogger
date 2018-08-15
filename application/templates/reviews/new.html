@@ -5,35 +5,31 @@
 <h1>{{ game.name }} ( {{ game.year }} )</h1>
 
 <form method="POST" action="{{ url_for('reviews_create', game_id=game.id) }}">
-    <table>
-        <tr>
-            <td>{{ form.text.label }}</td>
-            <td>{{ form.text }}</td>
-            <td>
-                <ul>
-                    {% for error in form.text.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        
-        <tr>
-            <td>{{ form.points.label }}</td>
-            <td>{{ form.points }}</td>
-            <td>
-                <ul>
-                    {% for error in form.points.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Tallenna arvostelu" /> </td>
-            <td><a href="{{ url_for('index') }}">Peruuta</a></td>
-        </tr>
-    </table>
+
+    <div class="form-group">
+        {{ form.text.label(for="text") }}
+        {{ form.text(class="form-control") }}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.text.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}        
+        </ul>
+    </div>
+    
+    <div class="form-group">
+        {{ form.points.label(for="points") }}
+        {{ form.points(class="form-control") }}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.points.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}        
+        </ul>
+    </div>
+    <button type="input" class="btn btn-info">Tallenna arvostelu</button>
 </form>
 
 {% endblock %}
