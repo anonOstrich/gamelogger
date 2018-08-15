@@ -8,39 +8,39 @@
     </head>    
     <body>
     
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-        <a class="navbar-brand" href="{{ url_for('index') }}">Peliloki</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
+<nav class="navbar navbar-expand-md navbar-dark bg-primary mb-4">
+    <a class="navbar-brand" href="{{ url_for('index') }}">Peliloki</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('games_index') }}">Listaa pelit</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('games_form') }}">Lisää peli</a>
+            </li>
+        </ul>
+        <div class="form-inline mt-2 mt-md-0">  
+    
+            {% if current_user.is_authenticated %}
+            <p>
+                Kirjautunut nimellä {{ current_user.name }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+            </p>
+            {% else %}
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('games_index') }}">Listaa pelit</a>
+                    <a  class="nav-link" href="{{ url_for('auth_register') }}">Rekisteröidy</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('games_form') }}">Lisää peli</a>
+                    <a class="nav-link" href="{{ url_for('auth_login') }}">Kirjaudu</a>
                 </li>
             </ul>
-            <div class="form-inline mt-2 mt-md-0">  
-    
-                {% if current_user.is_authenticated %}
-                <p>
-                    Kirjautunut nimellä {{ current_user.name }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
-                </p>
-                {% else %}
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a  class="nav-link" href="{{ url_for('auth_register') }}">Rekisteröidy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth_login') }}">Kirjaudu</a>
-                    </li>
-                </ul>
-                {% endif %}
-            </div>
-        </div>    
-    </nav>
+            {% endif %}
+        </div>
+    </div>    
+</nav>
     
     
     <main role="main" class="container">
