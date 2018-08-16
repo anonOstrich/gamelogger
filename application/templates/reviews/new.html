@@ -18,10 +18,16 @@
         </ul>
     </div>
     
-    <div class="form-group">
-        {{ form.points.label(for="points") }}
-        {{ form.points(class="form-control") }}
+    <div>
+        {{ form.points.label(for="points")}}
     </div>
+    {% for point in form.points %}
+        <div class="form-check form-check-inline">
+        {{ point(class="form-check-input") }}
+        {{ point.label(class="form-check-label") }}
+        </div>
+    {% endfor %}    
+    
     <div class="container text-danger">
         <ul class="list-inline">
             {% for error in form.points.errors %}
@@ -29,6 +35,8 @@
             {% endfor %}        
         </ul>
     </div>
+    
+    
     <button type="input" class="btn btn-info">Tallenna arvostelu</button>
 </form>
 

@@ -1,6 +1,7 @@
 from application import db
 from application.models import Base
 from sqlalchemy.sql import text
+import os
 
 class Game(Base):
     name = db.Column(db.String(255), nullable=False)
