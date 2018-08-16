@@ -37,9 +37,11 @@ class Game(Base):
         
         for row in res: 
             avg = row[1]
+            
             if avg is None: 
                 avg = ""
-            elif avg.is_integer():
+            # PostgreSQL:llä palautuskeskiarvojen tyyppi on decimal, jolla ei ole metodia is_integer()
+            elif (not os.environ.get("HEROKU")) and avg.is_integer():
                 avg = int(avg)
             else:
                 avg = format(row[1], ".2f")
