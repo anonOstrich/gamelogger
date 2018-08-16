@@ -4,7 +4,7 @@
 {% if current_user.is_authenticated %}
 <a href="{{ url_for('games_modify', game_id=game.id) }}">Muokkaa pelin tietoja </a></br>
 {% if current_user.has_reviewed(game.id)%}
-Olet jo arvioinut!!1
+Olet jo arvioinut
 {% else %}
 <a href="{{ url_for('reviews_create', game_id=game.id) }}">Arvioi peli</a>
 {% endif %}
