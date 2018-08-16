@@ -2,7 +2,8 @@
 
 {% block body %}
 
-<table>
+<table class="table table-striped">
+    <thead class="thead-dark">
     <tr>
         <th>Peli</th>
         <th>Kehittäjä</th>
@@ -10,6 +11,8 @@
         <th>Arvioiden lukumäärä</th>
         <th>Arvioiden keskiarvo</th>
     </tr>
+    </thead>
+    <tbody>
     
     {% for game in games %}
     <tr>
@@ -20,6 +23,7 @@
         <td>{{ review_averages[game.id] }}</td>
     </tr>
     {% endfor %}
+    </tbody>
 
 </table>
 

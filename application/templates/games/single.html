@@ -15,32 +15,51 @@ Olet jo arvioinut
 </ul>
 <p>{{ game.description }}</p>
 
-<table>
-    <tr>
-        <th>Arvio</th>
-        <th>Pistemäärä /10</th>
-        <th>Kirjoittaja</th>
-        <th>Reagointi</th>
-    </tr>
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Arvio</th>
+            <th>Pistemäärä /10</th>
+            <th>Kirjoittaja</th>
+            <th>Reagointi</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for review in reviews %}
     <tr>
         <td>{{ review.text }}</td>
         <td>{{ review.points }}</td>
         <td>{{ review.account.username }}</td>
         <td>
+
+
         {% if current_user.is_authenticated %}
             {% if current_user.has_reacted(review.id) %}
             Olet jo reagoinut
             {% else %}
-            <form method="POST" action="{{ url_for('reactions_create', review_id=review.id) }}">
-            {{ form.positivity }}
-                <input type="submit" value="Reagoi" />
-            </form>
+            
+                <form class="form-inline" method="POST" action="{{ url_for('reactions_create', review_id=review.id) }}">
+                    {% for subfield in form.positivity %}
+                    
+                    <div class="form-group">
+                        <!--  Alla oleva värin päättäminen on ehkä aika hack, sillä se perustuu täysin ReactionFormin rakenteeseen. 
+                              Jos ko. luokkaa muutetaan, joutuu löytämään uuden ratkaisun...   -->
+                        <button type="submit" class="btn btn-{{["danger", "success"][subfield.data] }}" value="{{ subfield.data }}" name="{{ subfield.name }}">
+                            {{ subfield.label.text }}
+                        </button>
+                    </div>
+                    
+                    {% endfor %}
+                </form>
+            
             {% endif %}
         {% endif %}
+
+
         </td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}

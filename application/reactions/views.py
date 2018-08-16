@@ -12,8 +12,11 @@ from application.reviews.models import Review
 @login_required
 def reactions_create(review_id):
     # validate that review exists. Perhaps Review.exists(game_id)
-    form = ReactionForm(request.form)    
-    if not form.validate():
+    form = ReactionForm(request.form)
+    validates = form.validate()
+    print("-----------------------------------------------------")
+    print(validates)
+    if not validates:
         return redirect(url_for("games_view", game_id=Review.query.get(review_id).game_id))
     r = Reaction(form.positivity.data)
     r.account_id = current_user.id
