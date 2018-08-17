@@ -4,4 +4,35 @@
 <h1>Peliloki</h1>
 <p>Tervetuloa! Sivuilla voit selata tietokannan pelejä ja niiden arvioita. Rekisteröitymällä käyttäjäksi voi kirjoittaa omia arvosteluja ja pitää samalla kirjaa pelaamistasi peleistä. Sivusto on työn alla, joten ominaisuuksien puutteellisuus on todennäköisesti tiedossa...
 </p>
+
+<div class="container">
+<div class="row">
+{% if current_user.is_authenticated %}
+<div class="col">
+Hei {{current_user.name }}, tässä pelit joita et ole arvioinut (kenties löydät jotain mieluista)
+
+    <div class="container list-group list-group-flush">
+    {% for game in unreviewed_games %}
+        <a class="list-group-item list-group-item-action" href="{{ url_for('games_view', game_id=game.id) }}">{{ game.name }}</a>
+    {% endfor %}
+
+    </div>
+</div>
+{% endif %}
+
+{% if users is defined %}
+<div class="col">
+Käyttäjät, jotka eivät ole vielä arvioineet pelejä:
+    <div class="container">
+    <ul class="list-group list-group-flush">
+        {% for user in users %}
+            <li class="list-group-item">{{ user.username }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+</div>
+{% endif %}
+</div>
+</div>
+
 {% endblock %}

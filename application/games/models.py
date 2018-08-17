@@ -48,6 +48,19 @@ class Game(Base):
                 avg = format(row[1], ".2f")
             review_averages[row[0]] = avg
         return review_averages
+    
+    @staticmethod
+    def find_unreviewed_games(user_id):
+        stmt = text("SELECT DISTINCT Game.id, Game.name FROM Game"
+                    " WHERE Game.id NOT IN (SELECT Game.id FROM Game JOIN Review ON Game.id = Review.game_id"
+                    " WHERE Review.account_id = :user_id); "
+                      ).params(user_id=user_id)
+        res=db.engine.execute(stmt)
+
+        games_info = []
+        for row in res:
+            games_info.append({"id":row[0], "name":row[1]})
+        return games_info
         
         
         

@@ -2,6 +2,7 @@ from application import db
 from application.models import Base
 from application.reviews.models import Review
 from application.reactions.models import Reaction
+from sqlalchemy.sql import text
 
 class User(Base):
 
@@ -26,6 +27,16 @@ class User(Base):
     def has_reacted(self, review_id):
         return Reaction.query.filter_by(account_id=self.id, review_id=review_id).first() is not None
     
+    @staticmethod
+    def find_users_with_no_reviews():
+        stmt = text("SELECT Account.username FROM Account"
+                    " WHERE Account.id NOT IN (SELECT DISTINCT Review.account_id FROM Review);")
+
+        res = db.engine.execute(stmt)
+        users=[]
+        for row in res:
+            users.append({"username": row[0]})
+        return users
         
     def get_id(self):
         return self.id
