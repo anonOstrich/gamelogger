@@ -21,7 +21,7 @@ class Reaction(Base):
     # koska sum(positive) = lkm(positive), lkm(negatiiviset) = lkm(positive) - sum(positive)
     @staticmethod
     def find_all_reactions_for_reviews_of_game(game_id):
-        stmt = text("SELECT Review.id, SUM(Reaction.positive), COUNT(Reaction.positive)"
+        stmt = text("SELECT Review.id, SUM(CASE WHEN Reaction.positive THEN 1 ELSE 0 END), COUNT(Reaction.positive)"
                     " FROM Review LEFT JOIN Reaction ON Review.id = Reaction.review_id"
                     " WHERE Review.game_id = :game_id GROUP BY Review.id"
                     " HAVING COUNT(Reaction.positive) > 0;").params(game_id=game_id)
@@ -34,8 +34,7 @@ class Reaction(Base):
             num_positives = row[1]
             num_negatives = row[2] - num_positives
             result[rev_id] = (num_positives, num_negatives)
-            print("*********************************")
-            print(result[rev_id])
+
         
         return result
 
