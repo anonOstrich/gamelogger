@@ -23,7 +23,7 @@ class Reaction(Base):
     def find_all_reactions_for_reviews_of_game(game_id):
         stmt = text("SELECT Review.id, SUM(CASE WHEN Reaction.positive THEN 1 ELSE 0 END), COUNT(Reaction.positive)"
                     " FROM Review LEFT JOIN Reaction ON Review.id = Reaction.review_id"
-                    " WHERE Review.game_id = :game_id GROUP BY Review.id HAVING COUNT(Reaction.positive)").params(game_id=game_id)
+                    " WHERE Review.game_id = :game_id GROUP BY Review.id HAVING COUNT(Reaction.positive) > 0").params(game_id=game_id)
         res = db.engine.execute(stmt)
 
         result = {}
