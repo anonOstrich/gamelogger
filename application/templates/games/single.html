@@ -1,20 +1,37 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>{{ game.name }}</h1> 
-{% if current_user.is_authenticated %}
-<a href="{{ url_for('games_modify', game_id=game.id) }}">Muokkaa pelin tietoja </a></br>
-{% if current_user.has_reviewed(game.id)%}
-Olet jo arvioinut
-{% else %}
-<a href="{{ url_for('reviews_create', game_id=game.id) }}">Arvioi peli</a>
-{% endif %}
-{% endif %}
-<ul>
-    <li>Kehittäjä: {{ game.developer }}</li>
-    <li>Julkaisuvuosi: {{ game.year }}</li>
-</ul>
-<p>{{ game.description }}</p>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h1>{{ game.name }} ({{ game.year }})</h1> 
 
+            <ul>
+                <li>Kehittäjä: {{ game.developer }}</li>
+            </ul>
+
+            
+            <div class="container">
+                {{ game.description }}
+            </div>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('games_modify', game_id=game.id) }}">Muokkaa pelin tietoja </a>
+            {% endif %}
+        </div>
+
+        <div class="col-sm align-self-center">
+            {% if current_user.is_authenticated %}    
+                {% if current_user.has_reviewed(game.id)%}
+                    Olet jo arvioinut
+                {% else %}
+                    <a href="{{ url_for('reviews_create', game_id=game.id) }}">
+                        <button class="btn btn-primary btn-lg btn-block">Arvioi peli</button>
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="container">
 <table class="table table-striped">
     <thead class="thead-dark">
         <tr>
@@ -71,5 +88,5 @@ Olet jo arvioinut
     {% endfor %}
     </tbody>
 </table>
-
+</div>
 {% endblock %}
