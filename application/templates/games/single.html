@@ -21,7 +21,10 @@ Olet jo arvioinut
             <th>Arvio</th>
             <th>Pistemäärä /10</th>
             <th>Kirjoittaja</th>
-            <th>Reagointi</th>
+            <th>Reagoinnnit</th>
+            {% if current_user.is_authenticated %}
+            <th>Reagoi</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -31,9 +34,15 @@ Olet jo arvioinut
         <td>{{ review.points }}</td>
         <td>{{ review.account.username }}</td>
         <td>
-
-
+            {% if reactions[review.id] is defined %}
+                <p>Positiivisia/negatiivisia reaktioita: {{ reactions[review.id][0] }}/{{ reactions[review.id][1] }} </p>
+            {% endif %}
+        </td>
         {% if current_user.is_authenticated %}
+        <td>
+
+
+        
             {% if current_user.has_reacted(review.id) %}
             Olet jo reagoinut
             {% else %}
@@ -53,10 +62,11 @@ Olet jo arvioinut
                 </form>
             
             {% endif %}
-        {% endif %}
+        
 
 
         </td>
+        {% endif %}
     </tr>
     {% endfor %}
     </tbody>

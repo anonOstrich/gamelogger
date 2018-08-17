@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, validators
 
 class LoginForm(FlaskForm): 
     username = StringField("Käyttäjätunnus",  [validators.Length(min=1, max=32, message="Tunnuksen pituuden oltava 1-32")])
-    password = PasswordField("Salasana", [validators.InputRequired(message="Ei voi olla tyhjä")])    
+    password = PasswordField("Salasana", [validators.InputRequired(message="Ei voi olla tyhjä"), validators.Length(max=32, message="Liian pitkä salasana")])    
     
     class Meta: 
         csrf = False

@@ -5,6 +5,7 @@ from application import app, db
 from application.games.models import Game
 from application.games.forms import GameForm
 from application.reviews.models import Review
+from application.reactions.models import Reaction
 from application.reactions.forms import ReactionForm
 
 
@@ -42,7 +43,8 @@ def games_view(game_id):
     form = ReactionForm()
     if not g: 
         return render_template("error.html", error = "Peliä ei ole olemassa")
-    return render_template("/games/single.html", game = g, reviews = reviews, form = form )
+    reactions = Reaction.find_all_reactions_for_reviews_of_game(game_id)
+    return render_template("/games/single.html", game = g, reviews = reviews, form = form, reactions = reactions)
 
     
 @app.route("/games/<game_id>/modify", methods=["GET", "POST"])
