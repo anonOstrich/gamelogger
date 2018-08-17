@@ -22,6 +22,8 @@ Toimintoja:
   * Muiden arvioiden kommentoiminen (mahdollinen toteutettava ajan salliessa)
   * Muiden käyttäjien seuraaminen(mahdollinen toteutettava ajan salliessa) 
 
+Sovelluksen monimutkaisempia yhteenvetokyselyitä ovat esimerkiksi etusivun arvioita tekemättömien käyttäjien esittäminen ja myös kirjautuneille käyttäjille näytettävä lista peleistä, joita kyseinen käyttäjä ei ole vielä arvioinut. Myös pelin yksittäisellä sivulla esitettävät arviot saattavat täyttää vaatimukset (/application/reactions/models.py, metodi find_all_reactions_for_reviews_of_game)
+
 Testitunnus: testi 
 
 Tesisalasana: salasana
