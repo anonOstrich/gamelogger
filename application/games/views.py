@@ -75,6 +75,9 @@ def games_modify(game_id):
 @login_required
 def games_delete(game_id):
     poistettava = Game.query.get(game_id)
+    if not poistettava: 
+        return render_template("error.html", error = "Peliä ei ole tietokannassa")
+    Reaction.delete_reactions_relating_to_game(game_id)
     db.session.query(Review).filter(Review.game_id == game_id).delete()
     db.session.delete(poistettava)
     db.session.commit()

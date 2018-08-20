@@ -12,6 +12,16 @@ class Reaction(Base):
     
     def __init__(self, positive):
         self.positive = positive
+
+    @staticmethod
+    def delete_reactions_relating_to_game(game_id):
+        stmt = text("DELETE FROM Reaction WHERE review_id IN"
+                    " (SELECT id FROM Review WHERE game_id=:game_id);").params(game_id=game_id)
+        res = db.engine.execute(stmt)
+        print("------------------------------------")
+        print(res)
+        res.close()
+
         
 
 
