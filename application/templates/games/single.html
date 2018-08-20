@@ -53,7 +53,7 @@
     <tbody>
     {% for review in reviews %}
     <tr>
-        <td>{{ review.text }}</td>
+        <td>{{ review.text }} <a href="{{ url_for('reviews_modify', review_id=review.id) }}"><button class="btn btn-success">Muokkaa arviota</button></a></td>
         <td>{{ review.points }}</td>
         <td>{{ review.account.username }}</td>
         <td>
