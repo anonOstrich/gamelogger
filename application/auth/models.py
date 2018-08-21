@@ -16,7 +16,7 @@ class User(Base):
     
     reviews = db.relationship("Review", backref="account", lazy=True)
     reactions = db.relationship("Reaction", backref="account", lazy=True)
-    userroles = db.relationship("UserRole", backref="account", lazy=True)
+    user_roles = db.relationship("UserRole", backref="account", lazy=True)
     
     def __init__(self, name, username, password): 
         self.name = name
@@ -53,10 +53,20 @@ class User(Base):
     def is_authenticated(self): 
         return True
 
+    def has_role(self, role_name):
+        roles = self.roles()
+        for role in roles:
+            if role.name == role_name:
+                return True
+        return False
+    
+    def roles(self):
+        return Role.query.join(Role.user_roles).filter_by(account_id=self.id).all()
+
 
 class Role(Base):
     name = db.Column(db.String(64), nullable=False)
-    userRoles = db.relationship("UserRole", backref="role", lazy = True)
+    user_roles = db.relationship("UserRole", backref="role", lazy = True)
 
 
     def __init__(self, name):

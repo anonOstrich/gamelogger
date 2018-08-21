@@ -25,7 +25,6 @@ login_manager.setup_app(app)
 login_manager.login_view = "auth_login"
 login_manager.login_message = "Kirjaudu sisään käyttääksesi toimintoa"
 
-#from application.auth.models import Role
 # roolitoiminnallisuus
 from functools import wraps
 from application.auth.models import Role
@@ -69,6 +68,9 @@ from application.reviews import views
 
 from application.reactions import models
 from application.reactions import views
+
+from application.genres import models
+from application.genres import views
 
 from application.auth.models import User, UserRole
 
