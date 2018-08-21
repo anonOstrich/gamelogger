@@ -61,10 +61,19 @@ class Role(Base):
 
     def __init__(self, name):
         self.name = name
+    
+    @staticmethod
+    def find_roles_for_user(user_id):
+        stmt = text("SELECT DISTINCT Role.name FROM Role JOIN User_role"
+                    " ON Role.id = User_role.role_id WHERE User_role.account_id = :user_id").params(user_id=user_id)
+
+        res = db.engine.execute(stmt)
+        roles = []
+        for row in res: 
+            roles.append(row[0])
+        return roles
 
 
-
-# aloitusarvot, koska ei voi olla null luodessa (tietokannan alustamisessa)
 class UserRole(Base):
     account_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable = False)
     role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable = False)

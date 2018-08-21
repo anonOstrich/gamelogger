@@ -1,8 +1,7 @@
-#flask
 from flask import Flask
 app = Flask(__name__)
 
-#tietokanta
+# tietokanta ja ORM
 from flask_sqlalchemy import SQLAlchemy 
 import os
 
@@ -15,7 +14,48 @@ else:
 
 db = SQLAlchemy(app)
 
-#oma sovellus
+# kirjautumistoiminnallisuus
+from os import urandom
+app.config["SECRET_KEY"] = urandom(32)
+
+from flask_login import LoginManager, current_user
+login_manager = LoginManager()
+login_manager.setup_app(app)
+
+login_manager.login_view = "auth_login"
+login_manager.login_message = "Kirjaudu sisään käyttääksesi toimintoa"
+
+#from application.auth.models import Role
+# roolitoiminnallisuus
+from functools import wraps
+from application.auth.models import Role
+
+def login_required(role="ANY"):    
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            if not current_user.is_authenticated:
+                return login_manager.unauthorized()
+            
+            unauthorized = False
+
+            if role != "ANY":
+                unauthorized = True
+            
+            for user_role in Role.find_roles_for_user(current_user.id):
+                if user_role == role:
+                    unauthorized = False
+                    break
+            
+            if unauthorized: 
+                return login_manager.unauthorized()
+            
+            return fn(*args, **kwargs)
+        return decorated_view
+    return wrapper
+
+
+# ladataan sovelluksen toiminnallisuus
 from application import views
 
 from application.games import models
@@ -30,23 +70,16 @@ from application.reviews import views
 from application.reactions import models
 from application.reactions import views
 
-#kirjautuminen
-from application.auth.models import User, Role, UserRole
-from os import urandom
-app.config["SECRET_KEY"] = urandom(32)
+from application.auth.models import User, UserRole
 
-from flask_login import LoginManager
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-login_manager.login_view = "auth_login"
-login_manager.login_message = "Rekisteröidy tai kirjaudu sisään käyttääksesi toimintoa"
+# kirjautumistoiminnallisuutta lisää
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
 
 
+# tietokannan luonti
 try: 
     db.create_all()
     # Alustetaan tietokanta jos sitä ei ole vielä luotu 

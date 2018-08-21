@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_required
+from flask_login import current_user
 
-from application import app, db
+from application import app, db, login_required
 from application.games.models import Game
 from application.games.forms import GameForm
 from application.reviews.models import Review
@@ -11,7 +11,7 @@ from application.reactions.forms import ReactionForm
 
 
 @app.route("/games/new")
-@login_required
+@login_required()
 def games_form():
     return render_template("games/new.html", form = GameForm())
 
@@ -23,7 +23,7 @@ def games_index():
 
 
 @app.route("/games/", methods=["POST"])
-@login_required
+@login_required()
 def games_create():  
     form = GameForm(request.form)
     
@@ -48,7 +48,7 @@ def games_view(game_id):
 
     
 @app.route("/games/<game_id>/modify", methods=["GET", "POST"])
-@login_required
+@login_required(role="ADMIN")
 def games_modify(game_id):
     g = Game.query.get(game_id)
     if not g: 
@@ -72,7 +72,7 @@ def games_modify(game_id):
     return redirect(url_for("games_view", game_id = game_id))
 
 @app.route("/games/<game_id>/delete", methods=["POST"])
-@login_required
+@login_required(role="ADMIN")
 def games_delete(game_id):
     poistettava = Game.query.get(game_id)
     if not poistettava: 

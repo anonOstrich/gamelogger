@@ -1,14 +1,14 @@
 from flask import redirect, render_template, request, url_for
-from flask_login import current_user, login_required
+from flask_login import current_user
 
-from application import app, db
+from application import app, db, login_required
 from application.reviews.models import Review 
 from application.reviews.forms import ReviewForm
 from application.games.models import Game
 
 
 @app.route("/review/<game_id>", methods=["POST"])
-@login_required
+@login_required()
 def reviews_create(game_id):
     form = ReviewForm(request.form)
     game = Game.query.get(game_id)
@@ -30,13 +30,13 @@ def reviews_create(game_id):
 
 
 @app.route("/review/<game_id>", methods=["GET"])
-@login_required
+@login_required()
 def reviews_show(game_id):
     return render_template("reviews/new.html", form = ReviewForm(), game = Game.query.get(game_id))
 
 #TODO: vain admin (ja kirjoittaja jonkin aikaa lisäämisen jälkeen?) pystyy muokkaamaan
 @app.route("/<review_id>/modify", methods=["GET", "POST"])
-@login_required
+@login_required(role="ADMIN")
 def reviews_modify(review_id):
     r = Review.query.get(review_id)
     if not r: 
