@@ -31,7 +31,7 @@ from application.reactions import models
 from application.reactions import views
 
 #kirjautuminen
-from application.auth.models import User
+from application.auth.models import User, Role, UserRole
 from os import urandom
 app.config["SECRET_KEY"] = urandom(32)
 
@@ -49,9 +49,18 @@ def load_user(user_id):
 
 try: 
     db.create_all()
-    from application.auth.models import User
-    u = User("Testi Käytäjä", "testi", "salasana")
-    db.session.add(u)
+    # Alustetaan tietokanta jos sitä ei ole vielä luotu 
+    u = User("Urho Sydänkarhu", "otso", "mesikammen")
+    admin_role = Role("ADMIN") 
+    default_role = Role("DEFAULT") 
+    db.session.add_all((u, admin_role, default_role))
+    db.session.commit()
+    # vasta nyt pääavaimet on luotu
+    ur = UserRole() 
+    ur.account_id = u.id
+    ur.role_id = admin_role.id
+    #luodaan oletusrooli valmiiksi tietokantaan
+    db.session.add(ur)
     db.session.commit()
 except: 
     pass

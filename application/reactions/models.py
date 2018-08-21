@@ -18,8 +18,6 @@ class Reaction(Base):
         stmt = text("DELETE FROM Reaction WHERE review_id IN"
                     " (SELECT id FROM Review WHERE game_id=:game_id);").params(game_id=game_id)
         res = db.engine.execute(stmt)
-        print("------------------------------------")
-        print(res)
         res.close()
 
         

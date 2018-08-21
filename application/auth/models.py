@@ -4,6 +4,8 @@ from application.reviews.models import Review
 from application.reactions.models import Reaction
 from sqlalchemy.sql import text
 
+import traceback
+
 class User(Base):
 
     __tablename__ = "account"
@@ -14,6 +16,7 @@ class User(Base):
     
     reviews = db.relationship("Review", backref="account", lazy=True)
     reactions = db.relationship("Reaction", backref="account", lazy=True)
+    userroles = db.relationship("UserRole", backref="account", lazy=True)
     
     def __init__(self, name, username, password): 
         self.name = name
@@ -49,3 +52,19 @@ class User(Base):
     
     def is_authenticated(self): 
         return True
+
+
+class Role(Base):
+    name = db.Column(db.String(64), nullable=False)
+    userRoles = db.relationship("UserRole", backref="role", lazy = True)
+
+
+    def __init__(self, name):
+        self.name = name
+
+
+
+# aloitusarvot, koska ei voi olla null luodessa (tietokannan alustamisessa)
+class UserRole(Base):
+    account_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable = False)
+    role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable = False)

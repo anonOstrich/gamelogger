@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user
 
 from application import app, db
-from application.auth.models import User
+from application.auth.models import Role, User, UserRole
 from application.auth.forms import LoginForm, RegisterForm
 
 
@@ -50,6 +50,11 @@ def auth_register():
     try: 
         user = User(form.name.data, form.username.data, form.password.data)
         db.session.add(user)
+        db.session.commit()
+        user_role = UserRole()
+        user_role.account_id = user.id
+        user_role.role_id = Role.query.filter_by(name="DEFAULT").first().id
+        db.session.add(user_role)
         db.session.commit()
     except: 
         return render_template("/auth/registerform.html", form = form, username_error = "Käyttäjänimi " + form.username.data + " on jo käytössä!")
