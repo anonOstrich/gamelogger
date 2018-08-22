@@ -8,12 +8,15 @@ from application.reviews.models import Review
 from application.reactions.models import Reaction
 from application.reactions.forms import ReactionForm
 
+from application.genres.models import Genre, GameGenre
+from application.genres.forms import GenreSelectionForm
+
 
 
 @app.route("/games/new")
 @login_required()
 def games_form():
-    return render_template("games/new.html", form = GameForm())
+    return render_template("games/new.html", game_form = GameForm(), genre_form = GenreSelectionForm())
 
 
 @app.route("/games/", methods=["GET"])
@@ -25,15 +28,28 @@ def games_index():
 @app.route("/games/", methods=["POST"])
 @login_required()
 def games_create():  
-    form = GameForm(request.form)
+
+    # testataan osaavatko konstruktorit poimia vain oleelliset tiedot
+    game_form = GameForm(request.form)
+    genre_form = GenreSelectionForm(request.form)
     
-    if not form.validate(): 
-        return render_template("/games/new.html", form = form)
+    if not (game_form.validate() and genre_form.validate()): 
+        return render_template("/games/new.html", game_form = game_form, genre_form = genre_form)
     
-    g = Game(form.name.data, form.developer.data, form.description.data,  form.year.data)
-    db.session.add(g)
+
+    game = Game(game_form.name.data, game_form.developer.data, game_form.description.data,
+                game_form.year.data)
+    db.session.add(game)
     db.session.commit()
-    
+
+    game_genres = []
+    for g_id in genre_form.genre_ids.data:
+        game_genre = GameGenre()
+        game_genre.game_id = game.id
+        game_genre.genre_id = g_id
+        game_genres.append(game_genre)   
+    db.session.add_all(game_genres)
+    db.session.commit()
     return redirect(url_for("games_index"))
 
 @app.route("/games/<game_id>", methods=["GET"])
@@ -44,7 +60,9 @@ def games_view(game_id):
     if not g: 
         return render_template("error.html", error = "Peliä ei ole olemassa")
     reactions = Reaction.find_all_reactions_for_reviews_of_game(game_id)
-    return render_template("/games/single.html", game = g, reviews = reviews, form = form, reactions = reactions)
+    genres = Genre.query.join(Genre.game_genres).filter(GameGenre.game_id==game_id).all()
+    return render_template("/games/single.html", game = g, reviews = reviews, form = form,
+                             reactions = reactions, genres = genres)
 
     
 @app.route("/games/<game_id>/modify", methods=["GET", "POST"])

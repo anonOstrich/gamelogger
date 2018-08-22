@@ -1,56 +1,54 @@
-{% extends "layout.html" %}
-
-{% block body %}
+{% extends "layout.html" %} {% block body %}
 <h1>Lisää uusi peli</h1>
 <form method="POST" action="{{ url_for('games_create') }}">
 
     <div class="form-group">
-        {{ form.name.label(for="name") }}
-        {{ form.name(class="form-control", autofocus=True) }}
+        {{ game_form.name.label(for="name") }} {{ game_form.name(class="form-control", autofocus=True) }}
     </div>
     <div class="container text-danger">
         <ul class="list-inline">
-            {% for error in form.name.errors %}
+            {% for error in game_form.name.errors %}
             <li>{{ error }}</li>
-            {% endfor %}        
+            {% endfor %}
         </ul>
     </div>
 
     <div class="form-group">
-        {{ form.developer.label(for="developer") }}
-        {{ form.developer(class="form-control") }}
+        {{ game_form.developer.label(for="developer") }} {{ game_form.developer(class="form-control") }}
     </div>
     <div class="container text-danger">
         <ul class="list-inline">
-            {% for error in form.developer.errors %}
+            {% for error in game_form.developer.errors %}
             <li>{{ error }}</li>
-            {% endfor %}        
+            {% endfor %}
         </ul>
     </div>
-    
+
     <div class="form-group">
-        {{ form.year.label(for="year") }}
-        {{ form.year(class="form-control") }}
+        {{ game_form.year.label(for="year") }} {{ game_form.year(class="form-control") }}
     </div>
     <div class="container text-danger">
         <ul class="list-inline">
-            {% for error in form.year.errors %}
+            {% for error in game_form.year.errors %}
             <li>{{ error }}</li>
-            {% endfor %}        
+            {% endfor %}
         </ul>
     </div>
- 
-     <div class="form-group">
-        {{ form.description.label(for="description") }}
-        {{ form.description(class="form-control", rows="7") }}
+
+    <div class="form-group">
+        {{ game_form.description.label(for="description") }} {{ game_form.description(class="form-control", rows="7") }}
     </div>
     <div class="container text-danger">
         <ul class="list-inline">
-            {% for error in form.description.errors %}
+            {% for error in game_form.description.errors %}
             <li>{{ error }}</li>
-            {% endfor %}        
+            {% endfor %}
         </ul>
     </div>
+
+
+    
+    {{ genre_form.genre_ids }}
 
     <button type="submit" class="btn btn-info">Lisää peli!</button>
 </form>

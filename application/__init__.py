@@ -54,7 +54,7 @@ def login_required(role="ANY"):
     return wrapper
 
 
-# ladataan sovelluksen toiminnallisuus
+# ladataan sovelluksen toiminnallisuus: luokat
 from application import views
 
 from application.games import models
@@ -99,3 +99,5 @@ try:
     db.session.commit()
 except: 
     pass
+
+# ladataan sovelluksen toiminnallisuus: näkymien luominen

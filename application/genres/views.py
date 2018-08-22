@@ -2,18 +2,18 @@ from flask import redirect, render_template, request, url_for
 
 from application import app, db, login_required
 from application.genres.models import Genre
-from application.genres.forms import GenreForm
+from application.genres.forms import GenreCreationForm
 
 
 @app.route("/genres", methods = ["GET"])
 @login_required(role="ADMIN")
 def genres_index(): 
-    return render_template("genres/list.html", genres = Genre.query.all(), form = GenreForm())
+    return render_template("genres/list.html", genres = Genre.query.all(), form = GenreCreationForm())
 
 @app.route("/genres", methods = ["POST"])
 @login_required(role="ADMIN")
 def genres_create(): 
-    form = GenreForm(request.form)
+    form = GenreCreationForm(request.form)
     if not form.validate():
         return render_template("genres/list.html", genres = Genre.query.all(), form=form)
 
