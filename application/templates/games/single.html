@@ -17,9 +17,7 @@
 
 
 
-            <div class="container">
-                {{ game.description }}
-            </div>
+            <div class="container" style="white-space: pre;">{{ game.description }}</div>
 
 
 
@@ -67,8 +65,7 @@
             {% for review in reviews %}
             <tr>
                 <td>
-                {{ review.text }}
-
+                <p style="white-space:pre-wrap;">{{ review.text }}</p>
                 {% if current_user.is_authenticated  and current_user.allowed_to_edit_review(review) %}               
                  <a href="{{ url_for('reviews_modify', review_id=review.id) }}">
                  <button class="btn btn-success">Muokkaa arviota</button>
@@ -81,7 +78,9 @@
                 <td>
 
                     {% if reactions[review.id] is defined %}
-                    <p>Positiivisia:negatiivisia reaktioita: {{ reactions[review.id][0] }}:{{ reactions[review.id][1] }}
+                    <p
+                    <span class="text-success">+{{ reactions[review.id][0] }}</span>/
+                     <span class="text-danger">-{{ reactions[review.id][1] }}</span>
                         </p>
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" style="width: {{ reactions[review.id][2] }}%" aria-valuenow="{{ reactions[review.id][2] }}"
@@ -102,9 +101,7 @@
                         {% for subfield in form.positivity %}
 
                         <div class="form-group">
-                            <!--  Alla oleva värin päättäminen on ehkä aika hack, sillä se perustuu täysin ReactionFormin rakenteeseen. 
-                              Jos ko. luokkaa muutetaan, joutuu löytämään uuden ratkaisun...   -->
-                            <button type="submit" class="btn btn-{{[" danger ", "success "][subfield.data] }}" value="{{ subfield.data }}" name="{{ subfield.name }}">
+                            <button type="submit" class="btn btn-{{["danger ", "success "][subfield.data] }}" value="{{ subfield.data }}" name="{{ subfield.name }}">
                                 {{ subfield.label.text }}
                             </button>
                         </div>

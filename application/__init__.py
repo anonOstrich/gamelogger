@@ -54,7 +54,7 @@ def login_required(role="ANY"):
     return wrapper
 
 
-# ladataan sovelluksen toiminnallisuus: luokat
+# ladataan sovelluksen toiminnallisuus
 from application import views
 
 from application.games import models
@@ -94,10 +94,7 @@ try:
     ur = UserRole() 
     ur.account_id = u.id
     ur.role_id = admin_role.id
-    #luodaan oletusrooli valmiiksi tietokantaan
     db.session.add(ur)
     db.session.commit()
 except: 
     pass
-
-# ladataan sovelluksen toiminnallisuus: näkymien luominen
