@@ -3,6 +3,7 @@ from application.models import Base
 from application.reviews.models import Review
 from application.reactions.models import Reaction
 from sqlalchemy.sql import text
+from datetime import datetime, timedelta
 
 import traceback
 
@@ -59,6 +60,17 @@ class User(Base):
             if role.name == role_name:
                 return True
         return False
+
+    def allowed_to_edit_review(self, review):
+        if self.has_role("ADMIN"):
+            return True
+        if self.id != review.account_id:
+            return False
+        # ainakin paikallinen sqlite tallentaa ajat utc/gmt-aikavyöhykkeellä, joten käytetään samaa
+        # - tässä kohtaa halutaan joka tapauksessa vain miettiä kuluneen ajan pituutta
+        now = datetime.utcnow()
+        too_late = review.date_created + timedelta(minutes=60)
+        return now < too_late
     
     def roles(self):
         return Role.query.join(Role.user_roles).filter_by(account_id=self.id).all()

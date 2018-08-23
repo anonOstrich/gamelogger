@@ -36,11 +36,13 @@ def reviews_show(game_id):
 
 #TODO: vain admin (ja kirjoittaja jonkin aikaa lisäämisen jälkeen?) pystyy muokkaamaan
 @app.route("/<review_id>/modify", methods=["GET", "POST"])
-@login_required(role="ADMIN")
+@login_required()
 def reviews_modify(review_id):
     r = Review.query.get(review_id)
     if not r: 
         return render_template("error.html", error = "Arvostelua ei löydy tietokannasta")
+    if not current_user.allowed_to_edit_review(r):
+        return render_template("error.html", error = "Sinulla ei ole muokkaamisoikeutta")
     if request.method == "GET": 
         form = ReviewForm()
         form.text.data = r.text

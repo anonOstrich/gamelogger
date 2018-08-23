@@ -1,9 +1,11 @@
-{% extends "layout.html" %} {% block body %}
+{% extends "layout.html" %} 
+{% block body %}
 <div class="container">
     <div class="row my-3">
         <div class="col-sm">
             <h1>
-                {{ game.name }} ({{ game.year }}) {% if current_user.is_authenticated %}
+                {{ game.name }} ({{ game.year }}) 
+                {% if current_user. is_authenticated and current_user.has_role("ADMIN") %}
                 <a href="{{ url_for('games_modify', game_id=game.id) }}">
                     <button class="btn btn-secondary btn-sm">Muokkaa pelin tietoja</button>
                 </a>
@@ -64,8 +66,16 @@
         <tbody>
             {% for review in reviews %}
             <tr>
-                <td>{{ review.text }} <a href="{{ url_for('reviews_modify', review_id=review.id) }}"><button class="btn btn-success">Muokkaa
-                            arviota</button></a></td>
+                <td>
+                {{ review.text }}
+
+                {% if current_user.is_authenticated  and current_user.allowed_to_edit_review(review) %}               
+                 <a href="{{ url_for('reviews_modify', review_id=review.id) }}">
+                 <button class="btn btn-success">Muokkaa arviota</button>
+                 </a>
+                {% endif %}
+
+                 </td>
                 <td>{{ review.points }}</td>
                 <td>{{ review.account.username }}</td>
                 <td>
