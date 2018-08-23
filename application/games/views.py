@@ -16,7 +16,9 @@ from application.genres.forms import GenreSelectionForm
 @app.route("/games/new")
 @login_required()
 def games_form():
-    return render_template("games/new.html", game_form = GameForm(), genre_form = GenreSelectionForm())
+    genre_form = GenreSelectionForm()
+    #tässä voisi päivittää genre_formin choices, mikä varmistaisi että uudet genret löytyvät
+    return render_template("games/new.html", game_form = GameForm(), genre_form = genre_form)
 
 
 @app.route("/games/", methods=["GET"])
@@ -77,15 +79,26 @@ def games_modify(game_id):
         form.year.data = g.year
         form.description.data = g.description
         form.developer.data = g.developer
-        return render_template("/games/modify.html", form = form, id  =game_id)
+        genre_form = GenreSelectionForm()
+        game_genres = GameGenre.query.filter(GameGenre.game_id==g.id)
+        genre_ids = []
+        for game_genre in game_genres:
+            genre_ids.append(game_genre.genre_id)
+        genre_form.genre_ids.data = genre_ids
+
+        return render_template("/games/modify.html", form = form, id  = game_id, genre_form = genre_form)
     
     form = GameForm(request.form)
-    if not form.validate():
-        render_template("games/modify.html", form = form, id = game_id)
+    genre_form = GenreSelectionForm(request.form)
+    if not (form.validate() and genre_form.validate()):
+        render_template("games/modify.html", form = form, genre_form = genre_form, id = game_id)
     g.name = form.name.data
     g.year = form.year.data
     g.description = form.description.data
     g.developer = form.developer.data
+    new_genres = genre_form.genre_ids.data
+    g.update_genres(new_genres)
+
     db.session.commit()
     return redirect(url_for("games_view", game_id = game_id))
 

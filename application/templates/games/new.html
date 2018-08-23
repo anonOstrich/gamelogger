@@ -46,9 +46,21 @@
         </ul>
     </div>
 
-
-    
-    {{ genre_form.genre_ids }}
+    <div class="container" id ="{{ genre_form.id }}">
+        {% for genre_id in genre_form.genre_ids %}
+        <div class="form-check">
+            {{ genre_id(class="form-check-input") }}
+            {{ genre_id.label }}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in genre_form.genre_ids.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 
     <button type="submit" class="btn btn-info">Lisää peli!</button>
 </form>

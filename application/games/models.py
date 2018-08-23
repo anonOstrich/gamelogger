@@ -1,4 +1,5 @@
 from application import db
+from application.genres.models import GameGenre
 from application.models import Base
 from sqlalchemy.sql import text
 import os
@@ -17,6 +18,22 @@ class Game(Base):
         self.developer = developer
         self.description = description
         self.year = year
+
+    def update_genres(self, genre_ids):
+        # aika raskas - voisi esim tarkastaa, ovatko uudet genret täsmälleen samat
+        # tällöin ei tarvitsisi tehdä mitään
+        GameGenre.query.filter(GameGenre.game_id == self.id).delete()
+        g_genres = []
+        for g_id in genre_ids: 
+            g_genre = GameGenre()
+            g_genre.game_id = self.id
+            g_genre.genre_id = g_id
+            g_genres.append(g_genre)
+            
+        db.session.add_all(g_genres)
+        db.session.commit()
+
+        
 
     @staticmethod
     def find_all_number_of_reviews(): 

@@ -1,14 +1,25 @@
 from flask_wtf import FlaskForm
 from sqlalchemy import inspect
-from wtforms import SelectMultipleField, StringField, validators
+from wtforms import SelectMultipleField, StringField, validators, widgets
 from application.genres.models import Genre
 from application import db
+
+
+
 class GenreCreationForm(FlaskForm):
     name = StringField("Genren nimi:", [validators.Length(min = 1, max = 64, message = "Nimen pituus 1-64 merkkiä")])
 
     class Meta: 
         csrf = False
 
+
+# kuten toteutettu https://gist.github.com/doobeh/4668212
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+# Genrelista ei taida aina päivittyä.... 
 class GenreSelectionForm(FlaskForm):
 
     def genre_choices():
@@ -25,7 +36,7 @@ class GenreSelectionForm(FlaskForm):
         return genre_list
         
 
-    genre_ids = SelectMultipleField("Valitse genret",  choices = genre_choices(), coerce = int)
+    genre_ids = MultiCheckboxField("Valitse genret",  choices = genre_choices(), coerce = int)
 
     class Meta:
         csrf = False
