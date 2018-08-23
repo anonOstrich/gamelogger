@@ -1,19 +1,9 @@
-from flask_wtf import FlaskForm
+from application.forms import BaseForm, length_validators
 from wtforms import TextAreaField, RadioField, validators
 
-class ReviewForm(FlaskForm):
+class ReviewForm(BaseForm):
 
-    def points_choices():
-        result=[]
-        for i in range(1, 11):
-            result.append((i, i))
-        return result    
-    
-    text = TextAreaField("Arvostelu", [validators.Length(min=2, max=2000, message="Arvion oltava 2-2000 merkkiä pitkä")])
+    text = TextAreaField("Arvostelu", length_validators(max=1000))
     points = RadioField("Arvosana", [validators.InputRequired(message="Valitse arvosana")], 
-                        choices=points_choices(), coerce=int)
-    
-    
-    class Meta: 
-        csrf = False
+                       choices=list(map(lambda i: (i,i), range(1,11))),  coerce=int)
         

@@ -50,8 +50,9 @@ def reviews_modify(review_id):
         return render_template("reviews/modify.html", form = form, game = Game.query.get(r.game_id), review_id = review_id)
 
     form = ReviewForm(request.form)
-    if not form.validate(): 
-        return render_template("reviews/modify.html", form=form, game = Game.query.get(r.game_id), review_id = review_id)
+
+    if not form.validate():
+        return render_template("reviews/modify.html", form = form, game = Game.query.get(r.game_id), review_id = review_id)
 
     r.text = form.text.data
     r.points = form.points.data

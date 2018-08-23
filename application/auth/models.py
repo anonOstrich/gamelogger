@@ -4,8 +4,7 @@ from application.reviews.models import Review
 from application.reactions.models import Reaction
 from sqlalchemy.sql import text
 from datetime import datetime, timedelta
-
-import traceback
+from application import constants
 
 class User(Base):
 
@@ -37,9 +36,7 @@ class User(Base):
                     " WHERE Account.id NOT IN (SELECT DISTINCT Review.account_id FROM Review);")
 
         res = db.engine.execute(stmt)
-        users=[]
-        for row in res:
-            users.append({"username": row[0]})
+        users = list(map(lambda row: {"username": row[0]}, res))
         return users
         
     def get_id(self):
@@ -69,11 +66,13 @@ class User(Base):
         # ainakin paikallinen sqlite tallentaa ajat utc/gmt-aikavyöhykkeellä, joten käytetään samaa
         # - tässä kohtaa halutaan joka tapauksessa vain miettiä kuluneen ajan pituutta
         now = datetime.utcnow()
-        too_late = review.date_created + timedelta(minutes=60)
+        too_late = review.date_created + timedelta(minutes=constants.EDITING_TIME_LIMIT)
         return now < too_late
     
     def roles(self):
         return Role.query.join(Role.user_roles).filter_by(account_id=self.id).all()
+
+
 
 
 class Role(Base):
@@ -84,16 +83,18 @@ class Role(Base):
     def __init__(self, name):
         self.name = name
     
+
+    # Käytetäänkö missään?
     @staticmethod
     def find_roles_for_user(user_id):
         stmt = text("SELECT DISTINCT Role.name FROM Role JOIN User_role"
                     " ON Role.id = User_role.role_id WHERE User_role.account_id = :user_id").params(user_id=user_id)
 
         res = db.engine.execute(stmt)
-        roles = []
-        for row in res: 
-            roles.append(row[0])
+        roles = list(map(lambda row: row[0], res))
         return roles
+
+
 
 
 class UserRole(Base):

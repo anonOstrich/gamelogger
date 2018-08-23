@@ -1,11 +1,12 @@
-from flask_wtf import FlaskForm
+from application.forms import BaseForm, length_validators
 from wtforms import StringField, IntegerField, TextAreaField, validators
+from datetime import date
 
-class GameForm(FlaskForm): 
-    name = StringField("Pelin nimi", [validators.Length(max=200, message="Liian pitkä nimi (korkeintaan 200 merkkiä)"), validators.Length(min=1, message="Syötä nimi")])
-    developer = StringField("Kehittäjä", [validators.Length(min=1, max=100, message="Oltava 1-100 merkin pituinen")])
-    description = TextAreaField("Kuvaus (korkeintaan 1000 merkkiä)", [validators.Length(min=1, max=1000, message="Kuvauksen oltava 1-1000 merkkiä pitkä")])
-    year = IntegerField("Julkaisuvuosi", [validators.NumberRange(min=0, max=2020, message="Oltava kokonaisluku väliltä 0-2020")])
-    
-    class Meta: 
-        csrf = False
+next_year = date.today().year + 1
+
+class GameForm(BaseForm): 
+    name = StringField("Pelin nimi", length_validators(max=200))
+    developer = StringField("Kehittäjä", length_validators(max=100))
+    description = TextAreaField("Kuvaus (korkeintaan 1000 merkkiä)", length_validators(max=1000))
+    year = IntegerField("Julkaisuvuosi",
+     [validators.NumberRange(min=0, max=next_year, message=str("Oltava kokonaisluku väliltä 0-" + str(next_year)))])
