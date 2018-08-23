@@ -51,7 +51,9 @@
             {% endfor %}        
         </ul>
     </div>
+
     <div class="container" id ="{{ genre_form.id }}">
+        <h4>{{ genre_form.genre_ids.label }}</h4>
         {% for genre_id in genre_form.genre_ids %}
         <div class="form-check">
             {{ genre_id(class="form-check-input") }}

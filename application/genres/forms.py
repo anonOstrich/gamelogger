@@ -21,22 +21,11 @@ class MultiCheckboxField(SelectMultipleField):
 
 # Genrelista ei taida aina päivittyä.... 
 class GenreSelectionForm(FlaskForm):
+    genre_ids = MultiCheckboxField("Valitse genret", coerce = int)
 
-    def genre_choices():
-        # tarkistetaan että tietokantataulu genre on luotu. 
-        # välttää virheen kun sovellus käynnistetään ilman olemassaolevaa tietokantaa
-        insp = inspect(db.engine)
-        if "genre" not in insp.get_table_names():
-            return []
-        
-        genres = Genre.query.all()
-        genre_list = []
-        for g in genres: 
-            genre_list.append((g.id, g.name))
-        return genre_list
-        
-
-    genre_ids = MultiCheckboxField("Valitse genret",  choices = genre_choices(), coerce = int)
+    def __init__(self, *args, **kwargs):
+        super(GenreSelectionForm, self).__init__(*args, **kwargs)
+        self.genre_ids.choices = [(genre.id, genre.name) for genre in Genre.query.all()]
 
     class Meta:
         csrf = False

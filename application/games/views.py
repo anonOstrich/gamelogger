@@ -79,12 +79,9 @@ def games_modify(game_id):
         form.year.data = g.year
         form.description.data = g.description
         form.developer.data = g.developer
+
         genre_form = GenreSelectionForm()
-        game_genres = GameGenre.query.filter(GameGenre.game_id==g.id)
-        genre_ids = []
-        for game_genre in game_genres:
-            genre_ids.append(game_genre.genre_id)
-        genre_form.genre_ids.data = genre_ids
+        genre_form.genre_ids.data = [game_genre.genre_id for game_genre in GameGenre.query.filter(GameGenre.game_id == game_id)]
 
         return render_template("/games/modify.html", form = form, id  = game_id, genre_form = genre_form)
     
