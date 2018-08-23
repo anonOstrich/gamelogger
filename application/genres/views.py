@@ -8,7 +8,8 @@ from application.genres.forms import GenreCreationForm
 @app.route("/genres", methods = ["GET"])
 @login_required(role="ADMIN")
 def genres_index(): 
-    return render_template("genres/list.html", genres = Genre.query.all(), form = GenreCreationForm())
+    sorted_genres = Genre.find_genres_sorted_by_number_of_games()
+    return render_template("genres/list.html", genres = sorted_genres, form = GenreCreationForm())
 
 @app.route("/genres", methods = ["POST"])
 @login_required(role="ADMIN")
