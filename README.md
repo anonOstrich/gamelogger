@@ -84,8 +84,8 @@ Oletetaan samat asiat kuin paikallisessa asennuksessa. Lisäksi oletetaan, että
 Voit nimetä sovelluksen haluamaksesi, tai jättää nimen pois komennosta. 
 Jos et ole kirjautunut sisään, syötä kirjautumistietosi niitä kysyttäessä. 
 Jos haluat, että sovelluksessa on käytössä pysyvä tietokanta, suorita muutama lisäaskel: 
-..1. Luo Herokuun ympäristömuuttuja komennolla `heroku config:set HEROKU=1`
-..2. Luo sovelluksen käyttöön PostgreSQL-tietokanta komennolla `heroku addons:add heroku-postgresql:hobby-dev`
+  1. Luo Herokuun ympäristömuuttuja komennolla `heroku config:set HEROKU=1`
+  2. Luo sovelluksen käyttöön PostgreSQL-tietokanta komennolla `heroku addons:add heroku-postgresql:hobby-dev`
 
 Tällöin sovellukseen syötetyt tiedot pysyvät tallessa vaikka se käynnistyisi uudellen palvelimella.
 3. Suorita `git init`
