@@ -73,7 +73,7 @@ class User(Base):
 
 
     def add_role(self, role):
-        self.add_roles([role])
+        self.add_roles(role)
         
     # metodit joilla selvitetään käyttäjän toimintaa sovelluksessa     
     #        

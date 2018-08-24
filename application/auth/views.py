@@ -42,7 +42,6 @@ def auth_register():
     
     form = RegisterForm(request.form)
     non_unique_username = User.user_exists_with_username(form.username.data)
-    
     if (not form.validate()) or non_unique_username: 
         error_message = None
         if non_unique_username: 
@@ -50,10 +49,11 @@ def auth_register():
         form.username.data = ""
         return render_template("/auth/registerform.html", form=form, non_unique_error = error_message)
      
-        user = User(form.name.data, form.username.data, form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        user.add_role(Role.query.filter_by(name="DEFAULT").first())
+
+    user = User(form.name.data, form.username.data, form.password.data)
+    db.session.add(user)
+    db.session.commit()
+    user.add_role(Role.query.filter_by(name="DEFAULT").first())
 
     return redirect(url_for("index"))
     
