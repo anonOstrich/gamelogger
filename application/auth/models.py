@@ -12,7 +12,10 @@ class User(Base):
     
     name = db.Column(db.String(144), nullable=False)
     username = db.Column(db.String(144), nullable=False, unique=True)
-    password_hash = db.Column(db.String(144), nullable = False)
+    
+    # db.String ei toimi PostgreSQL:ssä hashattuun salasanatoiminnallisuuteen
+    # https://stackoverflow.com/questions/5881169/what-column-type-length-should-i-use-for-storing-a-bcrypt-hashed-password-in-a-d
+    password_hash = db.Column(db.Binary(60), nullable = False)
 
     reviews = db.relationship("Review", backref="account", lazy=True)
     reactions = db.relationship("Reaction", backref="account", lazy=True)
