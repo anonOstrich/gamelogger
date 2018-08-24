@@ -63,13 +63,10 @@ Asennusohje
 Oletetaan, että asennettuina on valmiiksi ajantasainen versio [pythonista](https://www.python.org/), siihen [pip](https://packaging.python.org/key_projects/#pip)-työkalu ja [venv](https://docs.python.org/3/library/venv.html)-kirjasto. 
 
 1. Paina GitHub-sivun oikeassa olevaa vihreää nappulaa "Clone or download" ja valitse "Download zip"
-2. Ladattuasi tiedosto pura se haluamaasi sijaintiin.
-
-... Sijainniksi käy esimerkiksi Documents, eli "/home/username/Documents". 
+2. Ladattuasi tiedosto pura se haluamaasi sijaintiin. Sijainniksi käy esimerkiksi Documents, eli "/home/username/Documents". 
 3. Navigoi kansion Documents/peliloki-master/ sisään ja avaa komentorivi.
-
-... Voit mennä tiedostoselaimella kyseiseen sijaintiin, painaa hiiren oikealla näppäimellä ja valita "Open in Terminal", tai vastaavan komennon. 
-... Toinen vaihtoehto on avata komentorivi ja navigoida sillä oikean kansion sisälle.
+Voit mennä tiedostoselaimella kyseiseen sijaintiin, painaa hiiren oikealla näppäimellä ja valita "Open in Terminal", tai vastaavan komennon. 
+Toinen vaihtoehto on avata komentorivi ja navigoida sillä oikean kansion sisälle.
 4. Suorita komento `python3 -m venv venv`
 5. Avaa virtuaalinen ympäristö komennolla `source venv/bin/activate`
 6. Asenna tarvittavat tiedostot komennolla `pip install -r requirements.txt`
@@ -84,12 +81,13 @@ Oletetaan samat asiat kuin paikallisessa asennuksessa. Lisäksi oletetaan, että
 1. Seuraa paikallisia asennuskohtia kunnes olet suorittanut askeleen 3
 2. Suorita komento `heroku create sovelluksen_nimi`.
 
-...Voit nimetä sovelluksen haluamaksesi, tai jättää nimen pois komennosta. 
-...Jos et ole kirjautunut sisään, syötä kirjautumistietosi niitä kysyttäessä. 
-...Jos haluat, että sovelluksessa on käytössä pysyvä tietokanta, suorita muutama lisäaskel: 
-... 1. Luo Herokuun ympäristömuuttuja komennolla `heroku config:set HEROKU=1`
-... 2. Luo sovelluksen käyttöön PostgreSQL-tietokanta komennolla `heroku addons:add heroku-postgresql:hobby-dev`
-...Tällöin sovellukseen syötetyt tiedot pysyvät tallessa vaikka se käynnistyisi uudellen palvelimella.
+Voit nimetä sovelluksen haluamaksesi, tai jättää nimen pois komennosta. 
+Jos et ole kirjautunut sisään, syötä kirjautumistietosi niitä kysyttäessä. 
+Jos haluat, että sovelluksessa on käytössä pysyvä tietokanta, suorita muutama lisäaskel: 
+..1. Luo Herokuun ympäristömuuttuja komennolla `heroku config:set HEROKU=1`
+..2. Luo sovelluksen käyttöön PostgreSQL-tietokanta komennolla `heroku addons:add heroku-postgresql:hobby-dev`
+
+Tällöin sovellukseen syötetyt tiedot pysyvät tallessa vaikka se käynnistyisi uudellen palvelimella.
 3. Suorita `git init`
 4. Suorita `git remote add heroku https://git.heroku.com/sovelluksen_nimi.git`. Voit tarkastaa nimen komennolla `heroku apps`
 5. Suorita `git add .`
