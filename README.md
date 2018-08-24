@@ -42,6 +42,7 @@ Voit myös rekisteröidä oman testikäyttäjän, jolla ei ole adminin roolia. V
 Käyttöohje:
 -----------
 Ole sivulla, painele sieltä mistä tuntuu intuitiiviselta. 
+
 (Täydentyy myöhemmin...)
 
 Linkkejä: 
@@ -63,8 +64,10 @@ Oletetaan, että asennettuina on valmiiksi ajantasainen versio [pythonista](http
 
 1. Paina GitHub-sivun oikeassa olevaa vihreää nappulaa "Clone or download" ja valitse "Download zip"
 2. Ladattuasi tiedosto pura se haluamaasi sijaintiin.
+
 ... Sijainniksi käy esimerkiksi Documents, eli "/home/username/Documents". 
 3. Navigoi kansion Documents/peliloki-master/ sisään ja avaa komentorivi.
+
 ... Voit mennä tiedostoselaimella kyseiseen sijaintiin, painaa hiiren oikealla näppäimellä ja valita "Open in Terminal", tai vastaavan komennon. 
 ... Toinen vaihtoehto on avata komentorivi ja navigoida sillä oikean kansion sisälle.
 4. Suorita komento `python3 -m venv venv`
@@ -80,6 +83,7 @@ Sovellus on nyt käynnissä osoitteessa <http://127.0.0.1:5000/>. Siirry sinne v
 Oletetaan samat asiat kuin paikallisessa asennuksessa. Lisäksi oletetaan, että asennettuina ovat [git](https://github.com/git/git) ja [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli). 
 1. Seuraa paikallisia asennuskohtia kunnes olet suorittanut askeleen 3
 2. Suorita komento `heroku create sovelluksen_nimi`.
+
 ...Voit nimetä sovelluksen haluamaksesi, tai jättää nimen pois komennosta. 
 ...Jos et ole kirjautunut sisään, syötä kirjautumistietosi niitä kysyttäessä. 
 ...Jos haluat, että sovelluksessa on käytössä pysyvä tietokanta, suorita muutama lisäaskel: 
