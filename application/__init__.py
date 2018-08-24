@@ -93,16 +93,25 @@ try:
     db.create_all()
     # Alustetaan tietokanta jos sitä ei ole vielä luotu 
     salt = "RANDOM"
-    u = User("Admin Hallitsija", "admin","admin_salasana")
+    admin = User("Admin Hallitsija", "admin","admin_salasana")
     admin_role = Role("ADMIN") 
+    normal = User("Esimerkki Käyttäjä", "testi", "salasana")
     default_role = Role("DEFAULT") 
-    db.session.add_all((u, admin_role, default_role))
+    db.session.add_all((admin, normal, admin_role, default_role))
     db.session.commit()
     # vasta nyt pääavaimet on luotu
-    ur = UserRole() 
-    ur.account_id = u.id
-    ur.role_id = admin_role.id
-    db.session.add(ur)
+
+    #TODO:
+    # Voisi ehkä toteuttaa liittämisen muualla? Esim user.addRole(Role)
+    # Pitää ehkä silti muistaa ensin committaa, jotaa pääavaimet luodaan...? 
+    ur1 = UserRole() 
+    ur1.account_id = admin.id
+    ur1.role_id = admin_role.id
+    ur2 = UsertRole()
+    ur2.account_id = normal.id 
+    ur2.role_id = default_role.id
+
+    db.session.add_all((ur1, ur2))
     db.session.commit()
 except: 
     pass
