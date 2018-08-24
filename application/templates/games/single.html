@@ -66,7 +66,7 @@
             <tr>
                 <td>
                 <p style="white-space:pre-wrap;">{{ review.text }}</p>
-                {% if current_user.is_authenticated  and current_user.allowed_to_edit_review(review) %}               
+                {% if current_user.is_authenticated  and current_user.is_allowed_to_edit_review(review) %}               
                  <a href="{{ url_for('reviews_modify', review_id=review.id) }}">
                  <button class="btn btn-success">Muokkaa arviota</button>
                  </a>

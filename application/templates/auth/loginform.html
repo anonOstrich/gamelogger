@@ -3,17 +3,18 @@
 {% block body %}
 {{ notfound_error }}
 <form method="POST" action="{{ url_for('auth_login') }}">
-    <!--TODO: Heitä hidden field osaksi LoginForm-luokkaa -->
     <input type="hidden" name="next_address" value="{{ request.args.get('next') }}" /> 
     <div class="form-group">
         {{ form.username.label(for="username") }}
         {{ form.username(class="form-control", autofocus=True) }}
     </div>
+
     <div class="container text-danger">
         <ul class="list-inline">
-            {%for error in form.username.errors %}
+            {% for error in form.username.errors %}
             <li class="list-inline-item">{{ error }} </li>
             {% endfor %}
+            
         </ul>      
     </div>
     

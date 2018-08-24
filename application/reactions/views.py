@@ -12,9 +12,12 @@ from application.reviews.models import Review
 @login_required()
 def reactions_create(review_id):
     # validate that review exists. Perhaps Review.exists(game_id)
+    review_exists = Review.query.filter_by(id=review_id).first() is not None
+    if not review_exists: 
+        return render_template("error.html", error = "Arviota ei ole olemassa.")
+
     form = ReactionForm(request.form)
-    validates = form.validate()
-    if not validates:
+    if not form.validate():
         return redirect(url_for("games_view", game_id=Review.query.get(review_id).game_id))
     r = Reaction(form.positivity.data)
     r.account_id = current_user.id

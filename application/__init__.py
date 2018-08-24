@@ -1,7 +1,7 @@
 from flask import Flask
 app = Flask(__name__)
 
-# turvallisuustoiminnallisuus
+# työkalut salasanojen hashaamiseen
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 app.config["BCRYPT_HANDLE_LONG_PASSWORDS"] = True
@@ -21,7 +21,7 @@ else:
 db = SQLAlchemy(app)
 
 
-# kirjautumistoiminnallisuus
+# kirjautumistoiminnallisuus 1
 from os import urandom
 app.config["SECRET_KEY"] = urandom(32)
 
@@ -48,8 +48,8 @@ def login_required(role="ANY"):
             if role != "ANY":
                 unauthorized = True
             
-            for user_role in Role.find_roles_for_user(current_user.id):
-                if user_role == role:
+            for user_role in current_user.roles():
+                if user_role.name == role:
                     unauthorized = False
                     break
             
@@ -81,7 +81,7 @@ from application.genres import views
 
 from application.auth.models import User, UserRole
 
-# kirjautumistoiminnallisuutta lisää
+# kirjautumistoiminnallisuus 2
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -104,14 +104,7 @@ try:
     #TODO:
     # Voisi ehkä toteuttaa liittämisen muualla? Esim user.addRole(Role)
     # Pitää ehkä silti muistaa ensin committaa, jotaa pääavaimet luodaan...? 
-    ur1 = UserRole() 
-    ur1.account_id = admin.id
-    ur1.role_id = admin_role.id
-    ur2 = UsertRole()
-    ur2.account_id = normal.id 
-    ur2.role_id = default_role.id
-
-    db.session.add_all((ur1, ur2))
-    db.session.commit()
+    admin.add_roles(admin_role, default_role)
+    normal.add_role(default_role)
 except: 
     pass

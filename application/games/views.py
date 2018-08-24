@@ -17,21 +17,20 @@ from application.genres.forms import GenreSelectionForm
 @login_required()
 def games_form():
     genre_form = GenreSelectionForm()
-    #tässä voisi päivittää genre_formin choices, mikä varmistaisi että uudet genret löytyvät
     return render_template("games/new.html", game_form = GameForm(), genre_form = genre_form)
 
 
 @app.route("/games/", methods=["GET"])
 def games_index(): 
-    return render_template("games/list.html", games = Game.query.all(), review_numbers = Game.find_all_number_of_reviews(),
+    # TODO:
+    # selviä yhdellä tietokantakyselyllä kolmen sijaan
+    return render_template("games/list.html", games = Game.query.all(), review_numbers = Game.find_all_numbers_of_reviews(),
                            review_averages = Game.find_all_averages_of_reviews())
 
 
 @app.route("/games/", methods=["POST"])
 @login_required()
 def games_create():  
-
-    # testataan osaavatko konstruktorit poimia vain oleelliset tiedot
     game_form = GameForm(request.form)
     genre_form = GenreSelectionForm(request.form)
     
@@ -44,14 +43,7 @@ def games_create():
     db.session.add(game)
     db.session.commit()
 
-    game_genres = []
-    for g_id in genre_form.genre_ids.data:
-        game_genre = GameGenre()
-        game_genre.game_id = game.id
-        game_genre.genre_id = g_id
-        game_genres.append(game_genre)   
-    db.session.add_all(game_genres)
-    db.session.commit()
+    game.add_genres(genre_form.genre_ids.data)
     return redirect(url_for("games_index"))
 
 @app.route("/games/<game_id>", methods=["GET"])
@@ -81,8 +73,8 @@ def games_modify(game_id):
         form.developer.data = g.developer
 
         genre_form = GenreSelectionForm()
-        genre_form.genre_ids.data = [game_genre.genre_id for game_genre in GameGenre.query.filter(GameGenre.game_id == game_id)]
-
+        genre_ids = [game_genre.genre_id for game_genre in GameGenre.query.filter(GameGenre.game_id == game_id)]
+        genre_form.genre_ids.data = genre_ids
         return render_template("/games/modify.html", form = form, id  = game_id, genre_form = genre_form)
     
     form = GameForm(request.form)
@@ -96,7 +88,6 @@ def games_modify(game_id):
     new_genres = genre_form.genre_ids.data
     g.update_genres(new_genres)
 
-    db.session.commit()
     return redirect(url_for("games_view", game_id = game_id))
 
 @app.route("/games/<game_id>/delete", methods=["POST"])
@@ -106,7 +97,10 @@ def games_delete(game_id):
     if not poistettava: 
         return render_template("error.html", error = "Peliä ei ole tietokannassa")
     Reaction.delete_reactions_relating_to_game(game_id)
-    db.session.query(Review).filter(Review.game_id == game_id).delete()
+    Review.query.filter(Review.game_id == game_id).delete()
+
+    # poistetaan vain liitostaulun turhat tiedot, mutta genre jää
+    GameGenre.query.filter(GameGenre.game_id == game_id).delete()
     db.session.delete(poistettava)
     db.session.commit()
     return redirect(url_for("games_index")) 

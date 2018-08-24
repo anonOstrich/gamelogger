@@ -34,8 +34,9 @@ class Reaction(Base):
                     " WHERE Review.game_id = :game_id GROUP BY Review.id HAVING COUNT(Reaction.positive) > 0").params(game_id=game_id)
         res = db.engine.execute(stmt)
 
-        result = {}
 
+        result = {}
+        
         for row in res: 
             rev_id = row[0]
             num_positives = row[1]

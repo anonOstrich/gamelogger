@@ -8,12 +8,8 @@ class BaseForm(FlaskForm):
         csrf = False
 
 
-# kuten toteutettu https://gist.github.com/doobeh/4668212
-class MultiCheckboxField(SelectMultipleField):
-    widget = widgets.ListWidget(prefix_label=False)
-    option_widget = widgets.CheckboxInput()
 
-
+# Valmiita validaattoreita, joissa virheviestit suomeksi
 def min_length(min):
     message = "Vähintään " + str(min) + " merkkiä pitkä"
 
@@ -41,3 +37,9 @@ def length_validators(min=1, max = -1):
     if max < 0: 
         raise ValueError("Ylärajaa ei asetettu")
     return [min_length(min), max_length(max)]
+
+
+# kuten toteutettu https://gist.github.com/doobeh/4668212
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()

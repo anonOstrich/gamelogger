@@ -2,7 +2,6 @@
 {% block body %}
 
 <form method="POST" action="{{ url_for('auth_register') }}">
-{{ username_error }}
 
     <div class="form-group">
         {{ form.name.label(for="name") }}
@@ -22,6 +21,11 @@
     </div>
     <div class="container text-danger">
         <ul class="list-inline">
+
+            {% if non_unique_error %}
+                <li class="list-inline-item">{{ non_unique_error }}</li>
+            {% endif %}     
+
             {% for error in form.username.errors %}
             <li>{{ error }}</li>
             {% endfor %}        
