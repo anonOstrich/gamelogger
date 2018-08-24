@@ -20,8 +20,11 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('games_index') }}">Listaa pelit</a>
+                    <a class="nav-link" href="{{ url_for('games_index') }}">Kaikki pelit</a>
                 </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('genres_index') }}">Genret</a>
+                    </li>
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('games_form') }}">Lisää peli</a>
@@ -33,11 +36,9 @@
                 {% if current_user.is_authenticated %}
                 <span class="nav-text text-dark">Kirjautunut nimellä {{ current_user.name }}</span>
                 <ul class="navbar-nav">
-                    {% if current_user.has_role("ADMIN") %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('genres_index') }}">Genret</a>
-                    </li>
-                    {% endif %}
+                    
+
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth_logout') }}">
                             Kirjaudu ulos

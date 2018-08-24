@@ -46,6 +46,15 @@ class Game(Base):
         res = db.engine.execute(stmt)        
         return {row[0]:row[1] for row in res}
 
+
+    # Selvästi kahden alemman toiminnallisuutta saa yhdistettyä    
+
+    @staticmethod
+    def find_numbers_of_reviews_for_genre(genre_id):
+        stmt = text("SELECT Game.id, COUNT(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id"
+        " HAVING Game.id IN (SELECT game_id FROM Game_genre WHERE genre_id = :genre_id);").params(genre_id=genre_id)
+        res = db.engine.execute(stmt)        
+        return {row[0]:row[1] for row in res}        
     
     @staticmethod
     def find_all_averages_of_reviews():
@@ -66,6 +75,29 @@ class Game(Base):
                 avg = format(row[1], ".2f")
             review_averages[row[0]] = avg
         return review_averages
+
+    @staticmethod
+    def find_averages_of_reviews_for_genre(genre_id):
+
+        stmt = text("SELECT Game.id, AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id"
+        " HAVING Game.id IN (SELECT DISTINCT Game_genre.game_id FROM Game_genre WHERE Game_genre.genre_id = :genre_id);").params(genre_id=genre_id)
+        res = db.engine.execute(stmt)
+        
+        review_averages = {}
+        
+        for row in res: 
+            avg = row[1]
+        
+            if avg is None: 
+                avg = ""
+            # PostgreSQL:llä palautuskeskiarvojen tyyppi on decimal, jolla ei ole metodia is_integer()
+            elif (not os.environ.get("HEROKU")) and avg.is_integer():
+                avg = int(avg)
+            else:
+                avg = format(row[1], ".2f")
+            review_averages[row[0]] = avg
+        return review_averages
+
     
     @staticmethod
     def find_all_unreviewed_games(user_id):
@@ -76,7 +108,7 @@ class Game(Base):
 
         res=db.engine.execute(stmt)
         return [{"id":row[0], "name":row[1]} for row in res]
-        
+
         
         
 

@@ -11,16 +11,18 @@
 
             <ul class="list-group">
                 {% for genre in genres%}
+                <a href="{{ url_for('genres_view', genre_id=genre.id) }}">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ genre.name }}
-                    <!-- TODO: Montako peliä kuuluu genreen + järjestäminen tämän perusteella -->
                     <span class="badge badge-primary badge-pill">{{ genre.number_of_games }}</span>
                 </li>
+                </a>
                 {% endfor %}
             </ul>
         </div>
     </div>
 
+   {% if current_user.is_authenticated and current_user.has_role("ADMIN") %}
     <div class="row">
         <div class="col">
             {{ error }}
@@ -41,6 +43,7 @@
             </form>
         </div>
     </div>
+    {% endif %}
 </div>
 
 

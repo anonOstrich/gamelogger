@@ -25,7 +25,7 @@ def games_index():
     # TODO:
     # selviä yhdellä tietokantakyselyllä kolmen sijaan
     return render_template("games/list.html", games = Game.query.all(), review_numbers = Game.find_all_numbers_of_reviews(),
-                           review_averages = Game.find_all_averages_of_reviews())
+                           review_averages = Game.find_all_averages_of_reviews(), title="Kaikki pelit")
 
 
 @app.route("/games/", methods=["POST"])
