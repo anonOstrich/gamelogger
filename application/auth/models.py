@@ -1,4 +1,4 @@
-from application import db 
+from application import db, bcrypt
 from application.models import Base
 from application.reviews.models import Review
 from application.reactions.models import Reaction
@@ -12,8 +12,8 @@ class User(Base):
     
     name = db.Column(db.String(144), nullable=False)
     username = db.Column(db.String(144), nullable=False, unique=True)
-    password = db.Column(db.String(144), nullable=False)
-    
+    password_hash = db.Column(db.String(144), nullable = False)
+
     reviews = db.relationship("Review", backref="account", lazy=True)
     reactions = db.relationship("Reaction", backref="account", lazy=True)
     user_roles = db.relationship("UserRole", backref="account", lazy=True)
@@ -21,7 +21,11 @@ class User(Base):
     def __init__(self, name, username, password): 
         self.name = name
         self.username = username
-        self.password = password
+        self.password_hash = bcrypt.generate_password_hash(password)
+
+    def password_matches(self, attempt):
+        return bcrypt.check_password_hash(self.password_hash, attempt)
+
         
         
     def has_reviewed(self, game_id):

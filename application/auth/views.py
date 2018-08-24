@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user
 
-from application import app, db
+from application import app, db, bcrypt
 from application.auth.models import Role, User, UserRole
 from application.auth.forms import LoginForm, RegisterForm
 
@@ -16,14 +16,14 @@ def auth_login():
     if not form.validate(): 
         return render_template("auth/loginform.html", form = form)
     
-    user = User.query.filter_by(username=form.username.data, password=form.password.data).first()
+
+    user = User.query.filter_by(username=form.username.data).first()
     
-    if not user: 
+    if not (user and user.password_matches(form.password.data)): 
         return render_template("auth/loginform.html", form = form, notfound_error = "Virheellinen käyttäjätunnus tai salasana")
-    
+
     login_user(user)
     # ohjataan sinne minne oltiin menossa
-    #todo? ohjataan ehkä sinne mistä klikattu "kirjaudu"?
     next = request.form.get("next_address")
     if next != "None": 
         return redirect(next)

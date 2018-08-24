@@ -1,6 +1,12 @@
 from flask import Flask
 app = Flask(__name__)
 
+# turvallisuustoiminnallisuus
+from flask_bcrypt import Bcrypt
+bcrypt = Bcrypt(app)
+app.config["BCRYPT_HANDLE_LONG_PASSWORDS"] = True
+
+
 # tietokanta ja ORM
 from flask_sqlalchemy import SQLAlchemy 
 import os
@@ -13,6 +19,7 @@ else:
 
 
 db = SQLAlchemy(app)
+
 
 # kirjautumistoiminnallisuus
 from os import urandom
@@ -85,7 +92,8 @@ def load_user(user_id):
 try: 
     db.create_all()
     # Alustetaan tietokanta jos sitä ei ole vielä luotu 
-    u = User("Urho Sydänkarhu", "otso", "mesikammen")
+    salt = "RANDOM"
+    u = User("Admin Hallitsija", "admin","admin_salasana")
     admin_role = Role("ADMIN") 
     default_role = Role("DEFAULT") 
     db.session.add_all((u, admin_role, default_role))
