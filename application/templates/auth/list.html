@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1> Kaikki sivuston käyttäjät</h1>
+<div class="list-group">
+    {% for user in users %}
+    <a href="{{ url_for('users_view', user_id=user.id) }}"class="list-group-item list-group-item-action">
+        {{user.username}}
+    <a>
+    {% endfor %}
+</div>
+{% endblock %}

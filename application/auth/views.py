@@ -50,10 +50,23 @@ def auth_register():
         return render_template("/auth/registerform.html", form=form, non_unique_error = error_message)
      
 
-    user = User(form.name.data, form.username.data, form.password.data)
+    user = User(form.name.data, form.username.data, form.password.data, form.description.data)
     db.session.add(user)
     db.session.commit()
     user.add_role(Role.query.filter_by(name="DEFAULT").first())
 
     return redirect(url_for("index"))
     
+
+@app.route("/users/")
+def users_index():
+
+    return render_template("/auth/list.html", users = User.query.all())
+
+@app.route("/users/<user_id>")
+def users_view(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        render_template("error.html", error = "Käyttäjää ei ole olemassa")
+
+    return render_template("auth/single.html", user=user)

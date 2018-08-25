@@ -24,15 +24,17 @@ class User(Base):
     name = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False, unique=True)
     password_hash = db.Column(db.Binary(60), nullable = False)
+    description = db.Column(db.String(1000))
 
     reviews = db.relationship("Review", backref="account", lazy=True)
     reactions = db.relationship("Reaction", backref="account", lazy=True)
     user_roles = db.relationship("UserRole", backref="account", lazy=True)
     
-    def __init__(self, name, username, password): 
+    def __init__(self, name, username, password, description): 
         self.name = name
         self.username = username
         self.password_hash = bcrypt.generate_password_hash(password)
+        self.description = description
 
     def password_matches(self, attempt):
         return bcrypt.check_password_hash(self.password_hash, attempt)

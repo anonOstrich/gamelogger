@@ -21,9 +21,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('games_index') }}">Kaikki pelit</a>
                 </li>
-                    <li class="nav-item">
+                <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('genres_index') }}">Genret</a>
-                    </li>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('users_index') }}">Käyttäjät</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Kehittäjät</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Etsi vuoden perusteella</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">Etsi nimen perusteella</a>
+                </li>
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('tags_index', user_id = current_user.id) }}">

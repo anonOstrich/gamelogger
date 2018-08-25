@@ -96,9 +96,9 @@ try:
     db.create_all()
     # Alustetaan tietokanta jos sitä ei ole vielä luotu 
     salt = "RANDOM"
-    admin = User("Admin Hallitsija", "admin","admin_salasana")
+    admin = User("Admin Hallitsija", "admin","admin_salasana", None)
     admin_role = Role("ADMIN") 
-    normal = User("Esimerkki Käyttäjä", "testi", "salasana")
+    normal = User("Esimerkki Käyttäjä", "testi", "salasana", None)
     default_role = Role("DEFAULT") 
     db.session.add_all((admin, normal, admin_role, default_role))
     db.session.commit()
