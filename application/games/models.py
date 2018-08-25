@@ -93,6 +93,10 @@ class Game(Base):
         
         for row in res: 
             avg = row[1]
+
+            if avg is None:
+                review_averages[row[0]] = ""
+                continue
             # PostgreSQL:llä palautuskeskiarvojen tyyppi on decimal, jolla ei ole metodia is_integer()
             if os.environ.get("HEROKU"):
                 avg = float(avg)
