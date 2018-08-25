@@ -2,7 +2,7 @@
 
 {% block body %}
 <h1>On tapahtunut virhe</h1>
-<p style="white-space: pre;">{{ error }}</p>
+<p style="white-space: pre-wrap;">{{ error }}</p>
 <a href="{{ url_for('index') }}">Etusivulle</a>
 
 {% endblock  %}
