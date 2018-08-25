@@ -12,6 +12,7 @@ class Game(Base):
 
     reviews = db.relationship("Review", backref="game", lazy=True)
     game_genres = db.relationship("GameGenre", backref="game", lazy=True)
+    game_tags = db.relationship("GameTag", backref="game", lazy=True)
 
     def __init__(self, name, developer, description, year):
         self.name = name
