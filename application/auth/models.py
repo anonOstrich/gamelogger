@@ -4,14 +4,16 @@ from application.reviews.models import Review
 from application.reactions.models import Reaction
 from application.tags.models import Tag
 from sqlalchemy.sql import text
+from sqlalchemy.schema import UniqueConstraint
 from datetime import datetime, timedelta
 from application import constants
 
 
 class Role(Base):
     name = db.Column(db.String(64), nullable=False)
-    user_roles = db.relationship("UserRole", backref="role", lazy = True)
 
+
+    user_roles = db.relationship("UserRole", backref="role", lazy = True)
 
     def __init__(self, name):
         self.name = name
@@ -64,6 +66,8 @@ class User(Base):
                 return True
         return False
 
+
+    # parametreina rooliolioita
     def add_roles(self, *args):
         def create_user_role(r):
             result = UserRole()
@@ -85,11 +89,11 @@ class User(Base):
         
     # metodit joilla selvitetään käyttäjän toimintaa sovelluksessa     
     #        
-    def has_reviewed(self, game_id):
-        return Review.query.filter_by(account_id=self.id, game_id=game_id).first() is not None
+    def has_reviewed(self, game):
+        return Review.query.filter_by(account_id=self.id, game_id=game.id).first() is not None
         
-    def has_reacted(self, review_id):
-        return Reaction.query.filter_by(account_id=self.id, review_id=review_id).first() is not None
+    def has_reacted_to(self, review):
+        return Reaction.query.filter_by(account_id=self.id, review_id=review.id).first() is not None
         
 
     def is_allowed_to_edit_review(self, review):
@@ -116,9 +120,11 @@ class User(Base):
 
     @staticmethod 
     def user_exists_with_username(username):
-        return User.query.filter(User.username==username).first() is not None    
+        return User.query.filter_by(username==username).first() is not None    
 
 
 class UserRole(Base):
     account_id = db.Column(db.Integer, db.ForeignKey("account.id"), nullable = False)
     role_id = db.Column(db.Integer, db.ForeignKey("role.id"), nullable = False)
+
+    unique_role = UniqueConstraint(account_id, role_id)

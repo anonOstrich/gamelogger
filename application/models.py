@@ -11,3 +11,4 @@ class Base(db.Model):
 
     class Meta:
         csrf = False
+

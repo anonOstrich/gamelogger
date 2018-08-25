@@ -35,7 +35,7 @@
     <div class="row">
     {% if current_user.is_authenticated %}
         <div class="col">
-            {% if current_user.has_reviewed(game.id)%} Olet jo arvioinut {% else %}
+            {% if current_user.has_reviewed(game) %} Olet jo arvioinut {% else %}
             <a href="{{ url_for('reviews_create', game_id=game.id) }}">
                 <button class="btn btn-primary btn-lg btn-block">Arvioi peli</button>
             </a>
@@ -76,7 +76,7 @@
                {% endfor %}
 
              </ul>
-            <a href="{{ url_for('tags_link', game_id=game.id) }}"><button class="btn">Muuta pelin tageja</button></a>
+            <a href="{{ url_for('tags_modify', game_id=game.id) }}"><button class="btn">Muuta pelin tageja</button></a>
         
 
 </div>
@@ -136,7 +136,7 @@
 
 
 
-                    {% if current_user.has_reacted(review.id) %} Olet jo reagoinut {% else %}
+                    {% if current_user.has_reacted_to(review) %} Olet jo reagoinut {% else %}
 
                     <form class="form-inline" method="POST" action="{{ url_for('reactions_create', review_id=review.id) }}">
                         {% for subfield in form.positivity %}

@@ -95,7 +95,6 @@ def load_user(user_id):
 try: 
     db.create_all()
     # Alustetaan tietokanta jos sitä ei ole vielä luotu 
-    salt = "RANDOM"
     admin = User("Admin Hallitsija", "admin","admin_salasana", None)
     admin_role = Role("ADMIN") 
     normal = User("Esimerkki Käyttäjä", "testi", "salasana", None)
@@ -103,11 +102,12 @@ try:
     db.session.add_all((admin, normal, admin_role, default_role))
     db.session.commit()
     # vasta nyt pääavaimet on luotu
-
-    #TODO:
-    # Voisi ehkä toteuttaa liittämisen muualla? Esim user.addRole(Role)
-    # Pitää ehkä silti muistaa ensin committaa, jotaa pääavaimet luodaan...? 
     admin.add_roles(admin_role, default_role)
     normal.add_role(default_role)
 except: 
     pass
+
+
+#we create here
+def initialize_from_randomized_data(path):
+    return "Jee"

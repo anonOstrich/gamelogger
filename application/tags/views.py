@@ -17,8 +17,12 @@ def tags_index(user_id):
 @login_required()
 def tags_create(user_id):
     user = User.query.get(user_id)
-    if (not user) or (current_user.id != user.id): 
-        return render_template("error.html", error ="Käyttäjää ei ole olemassa tai sinulla ei ole oikeuksia lisätä tägejä käyttäjälle")    
+
+    if not user: 
+        return render_template("error.html", error ="Käyttäjää ei  ole olemassa")
+    if current_user.id != user.id: 
+        return render_template("error.html", error ="Sinulla ei ole oikeuksia lisätä tägejä toiselle käyttäjälle")  
+
     form = TagCreationForm(request.form)
     if not form.validate():
         tags_info = Tag.find_all_tags_and_numbers_of_tagged_games(user_id)
@@ -31,11 +35,10 @@ def tags_create(user_id):
     return redirect(url_for("tags_index", user_id=user_id))
 
 
-# link existing tags to the specidfied game and the current user
-@app.route("/tags/link/<game_id>", methods=["GET", "POST"])
+
+@app.route("/tags/modify/<game_id>", methods=["GET", "POST"])
 @login_required()
-def tags_link(game_id):
-    user_id = current_user.id
+def tags_modify(game_id):
     game = Game.query.get(game_id)
     if not game: 
         return render_template("error.html", error = "Peliä ei ole tietokannassa")
@@ -47,11 +50,20 @@ def tags_link(game_id):
         return render_template("tags/link.html", form = form, game = game)
 
     form = TagSelectionForm(request.form)
-    game.link_tags(form.tag_ids.data)
+    game.modify_tags(form.tag_ids.data)
     return redirect(url_for("games_view", game_id=game_id))
 
 
 @app.route("/tags/<tag_id>/delete", methods=["POST"])
 @login_required()
 def tasks_delete(tag_id):
-    return ":)"
+    tag = Tag.query.get(tag_id)
+    if not tag: 
+        return render_template("error.html", error = "Tagia ei ole olemassa")
+    if tag.account_id != current_user.id:
+        return render_template("error.html", error = "Et voi poistaa toisen tagia")
+    
+    GameTag.query.filter(GameTag.tag_id==tag_id).all().delete()
+    db.session.delete(tag)
+    db.session.commit()
+    return redirect(url_for("tags_index", user_id=current_user.id))
