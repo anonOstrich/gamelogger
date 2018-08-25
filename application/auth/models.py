@@ -2,9 +2,11 @@ from application import db, bcrypt
 from application.models import Base
 from application.reviews.models import Review
 from application.reactions.models import Reaction
+from application.tags.models import Tag
 from sqlalchemy.sql import text
 from datetime import datetime, timedelta
 from application import constants
+
 
 class Role(Base):
     name = db.Column(db.String(64), nullable=False)
@@ -74,6 +76,10 @@ class User(Base):
 
     def add_role(self, role):
         self.add_roles(role)
+    
+    # tagitoiminnallisuutta
+    def tags(self):
+        return Tag.query.filter_by(account_id = self.id).all()
         
     # metodit joilla selvitetään käyttäjän toimintaa sovelluksessa     
     #        

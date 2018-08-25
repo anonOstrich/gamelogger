@@ -11,6 +11,8 @@ from application.reactions.forms import ReactionForm
 from application.genres.models import Genre, GameGenre
 from application.genres.forms import GenreSelectionForm
 
+from application.tags.models import Tag, GameTag
+
 
 
 @app.route("/games/new")
@@ -55,8 +57,12 @@ def games_view(game_id):
         return render_template("error.html", error = "Peliä ei ole olemassa")
     reactions = Reaction.find_all_reactions_for_reviews_of_game(game_id)
     genres = Genre.query.join(Genre.game_genres).filter(GameGenre.game_id==game_id).all()
+
+    tags = []
+    if current_user.is_authenticated:
+        tags = Tag.query.join(Tag.game_tags).filter(Tag.account_id==current_user.id, GameTag.game_id == game_id)
     return render_template("/games/single.html", game = g, reviews = reviews, form = form,
-                             reactions = reactions, genres = genres)
+                             reactions = reactions, genres = genres, tags = tags)
 
     
 @app.route("/games/<game_id>/modify", methods=["GET", "POST"])

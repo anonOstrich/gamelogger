@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+<h1>{{ game.name }}({{ game.year}})</h1>
+</div>
+<div class="container">
+<div class="row">
+<div class="col">
+
+<form method="POST" action="{{ url_for('tags_link', game_id=game.id) }}">
+    <div class="container" id ="{{ form.id }}">
+        <h4>{{ form.tag_ids.label }}</h4>
+        {% for tag_id in form.tag_ids %}
+        <div class="form-check">
+            {{ tag_id(class="form-check-input") }}
+            {{ tag_id.label }}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.tag_ids.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="submit" class="btn btn-primary"> Tallenna tagit</button>
+</form>
+</div>
+
+    <div class="col">
+        <a href="{{ url_for('tags_index', user_id=current_user.id) }}">
+        <button class="btn btn-primary">Hallinnoi tagejasi</button>
+    </a>
+    </div>
+</div>
+</div>
+
+{% endblock %}

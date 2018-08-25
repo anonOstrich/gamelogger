@@ -1,5 +1,6 @@
 from application import db
 from application.genres.models import GameGenre
+from application.tags.models import GameTag
 from application.models import Base
 from sqlalchemy.sql import text
 import os
@@ -37,6 +38,22 @@ class Game(Base):
 
         g_genres = map(create_game_genre, genre_ids)            
         db.session.add_all(g_genres)
+        db.session.commit()
+
+
+    def link_tags(self, tag_ids): 
+        GameTag.query.filter_by(game_id=self.id).delete()
+        self.add_tags(tag_ids)
+
+    def add_tags(self, tag_ids):
+        def create_game_tag(tag_id):
+            result = GameTag()
+            result.game_id = self.id
+            result.tag_id = tag_id
+            return result
+
+        game_tags = map(create_game_tag, tag_ids)
+        db.session.add_all(game_tags)
         db.session.commit()
 
         
