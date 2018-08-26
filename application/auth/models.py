@@ -120,7 +120,7 @@ class User(Base):
 
     @staticmethod 
     def user_exists_with_username(username):
-        return User.query.filter_by(username==username).first() is not None    
+        return User.query.filter_by(username=username).first() is not None    
 
 
 class UserRole(Base):
