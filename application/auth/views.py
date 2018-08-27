@@ -1,9 +1,9 @@
 from flask import render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 
-from application import app, db, bcrypt
+from application import app, db, bcrypt, login_required
 from application.auth.models import Role, User, UserRole
-from application.auth.forms import LoginForm, RegisterForm
+from application.auth.forms import LoginForm, RegisterForm, DescriptionForm
 
 
 @app.route("/auth/login/", methods = ["GET", "POST"])
@@ -70,3 +70,17 @@ def users_view(user_id):
         render_template("error.html", error = "Käyttäjää ei ole olemassa")
 
     return render_template("auth/single.html", user=user)
+
+@app.route("/users/modify", methods=["GET", "POST"])
+@login_required()
+def users_modify(): 
+    if request.method == "GET":
+        form = DescriptionForm()
+        form.description.data = current_user.description
+        return render_template("auth/single.html", form=form, user=current_user)
+    form = DescriptionForm(request.form)
+    if not form.validate():
+        return render_template("auth/single.html", form=form, user=current_user)
+    current_user.description = form.description.data
+    db.session.commit()
+    return redirect(url_for("users_view", user_id=current_user.id))

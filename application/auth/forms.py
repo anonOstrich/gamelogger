@@ -11,3 +11,6 @@ class RegisterForm(BaseForm):
     username = StringField("Käyttäjätunnus", length_validators(max=100))
     password = PasswordField("Salasana (vähintään 6 merkkiä)", length_validators(6, 32))
     description = TextAreaField("Lyhyt kuvaus itsestäsi (vapaaehtoinen)", length_validators(max=1000))
+
+class DescriptionForm(BaseForm):
+    description = TextAreaField("", length_validators(max=1000))

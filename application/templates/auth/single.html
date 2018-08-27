@@ -3,8 +3,23 @@
 
 <div class="container">
 
-{{ user.username }}
-<p style="white-space: pre-wrap;">{{user.description}}</p>
+<h1>{{ user.username }}</h1>
+
+{% if current_user.is_authenticated %}
+{% if form  %}
+<form method="POST" action="{{ url_for('users_modify')}}">
+    <div class="form-group">
+        {{ form.description(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Tallenna</button>
+</form>
+{% else %}
+<p style="white-space: pre-wrap; word-wrap: break-word;">{{user.description}}</p>
+<a href="{{ url_for('users_modify') }}" class="btn btn-secondary">Muokkaa kuvausta</a>
+{% endif %}
+{% else  %}
+<p style="white-space: pre-wrap; word-wrap: break-word;">{{user.description}}</p>
+{% endif%}
 Tagit: tulossa...
 Arvosteluyhteenvetoa: tulossa... 
 </div>
