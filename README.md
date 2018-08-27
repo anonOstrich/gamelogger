@@ -5,7 +5,7 @@ Rekisteröityneet käyttäjät voivat kirjata pelaamiaan pelejä ja antaa näill
 
 Kaikki sivuston käyttäjät pystyvät selaamaan tietokannassa olevia pelejä ja niihin liittyviä arvosteluja. Oletuksena etusivulla näytetään äskettäin lisättyjä arvosteluja. Pelejä voi etsiä esimerkiksi kehittäjän, nimen tai julkaisuvuoden mukaan. Klikkaamalla käyttäjätunnusta pääsee tutkailemaan tämän käyttäjän arvioimia pelejä ja tagien perusteella luotuja listoja.
 
-Järjestelmällä on myös ylläpitäjä, joka pystyy ainakin poistamaan käyttäjätunnuksia ja muokkaamaan mitä tahansa sivulla olevaa tietoa. Mahdollisesti myös elokuvien tietojen syöttäminen järjestelmään voisi olla ylläpitäjän vastuulla.
+Järjestelmällä on myös ylläpitäjä, joka pystyy ainakin poistamaan käyttäjätunnuksia ja muokkaamaan mitä tahansa sivulla olevaa tietoa. Hän vastaa myös genrejen ylläpitämisestä
 
 Toimintoja: 
 -----------
@@ -20,8 +20,7 @@ Toimintoja:
   * Arvioista “tykkääminen” tai “ei-tykkääminen” 
   * Omien tagien lisääminen 
   * Tagien perusteella käyttäjän listojen selaaminen
-  * Muiden arvioiden kommentoiminen (mahdollinen toteutettava ajan salliessa)
-  * Muiden käyttäjien seuraaminen(mahdollinen toteutettava ajan salliessa) 
+
 
 Sovelluksen monimutkaisempia yhteenvetokyselyitä ovat esimerkiksi etusivun arvioita tekemättömien käyttäjien esittäminen ja myös kirjautuneille käyttäjille näytettävä lista peleistä, joita kyseinen käyttäjä ei ole vielä arvioinut. Myös pelin yksittäisellä sivulla esitettävät arviot saattavat täyttää vaatimukset (/application/reactions/models.py, metodi find_all_reactions_for_reviews_of_game)
 
@@ -30,7 +29,6 @@ Tunnukset
 
 ### Admin-käyttäjä: 
 tunnus: admin
-
 salasana: admin_password
 
 ### Normaali käyttäjä
@@ -105,3 +103,13 @@ Oletetaan samat asiat kuin paikallisessa asennuksessa. Lisäksi oletetaan, että
 8. Sovellus käynnistetään herokussa. 
 
 Käynnistymisen jälkeen se löytyy osoitteesta <https://sovelluksen_nimi.herokuapp.com>
+
+Sovelluksen rajoitteet
+----------------------
+Tietokantakyselyissä ei hyödynnetä indeksejä, joten suurella käyttäjämäärällä etenkin monimutkaiset yhteenvetokyselyt veisivät aikaa.  Suurta käyttäjämäärää ei myöskään pysty hallitsemaan yksittäinen admin, vaan pitäisi luoda moderaattori-rooli ja admin voisi jakaa moderaattorioikeuksia valikoiduille käyttäjille. 
+
+
+Puuttuvat ominaisuudet
+----------------------
+* Kommentointimahdollisuus arvioiden yhteyteen
+* Käyttäjän/ tagin seuraaminen, jolloin etusivulla näytettäisiin viime vierailun jälkeen tällä tägillä tägätyt pelit
