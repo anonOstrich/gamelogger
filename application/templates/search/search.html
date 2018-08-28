@@ -1,21 +1,93 @@
 {% extends "layout.html" %} {% block body %}
+
+<h1>Hae pelejä</h1>
+
 <form method="POST" action="{{ url_for('search')}}">
     <div class="form-group">
         {{ form.name.label }} {{ form.name(class="form-control") }}
     </div>
 
     <div class="form-group">
-        {{ form.name.label }} {{ form.name(class="form-control") }}
+        {{ form.min_year.label }} {{ form.min_year(class="form-control") }}
+    </div>
+    <div class=form-group>
+        {{ form.max_year.label }} {{ form.max_year(class="form-control") }}
     </div>
     <div class="form-group">
-        {{ form.name.label }} {{ form.name(class="form-control") }}
-    </div>
-    <div class="form-group">
-        {{ form.name.label }} {{ form.name(class="form-control") }}
+        {{ form.developer.label }} {{ form.developer(class="form-control") }}
     </div>
 
+    <div class="container" id ="{{ form.genres.id }}">
+            <h4>{{ form.genres.label }}</h4>
+               {% for genre in form.genres %}
+               <div class="form-check">
+                   {{ genre(class="form-check-input") }}
+                   {{ genre.label }}
+               </div>
+               {% endfor %}
+    </div>
+    <div class="form-group">
+        {{ form.min_average.label }} {{ form.min_average(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.max_average.label }} {{form.max_average(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.min_reviews.label }} {{ form.min_reviews(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.max_reviews.label }} {{form.max_reviews(class="form-control") }}
+    </div>
+
+    
+    {% if form.tags.data %}
+    <div class="form-group">
+        {{ form.tags.label }} {{ form.tags(class="form-control") }}
+    </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Hae</button>
 </form>
 
+{% if games %}
+<h2>Hakutuloksia: {{ len(games) }}</h2>
+
+<table class="table table-responsive table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Peli</th>
+            <th scope="col">Kehittäjä</th>
+            <th scope="col">Julkaisuvuosi</th>
+            <th scope="col">Arvioiden lukumäärä</th>
+            <th scope="col">Arvioiden keskiarvo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for game in games %}
+        <tr>
+            <td>
+                <a href="{{ url_for('games_view', game_id = game.id) }}" style="white-space: pre-wrap; word-wrap: break-word;">{{ game.name }}</a>
+            </td>
+            <td>
+                <span style="white-space: pre-wrap; word-wrap: break-word;">{{ game.developer }}</span>
+            </td>
+            <td>
+                {{ game.year }}
+            </td>
+            <td>
+                {{ review_numbers[game_id] }}
+            </td>
+            <td>
+                {{ review_averages[game_id] }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+
+</table>
+
+{% endif %}
 
 
 {% endblock %}

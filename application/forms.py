@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectMultipleField, widgets, ValidationError
+from wtforms import SelectMultipleField, widgets, ValidationError, validators
 
 
 class BaseForm(FlaskForm):
@@ -33,10 +33,14 @@ def max_length(max):
 
 
 
-def length_validators(min=1, max = -1):
+def length_validators(min=1, max = -1, optional=False):
     if max < 0: 
         raise ValueError("Ylärajaa ei asetettu")
-    return [min_length(min), max_length(max)]
+    
+    validator_list = [min_length(min), max_length(max)]
+    if optional: 
+        validator_list.append(validators.Optional)
+    return validator_list
 
 
 # kuten toteutettu https://gist.github.com/doobeh/4668212

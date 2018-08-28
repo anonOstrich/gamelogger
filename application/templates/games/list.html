@@ -18,7 +18,7 @@
     
     {% for game in games %}
     <tr>
-        <td><div style="white-space: pre-wrap; word-wrap: break-word"><a style="white-space: pre-wrap; word-wrap: break-word" href="{{ url_for('games_view', game_id=game.id) }}">{{ game.name }}</a></div></td>
+        <td><a style="white-space: pre-wrap; word-wrap: break-word" href="{{ url_for('games_view', game_id=game.id) }}">{{ game.name }}</a></td>
         <td style="word-wrap: break-word;">{{ game.developer }}</td>
         <td>{{ game.year }}</td>
         <td>{{ review_numbers[game.id] }}</td>
