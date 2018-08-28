@@ -27,32 +27,31 @@ def search():
     search_parameters = {}
 
     # varmasti on järkevämpi tapa iteroida läpi kentät
-    print(type(form.name.data))
-
-
+    print(form.genres.data)
     if form.name.data != "": 
         search_parameters["name"] = form.name.data
     
-    if form.min_year.data != "": 
+    if form.min_year.data is not None: 
         search_parameters["min_year"] = form.min_year.data
     
-    if form.max_year.data!= "": 
+    if form.max_year.data is not None: 
         search_parameters["max_year"] = form.max_year.data
     
     if form.developer.data != "":
         search_parameters["developer"] = form.developer.data
 
+    if form.genres.data:
+        search_parameters["genres"] = tuple(form.genres.data)
 
-    if form.min_average.data != "":
+
+    if form.min_average.data is not None:
         search_parameters["min_average"] = form.min_average.data
-    if form.max_average.data != "": 
+    if form.max_average.data is not None: 
         search_parameters["max_average"] = form.max_average.data
-    if form.min_count.data != "":
+    if form.min_count.data is not None:
         search_parameters["min_count"] = form.min_count.data
-    if form.max_count.data != "": 
+    if form.max_count.data is not None: 
         search_parameters["max_count"] = form.max_count.data
 
- 
     games_info = Game.find_all_info(search_parameters)
-
     return render_template("search/search.html", form=form, games_info = games_info)

@@ -6,11 +6,12 @@ from sqlalchemy.sql import text
 from sqlalchemy import bindparam
 import os
 
+
 class Game(Base):
     name = db.Column(db.String(200), nullable=False)
     developer = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(1000), nullable=False)
-    year = db.Column(db.Integer, nullable=False) 
+    year = db.Column(db.Integer, nullable=False)
 
     reviews = db.relationship("Review", backref="game", lazy=True)
     game_genres = db.relationship("GameGenre", backref="game", lazy=True)
@@ -23,12 +24,10 @@ class Game(Base):
         self.year = year
 
     def update_genres(self, genre_ids):
-        # voisiko tehdä vähemmällä tietokannan käytöllä kuin poistamalla aina kaikki? 
+        # voisiko tehdä vähemmällä tietokannan käytöllä kuin poistamalla aina kaikki?
         GameGenre.query.filter(GameGenre.game_id == self.id).delete()
         db.session.commit()
         self.add_genres(genre_ids)
-
-
 
     def add_genres(self, genre_ids):
         def create_game_genre(genre_id):
@@ -37,12 +36,11 @@ class Game(Base):
             result.genre_id = genre_id
             return result
 
-        g_genres = map(create_game_genre, genre_ids)            
+        g_genres = map(create_game_genre, genre_ids)
         db.session.add_all(g_genres)
         db.session.commit()
 
-
-    def modify_tags(self, tag_ids): 
+    def modify_tags(self, tag_ids):
         GameTag.query.filter_by(game_id=self.id).delete()
         self.add_tags(tag_ids)
 
@@ -57,41 +55,37 @@ class Game(Base):
         db.session.add_all(game_tags)
         db.session.commit()
 
+    # yhdistetty toiminnallisuutta, voisi heittää erilliseen utilities-luokkaankin
 
-    #yhdistetty toiminnallisuutta, voisi heittää erilliseen utilities-luokkaankin
     @staticmethod
-    def find_all_numbers_of_reviews_with_having_condition(condition="",param_name=None, param_value=None):
-        query = "SELECT Game.id, COUNT(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id "+ condition + ";"
+    def find_all_numbers_of_reviews_with_having_condition(condition="", param_name=None, param_value=None):
+        query = "SELECT Game.id, COUNT(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id " + condition + ";"
 
         stmt = text(query)
 
-        if param_value: 
+        if param_value:
             stmt = stmt.bindparams(
                 bindparam(param_name, value=param_value, )
             )
-       
-        res = db.engine.execute(stmt)        
-        return {row[0]:row[1] for row in res}
 
+        res = db.engine.execute(stmt)
+        return {row[0]: row[1] for row in res}
 
     @staticmethod
-    def find_all_numbers_of_reviews(): 
+    def find_all_numbers_of_reviews():
         return Game.find_all_numbers_of_reviews_with_having_condition()
-
-  
 
     @staticmethod
     def find_numbers_of_reviews_for_genre(genre_id):
-        return Game.find_all_numbers_of_reviews_with_having_condition("HAVING Game.id IN (SELECT game_id FROM Game_genre WHERE genre_id = :genre_id)"
-        ,"genre_id", genre_id)
- 
+        return Game.find_all_numbers_of_reviews_with_having_condition("HAVING Game.id IN (SELECT game_id FROM Game_genre WHERE genre_id = :genre_id)", "genre_id", genre_id)
 
-    #samoin yhdistetty toiminnallisuutta
+    # samoin yhdistetty toiminnallisuutta
+
     @staticmethod
     def construct_review_averages_dictionary(res):
         review_averages = {}
-        
-        for row in res: 
+
+        for row in res:
             avg = row[1]
 
             if avg is None:
@@ -101,19 +95,18 @@ class Game(Base):
             if os.environ.get("HEROKU"):
                 avg = float(avg)
 
-            if avg is None: 
+            if avg is None:
                 avg = ""
-            elif avg.is_integer():
-                avg = int(avg)
             else:
                 avg = format(row[1], ".2f")
             review_averages[row[0]] = avg
-            
-        return review_averages     
-    
+
+        return review_averages
+
     @staticmethod
     def find_all_averages_of_reviews():
-        stmt = text("SELECT Game.id, AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id;")
+        stmt = text(
+            "SELECT Game.id, AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id;")
         res = db.engine.execute(stmt)
         return Game.construct_review_averages_dictionary(res)
 
@@ -121,97 +114,98 @@ class Game(Base):
     def find_averages_of_reviews_for_genre(genre_id):
 
         stmt = text("SELECT Game.id, AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id"
-        " HAVING Game.id IN (SELECT DISTINCT Game_genre.game_id FROM Game_genre WHERE Game_genre.genre_id = :genre_id);").params(genre_id=genre_id)
+                    " HAVING Game.id IN (SELECT DISTINCT Game_genre.game_id FROM Game_genre WHERE Game_genre.genre_id = :genre_id);").params(genre_id=genre_id)
         res = db.engine.execute(stmt)
         return Game.construct_review_averages_dictionary(res)
 
-    
     @staticmethod
     def find_all_unreviewed_games(user_id):
         stmt = text("SELECT DISTINCT Game.id, Game.name FROM Game"
                     " WHERE Game.id NOT IN (SELECT Game.id FROM Game JOIN Review ON Game.id = Review.game_id"
                     " WHERE Review.account_id = :user_id); "
-                      ).params(user_id=user_id)
+                    ).params(user_id=user_id)
 
-        res=db.engine.execute(stmt)
-        return [{"id":row[0], "name":row[1]} for row in res]
-
-        
-        
+        res = db.engine.execute(stmt)
+        return [{"id": row[0], "name":row[1]} for row in res]
 
     # dictionary with keyes being strings, e.g. "min_year":2000
+
     @staticmethod
     def find_all_info(parameters):
         name_query = ""
         if "name" in parameters:
             # || on tapa liittää merkkijonoja yhteen sqlitessä ja postgresql:ssä
-            name_query = "LOWER(Game.name) LIKE '%' || :name ||'%'" 
+            name_query = "LOWER(Game.name) LIKE '%' || :name ||'%'"
 
         year_query = ""
-        if "min_year" in parameters or  "max_year" in parameters:
+        if "min_year" in parameters or "max_year" in parameters:
             first = ":min_year" if parameters["min_year"] else 0
             last = ":max_year" if parameters["max_year"] else 3000
-            year_query = "Game.year BETWEEN " + str(first) +"  AND " + str(last)
+            year_query = "Game.year BETWEEN " + \
+                str(first) + "  AND " + str(last)
 
         developer_query = ""
         if "developer" in parameters:
             developer_query = "LOWER(Game.developer) LIKE '%' || :developer || '%'"
 
-
         # TODO
         #genre_query = ""
         #tag_query = ""
-
 
         average_query = ""
         if "min_average" in parameters or "max_average" in parameters:
             lowest_average = ":min_average" if parameters["min_average"] else 0
             highest_average = ":max_average" if parameters["max_average"] else 10
-            no_average_addendum = "" if parameters["min_average"] else " OR AVG(Review.points) IS NULL"
-            average_query = "AVG(Review.points) BETWEEN " + str(lowest_average) + " AND " + str(highest_average) + no_average_addendum
-        
+            no_average_addendum = "" if parameters[
+                "min_average"] else " OR AVG(Review.points) IS NULL"
+            average_query = "AVG(Review.points) BETWEEN " + str(lowest_average) + \
+                " AND " + str(highest_average) + no_average_addendum
+
         count_query = ""
         if "min_count" in parameters or "max_count" in parameters:
             lowest_count = ":min_count" if parameters["min_count"] else 0
             # ainakin postgreSQL:n integerin suurin arvo. Jos missään tulee vastaan niin herokussa, jossa ko tkhj käytössä
             highest_count = ":max_count" if parameters["max_count"] else 2147483647
-            no_count_addendum = "" if parameters["min_count"] else " OR COUNT(Review.points) IS NULL"
-            count_query = "COUNT(Review.points) BETWEEN " + str(lowest_count) + " AND " + str(highest_count) + no_count_addendum
+            no_count_addendum = "" if parameters[
+                "min_count"] else " OR COUNT(Review.points) IS NULL"
+            count_query = "COUNT(Review.points) BETWEEN " + str(lowest_count) + \
+                " AND " + str(highest_count) + no_count_addendum
 
-        where_filters = [name_query, year_query, developer_query] 
-        where_filters = [ q for q in where_filters if q !=""]
-        having_filters = [average_query , count_query]
+        genre_query = ""
+        if "genres" in parameters:
+            genre_query = " Game.id IN (:genres) "
+
+        where_filters = [name_query, year_query, developer_query]
+        where_filters = [q for q in where_filters if q != ""]
+        having_filters = [average_query, count_query, genre_query]
         having_filters = [q for q in having_filters if q != ""]
-        query = "SELECT Game.id, Game.name, Game.year, Game.developer, COUNT(Review.points), AVG(Review.points)" + " From Game LEFT JOIN Review ON Game.id=Review.game_id LEFT JOIN Game_genre ON Game_genre.game_id=Game.id  LEFT JOIN" + " Game_tag ON Game_tag.game_id = Game.id"
+        query = "SELECT Game.id, Game.name, Game.year, Game.developer, COUNT(Review.points), AVG(Review.points)" + \
+            " From Game LEFT JOIN Review ON Game.id=Review.game_id LEFT JOIN Game_genre ON Game_genre.game_id=Game.id  LEFT JOIN" + \
+                " Game_tag ON Game_tag.game_id = Game.id"
 
-        if len("".join(where_filters)) > 0: 
+        if len("".join(where_filters)) > 0:
             query = query + " WHERE ("
             query = query + " AND ".join(where_filters)
-            query = query + ") " 
+            query = query + ") "
 
-        query = query + "GROUP BY Game.id "
+        query = query + " GROUP BY Game.id "
 
         if len("".join(having_filters)) > 0:
             query = query + "HAVING ("
             query = query + " AND ".join(having_filters)
             query = query + ")"
 
-
         query = query + " ORDER BY Game.name;"
         stmt = text(query)
 
-
-
-        
-
-        
         res = db.engine.execute(stmt, parameters)
 
         games_info = []
 
-        for row in res: 
+        for row in res:
             game_info = {}
-            game_info.update({"id":row[0], "name":row[1], "year":row[2], "developer":row[3], "number_of_reviews":row[4], "average_of_reviews":row[5]})
+            game_info.update({"id": row[0], "name": row[1], "year": row[2], "developer": row[3],
+                              "number_of_reviews": row[4], "average_of_reviews": row[5]})
             games_info.append(game_info)
 
         return games_info
