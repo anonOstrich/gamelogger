@@ -149,7 +149,6 @@ class Game(Base):
             developer_query = "LOWER(Game.developer) LIKE '%' || :developer || '%'"
 
         # TODO
-        #genre_query = ""
         #tag_query = ""
 
         average_query = ""
@@ -171,16 +170,49 @@ class Game(Base):
             count_query = "COUNT(Review.points) BETWEEN " + str(lowest_count) + \
                 " AND " + str(highest_count) + no_count_addendum
 
-        genre_query = ""
-        if "genres" in parameters:
-            genre_query = " Game.id IN (:genres) "
 
-        where_filters = [name_query, year_query, developer_query]
+
+                
+
+        genre_where_query = ""
+        if "genres" in parameters:
+            genre_where_query = " Game.id IN ("
+
+            games_that_match_genre = GameGenre.query.filter(GameGenre.genre_id.in_(parameters["genres"])).all()
+
+
+            games_that_match_genre = [g.game_id for g in games_that_match_genre]
+
+            print("GAMES THAT MATCH ANY GENRE:")
+            print(games_that_match_genre)
+
+            game_parameter_names = []
+            for game_id in games_that_match_genre:
+                game_parameter_names.append(":g_id" + str(game_id))
+                parameters.update({"g_id" + str(game_id): game_id})
+
+            genre_where_query = genre_where_query + ", ".join(game_parameter_names)
+            genre_where_query = genre_where_query + ")"
+
+        genre_having_query = ""
+        if "genres" in parameters:
+            genre_having_query = genre_having_query + " COUNT(Game_genre.id) >= :number_of_genres"
+            parameters.update({"number_of_genres": len(parameters["genres"])})
+
+
+
+
+        where_filters = [name_query, year_query, developer_query, genre_where_query]
         where_filters = [q for q in where_filters if q != ""]
-        having_filters = [average_query, count_query, genre_query]
+        having_filters = [average_query, count_query, genre_having_query]
         having_filters = [q for q in having_filters if q != ""]
-        query = "SELECT Game.id, Game.name, Game.year, Game.developer, COUNT(Review.points), AVG(Review.points)" + \
-            " From Game LEFT JOIN Review ON Game.id=Review.game_id LEFT JOIN Game_genre ON Game_genre.game_id=Game.id  LEFT JOIN" + \
+
+        query = "SELECT Game.id, Game.name, Game.year, Game.developer, COUNT(Review.points), AVG(Review.points)"
+
+        if "genres" in parameters:
+            query = query + ", COUNT(Game_Genre.id)"
+
+        query = query + " From Game LEFT JOIN Review ON Game.id=Review.game_id LEFT JOIN Game_genre ON Game_genre.game_id=Game.id  LEFT JOIN" + \
                 " Game_tag ON Game_tag.game_id = Game.id"
 
         if len("".join(where_filters)) > 0:
@@ -197,7 +229,7 @@ class Game(Base):
 
         query = query + " ORDER BY Game.name;"
         stmt = text(query)
-
+    
         res = db.engine.execute(stmt, parameters)
 
         games_info = []
