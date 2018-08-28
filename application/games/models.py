@@ -153,20 +153,18 @@ class Game(Base):
 
         average_query = ""
         if "min_average" in parameters or "max_average" in parameters:
-            lowest_average = ":min_average" if parameters["min_average"] else 0
-            highest_average = ":max_average" if parameters["max_average"] else 10
-            no_average_addendum = "" if parameters[
-                "min_average"] else " OR AVG(Review.points) IS NULL"
+            lowest_average = ":min_average" if "min_average" in parameters else 0
+            highest_average = ":max_average" if "max_average" in parameters else 10
+            no_average_addendum = "" if "min_average" in parameters else " OR AVG(Review.points) IS NULL"
             average_query = "AVG(Review.points) BETWEEN " + str(lowest_average) + \
                 " AND " + str(highest_average) + no_average_addendum
 
         count_query = ""
         if "min_count" in parameters or "max_count" in parameters:
-            lowest_count = ":min_count" if parameters["min_count"] else 0
+            lowest_count = ":min_count" if "min_count" in parameters else 0
             # ainakin postgreSQL:n integerin suurin arvo. Jos missään tulee vastaan niin herokussa, jossa ko tkhj käytössä
-            highest_count = ":max_count" if parameters["max_count"] else 2147483647
-            no_count_addendum = "" if parameters[
-                "min_count"] else " OR COUNT(Review.points) IS NULL"
+            highest_count = ":max_count" if "max_count" in parameters else 2147483647
+            no_count_addendum = "" if "min_count" in parameters else " OR COUNT(Review.points) IS NULL"
             count_query = "COUNT(Review.points) BETWEEN " + str(lowest_count) + \
                 " AND " + str(highest_count) + no_count_addendum
 
@@ -182,9 +180,6 @@ class Game(Base):
 
 
             games_that_match_genre = [g.game_id for g in games_that_match_genre]
-
-            print("GAMES THAT MATCH ANY GENRE:")
-            print(games_that_match_genre)
 
             game_parameter_names = []
             for game_id in games_that_match_genre:
