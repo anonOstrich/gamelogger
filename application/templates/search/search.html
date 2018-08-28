@@ -6,15 +6,45 @@
     <div class="form-group">
         {{ form.name.label }} {{ form.name(class="form-control") }}
     </div>
-
+</div>
+<div class="container text-danger">
+    <ul class="list-inline">
+        {% for error in form.name.errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+</div>
     <div class="form-group">
         {{ form.min_year.label }} {{ form.min_year(class="form-control") }}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.min_year.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
     </div>
     <div class=form-group>
         {{ form.max_year.label }} {{ form.max_year(class="form-control") }}
     </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.max_year.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <div class="form-group">
         {{ form.developer.label }} {{ form.developer(class="form-control") }}
+    </div>
+
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.developer.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <div class="container" id ="{{ form.genres.id }}">
@@ -26,17 +56,55 @@
                </div>
                {% endfor %}
     </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.genres.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <div class="form-group">
         {{ form.min_average.label }} {{ form.min_average(class="form-control") }}
     </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.min_average.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
     <div class="form-group">
         {{ form.max_average.label }} {{form.max_average(class="form-control") }}
     </div>
-    <div class="form-group">
-        {{ form.min_reviews.label }} {{ form.min_reviews(class="form-control") }}
+
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.max_average.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
     </div>
     <div class="form-group">
-        {{ form.max_reviews.label }} {{form.max_reviews(class="form-control") }}
+        {{ form.min_count.label }} {{ form.min_count(class="form-control") }}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.min_count.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="form-group">
+        {{ form.max_count.label }} {{form.max_count(class="form-control") }}
+    </div>
+    <div class="container text-danger">
+        <ul class="list-inline">
+            {% for error in form.max_count.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
     
@@ -49,8 +117,8 @@
     <button type="submit" class="btn btn-primary">Hae</button>
 </form>
 
-{% if games %}
-<h2>Hakutuloksia: {{ len(games) }}</h2>
+{% if games_info %}
+<h2>Hakutuloksia: {{ games_info.length }}</h2>
 
 <table class="table table-responsive table-striped">
     <thead class="thead-dark">
@@ -63,22 +131,24 @@
         </tr>
     </thead>
     <tbody>
-        {% for game in games %}
+        {% for game_info in games_info %}
         <tr>
             <td>
-                <a href="{{ url_for('games_view', game_id = game.id) }}" style="white-space: pre-wrap; word-wrap: break-word;">{{ game.name }}</a>
+                <a href="{{ url_for('games_view', game_id = game_info['id']) }}" style="white-space: pre-wrap; word-wrap: break-word;">
+                    {{ game_info["name"] }}
+                </a>
             </td>
             <td>
-                <span style="white-space: pre-wrap; word-wrap: break-word;">{{ game.developer }}</span>
+                <span style="white-space: pre-wrap; word-wrap: break-word;">{{ game_info["developer"] }}</span>
             </td>
             <td>
-                {{ game.year }}
+                {{ game_info["year"] }}
             </td>
             <td>
-                {{ review_numbers[game_id] }}
+                {{ game_info["number_of_reviews"] }}
             </td>
             <td>
-                {{ review_averages[game_id] }}
+                {{ game_info["average_of_reviews"] }}
             </td>
         </tr>
         {% endfor %}

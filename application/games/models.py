@@ -139,3 +139,79 @@ class Game(Base):
         
         
 
+    # dictionary with keyes being strings, e.g. "min_year":2000
+    @staticmethod
+    def find_all_info(parameters):
+        name_query = ""
+        if "name" in parameters:
+            # || on tapa liittää merkkijonoja yhteen sqlitessä ja postgresql:ssä
+            name_query = "LOWER(Game.name) LIKE '%' || :name ||'%'" 
+
+        year_query = ""
+        if "min_year" in parameters or  "max_year" in parameters:
+            first = ":min_year" if parameters["min_year"] else 0
+            last = ":max_year" if parameters["max_year"] else 3000
+            year_query = "Game.year BETWEEN " + str(first) +"  AND " + str(last)
+
+        developer_query = ""
+        if "developer" in parameters:
+            developer_query = "LOWER(Game.developer) LIKE '%' || :developer || '%'"
+
+
+        # TODO
+        #genre_query = ""
+        #tag_query = ""
+
+
+        average_query = ""
+        if "min_average" in parameters or "max_average" in parameters:
+            lowest_average = ":min_average" if parameters["min_average"] else 0
+            highest_average = ":max_average" if parameters["max_average"] else 10
+            no_average_addendum = "" if parameters["min_average"] else " OR AVG(Review.points) IS NULL"
+            average_query = "AVG(Review.points) BETWEEN " + str(lowest_average) + " AND " + str(highest_average) + no_average_addendum
+        
+        count_query = ""
+        if "min_count" in parameters or "max_count" in parameters:
+            lowest_count = ":min_count" if parameters["min_count"] else 0
+            # ainakin postgreSQL:n integerin suurin arvo. Jos missään tulee vastaan niin herokussa, jossa ko tkhj käytössä
+            highest_count = ":max_count" if parameters["max_count"] else 2147483647
+            no_count_addendum = "" if parameters["min_count"] else " OR COUNT(Review.points) IS NULL"
+            count_query = "COUNT(Review.points) BETWEEN " + str(lowest_count) + " AND " + str(highest_count) + no_count_addendum
+
+        where_filters = [name_query, year_query, developer_query] 
+        where_filters = [ q for q in where_filters if q !=""]
+        having_filters = [average_query , count_query]
+        having_filters = [q for q in having_filters if q != ""]
+        query = "SELECT Game.id, Game.name, Game.year, Game.developer, COUNT(Review.points), AVG(Review.points)" + " From Game LEFT JOIN Review ON Game.id=Review.game_id LEFT JOIN Game_genre ON Game_genre.game_id=Game.id  LEFT JOIN" + " Game_tag ON Game_tag.game_id = Game.id"
+
+        if len("".join(where_filters)) > 0: 
+            query = query + " WHERE ("
+            query = query + " AND ".join(where_filters)
+            query = query + ") " 
+
+        query = query + "GROUP BY Game.id "
+
+        if len("".join(having_filters)) > 0:
+            query = query + "HAVING ("
+            query = query + " AND ".join(having_filters)
+            query = query + ")"
+
+
+        query = query + " ORDER BY Game.name;"
+        stmt = text(query)
+
+
+
+        
+
+        
+        res = db.engine.execute(stmt, parameters)
+
+        games_info = []
+
+        for row in res: 
+            game_info = {}
+            game_info.update({"id":row[0], "name":row[1], "year":row[2], "developer":row[3], "number_of_reviews":row[4], "average_of_reviews":row[5]})
+            games_info.append(game_info)
+
+        return games_info

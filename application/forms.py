@@ -39,7 +39,7 @@ def length_validators(min=1, max = -1, optional=False):
     
     validator_list = [min_length(min), max_length(max)]
     if optional: 
-        validator_list.append(validators.Optional)
+        validator_list.append(validators.Optional())
     return validator_list
 
 
