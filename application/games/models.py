@@ -2,7 +2,7 @@ from application import db
 from application.genres.models import GameGenre
 from application.tags.models import GameTag
 from application.models import Base
-from application.utilities import page_query
+from application.utilities import page_query, shorten_if_longer_than
 from application.constants import GAME_RESULTS_PER_PAGE
 from sqlalchemy.sql import text
 from sqlalchemy import bindparam
@@ -133,7 +133,7 @@ class Game(Base):
     # dictionary with keyes being strings, e.g. "min_year":2000
 
     @staticmethod
-    def find_all_info(parameters, page_number = 1):
+    def find_all_info(parameters={}, page_number = 1):
         name_query = ""
         if "name" in parameters:
             # || on tapa liittää merkkijonoja yhteen sqlitessä ja postgresql:ssä
@@ -176,20 +176,16 @@ class Game(Base):
 
         genre_where_query = ""
         if "genres" in parameters:
-            genre_where_query = " Game.id IN ("
+            genre_where_query = " Game_genre.genre_id IN ("
 
-            games_that_match_genre = GameGenre.query.filter(GameGenre.genre_id.in_(parameters["genres"])).all()
+            genre_parameter_names = []
+            for genre_id in parameters["genres"]:
+                genre_parameter_names.append(":genre_id" + str(genre_id))
+                parameters.update({"genre_id" + str(genre_id): genre_id})
+            
+            genre_where_query = genre_where_query + ", ".join(genre_parameter_names)
+            genre_where_query  = genre_where_query + " ) "
 
-
-            games_that_match_genre = [g.game_id for g in games_that_match_genre]
-
-            game_parameter_names = []
-            for game_id in games_that_match_genre:
-                game_parameter_names.append(":g_id" + str(game_id))
-                parameters.update({"g_id" + str(game_id): game_id})
-
-            genre_where_query = genre_where_query + ", ".join(game_parameter_names)
-            genre_where_query = genre_where_query + ")"
 
         genre_having_query = ""
         if "genres" in parameters:
@@ -199,18 +195,16 @@ class Game(Base):
 
         tag_where_query = ""
         if "tags" in parameters:
-            tag_where_query = "Game.id IN ("
-            games_that_match_tag = GameTag.query.filter(GameTag.tag_id.in_(parameters["tags"])).all()
+            tag_where_query = "Game_tag.tag_id IN ("
 
-            games_that_match_tag = [gt.game_id for gt in games_that_match_tag]
+            tag_parameter_names = []
+            for tag_id in parameters["tags"]: 
+                tag_parameter_names.append(":tag_id" + str(tag_id))
+                parameters.update({"tag_id" + str(tag_id): tag_id})
 
-            game_parameter_names = []
-            for game_id in games_that_match_tag: 
-                game_parameter_names.append(":g2_id" + str(game_id))
-                parameters.update({"g2_id" + str(game_id): game_id })
+            tag_where_query = tag_where_query + ", ".join(tag_parameter_names) + ") "
 
-            tag_where_query = tag_where_query + ", ".join(game_parameter_names)
-            tag_where_query = tag_where_query + ")"
+ 
         
         tag_having_query = ""
         if "tags" in parameters:
@@ -261,7 +255,7 @@ class Game(Base):
 
         for row in res:
             game_info = {}
-            game_info.update({"id": row[0], "name": row[1], "year": row[2], "developer": row[3],
+            game_info.update({"id": row[0], "name": shorten_if_longer_than(row[1]), "year": row[2], "developer": shorten_if_longer_than(row[3]),
                               "number_of_reviews": row[4], "average_of_reviews": row[5]})
             games_info.append(game_info)
 

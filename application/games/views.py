@@ -7,7 +7,8 @@ from application.games.forms import GameForm
 from application.reviews.models import Review
 from application.reactions.models import Reaction
 from application.reactions.forms import ReactionForm
-
+from application.constants import MAXIMUM_LENGTH_OF_LISTED_TITLE
+from application.utilities import shorten_if_longer_than
 from application.genres.models import Genre, GameGenre
 from application.genres.forms import GenreSelectionForm
 
@@ -25,9 +26,11 @@ def games_form():
 @app.route("/games/", methods=["GET"])
 def games_index(): 
     # TODO:
-    # selviä yhdellä tietokantakyselyllä kolmen sijaan
-    return render_template("games/list.html", games = Game.query.all(), review_numbers = Game.find_all_numbers_of_reviews(),
-                           review_averages = Game.find_all_averages_of_reviews(), title="Kaikki pelit")
+
+
+    games_info = Game.find_all_info()
+    
+    return render_template("games/list.html", games_info = games_info, title="Kaikki pelit")
 
 
 @app.route("/games/", methods=["POST"])
