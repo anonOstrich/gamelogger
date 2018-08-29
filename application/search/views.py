@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import current_user
 from application import app, db
+from application.constants import GAME_RESULTS_PER_PAGE
 from application.games.models import Game
 from application.search.forms import SearchForm
 import os
@@ -62,12 +63,10 @@ def search(page_number = 1):
         search_parameters["min_count"] = form.min_count.data
     if form.max_count.data is not None: 
         search_parameters["max_count"] = form.max_count.data
-
-    print("PAGE NUMBER: ")
-    print(page_number)
     
 
     games_info = Game.find_all_info(search_parameters, page_number = int(page_number))
-    return render_template("search/search.html", form=form, games_info = games_info, page_number = int(page_number), scroll="result_table")
+    return render_template("search/search.html", form=form, games_info = games_info, page_number = int(page_number), scroll="result_table", 
+        last_page =  len(games_info)< GAME_RESULTS_PER_PAGE)
     
 

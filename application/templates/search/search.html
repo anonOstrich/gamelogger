@@ -128,7 +128,11 @@
     <button type="submit" class="btn btn-primary">Hae</button>
 </form>
 
-{% if games_info %}
+{% if games_info  %}
+
+{% if games_info|length == 0%}
+Ei enempää tuloksia
+{% endif %}
 
 <h2 id = "result_table">Hakutulokset</h2>
 
@@ -165,43 +169,33 @@
     </tbody>
 </table>
 
-<nav aria-label="Search results navigation">
-  <ul class="pagination">
-    <li class="page-item">
+<div class="btn-group" role="group" aria-label="Search results navigation">
+
+  
+  <form method = "POST", action = "{{ url_for('search', page_number = 1)}}">
+  <button type="submit" class="btn btn-secondary">Ensimmäinen</button>
+  </form>
+
+    {% if page_number > 1 %}
     <form method = "POST", action = "{{ url_for('search', page_number = page_number - 1)}}">
-        <span style="visibility: hidden;">{{form}}</span>
-        <button type="submit" class="page-link">Edellinen</button>
-    </form>
-    </li>
+  <button type="submit" class="btn btn-secondary">{{ page_number - 1 }}</button>
+  </form>
+  {% endif%}
 
-        <li class="page-item">
-    <form method = "POST", action = "{{ url_for('search', page_number = page_number -1)}}">
-        <span style="visibility: hidden;">{{form}}</span>
-        <button type="submit" class="page-link">{{page_number - 1}}</button>
-    </form>
-    </li>
+  {% if games_info|length > 0 %}
 
-        <li class="page-item">
+  <form method = "POST", action = "{{ url_for('search', page_number = page_number)}}">
+  <button type="submit" class="btn btn-outline-secondary">{{ page_number }}</button>
+  </form>
+  {% endif %}
 
-        <a class="page-link" href="#">{{page_number}}</a>
-    
-    </li>
+{% if not last_page %}
+  <form method = "POST", action = "{{ url_for('search', page_number = page_number + 1)}}">
+  <button type="submit" class="btn btn-secondary">{{ page_number + 1}}</button>
+  </form>
+{% endif %}
 
-        <li class="page-item">
-    <form method = "POST", action = "{{ url_for('search', page_number = page_number +1)}}">
-        <span style="visibility: hidden;">{{form}}</span>
-        <button type="submit" class="page-link">{{ page_number + 1}}</button>
-    </form>
-    </li>
-
-        <li class="page-item">
-    <form method = "POST", action = "{{ url_for('search', page_number = page_number +1)}}">
-        <span style="visibility: hidden;">{{form}}</span>
-        <button type="submit" class="page-link">Seuraava</button>
-    </form>
-    </li>
-  </ul>
-</nav>
+</div>
 
 
 
