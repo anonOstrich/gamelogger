@@ -195,9 +195,32 @@ class Game(Base):
             parameters.update({"number_of_genres": len(parameters["genres"])})
 
 
+        tag_where_query = ""
+        if "tags" in parameters:
+            tag_where_query = "Game.id IN ("
+            games_that_match_tag = GameTag.query.filter(GameTag.tag_id.in_(parameters["tags"])).all()
+
+            games_that_match_tag = [gt.game_id for gt in games_that_match_tag]
+
+            tag_parameter_names = []
+            for tag_id in games_that_match_tag: 
+                tag_parameter_names.append(":tag_id" + str(tag_id))
+                parameters.update({"tag_id" + str(tag_id): tag_id })
+
+            tag_where_query = tag_where_query + ", ".join(tag_parameter_names)
+            tag_where_query = tag_where_query + ")"
+        
+        tag_having_query = ""
+        if "tags" in parameters:
+            tag_having_query = tag_having_query + " COUNT(Game_tag.id) >= :number_of_tags"
+            parameters.update({"number_of_tags": len(parameters["tags"])})
 
 
-        where_filters = [name_query, year_query, developer_query, genre_where_query]
+        
+
+
+
+        where_filters = [name_query, year_query, developer_query, genre_where_query, tag_where_query]
         where_filters = [q for q in where_filters if q != ""]
         having_filters = [average_query, count_query, genre_having_query]
         having_filters = [q for q in having_filters if q != ""]
@@ -207,8 +230,15 @@ class Game(Base):
         if "genres" in parameters:
             query = query + ", COUNT(Game_Genre.id)"
 
-        query = query + " From Game LEFT JOIN Review ON Game.id=Review.game_id LEFT JOIN Game_genre ON Game_genre.game_id=Game.id  LEFT JOIN" + \
-                " Game_tag ON Game_tag.game_id = Game.id"
+        if "tags"in parameters:
+            query = query + ", COUNT(Game_Tag.id)"
+
+        query = query + " From Game LEFT JOIN Review ON Game.id=Review.game_id "
+        
+        if "genres" in parameters:
+            query = query +  "LEFT JOIN Game_genre ON Game_genre.game_id=Game.id "
+        if "tags" in parameters:
+            query = query + " LEFT JOIN Game_tag ON Game_tag.game_id = Game.id "
 
         if len("".join(where_filters)) > 0:
             query = query + " WHERE ("
