@@ -202,12 +202,12 @@ class Game(Base):
 
             games_that_match_tag = [gt.game_id for gt in games_that_match_tag]
 
-            tag_parameter_names = []
-            for tag_id in games_that_match_tag: 
-                tag_parameter_names.append(":tag_id" + str(tag_id))
-                parameters.update({"tag_id" + str(tag_id): tag_id })
+            game_parameter_names = []
+            for game_id in games_that_match_tag: 
+                game_parameter_names.append(":g2_id" + str(tag_id))
+                parameters.update({"g2_id" + str(tag_id): tag_id })
 
-            tag_where_query = tag_where_query + ", ".join(tag_parameter_names)
+            tag_where_query = tag_where_query + ", ".join(game_parameter_names)
             tag_where_query = tag_where_query + ")"
         
         tag_having_query = ""
