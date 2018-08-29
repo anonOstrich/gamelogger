@@ -222,7 +222,7 @@ class Game(Base):
 
         where_filters = [name_query, year_query, developer_query, genre_where_query, tag_where_query]
         where_filters = [q for q in where_filters if q != ""]
-        having_filters = [average_query, count_query, genre_having_query]
+        having_filters = [average_query, count_query, genre_having_query, tag_having_query]
         having_filters = [q for q in having_filters if q != ""]
 
         query = "SELECT Game.id, Game.name, Game.year, Game.developer, COUNT(Review.points), AVG(Review.points)"
