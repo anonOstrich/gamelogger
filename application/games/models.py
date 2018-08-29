@@ -204,8 +204,8 @@ class Game(Base):
 
             game_parameter_names = []
             for game_id in games_that_match_tag: 
-                game_parameter_names.append(":g2_id" + str(tag_id))
-                parameters.update({"g2_id" + str(tag_id): tag_id })
+                game_parameter_names.append(":g2_id" + str(game_id))
+                parameters.update({"g2_id" + str(game_id): game_id })
 
             tag_where_query = tag_where_query + ", ".join(game_parameter_names)
             tag_where_query = tag_where_query + ")"
