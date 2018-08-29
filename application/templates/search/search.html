@@ -129,7 +129,8 @@
 </form>
 
 {% if games_info %}
-<h2>Hakutuloksia: {{ games_info.length }}</h2>
+
+<h2 id = "result_table">Hakutulokset</h2>
 
 <table class="table table-responsive table-striped">
     <thead class="thead-dark">
@@ -145,9 +146,7 @@
         {% for game_info in games_info %}
         <tr>
             <td>
-                <a href="{{ url_for('games_view', game_id = game_info['id']) }}" style="white-space: pre-wrap; word-wrap: break-word;">
-                    {{ game_info["name"] }}
-                </a>
+                <a href="{{ url_for('games_view', game_id = game_info['id']) }}" style="white-space: pre-wrap; word-wrap: break-word;">{{ game_info["name"] }}</a>
             </td>
             <td>
                 <span style="white-space: pre-wrap; word-wrap: break-word;">{{ game_info["developer"] }}</span>
@@ -164,8 +163,46 @@
         </tr>
         {% endfor %}
     </tbody>
-
-
 </table>
+
+<nav aria-label="Search results navigation">
+  <ul class="pagination">
+    <li class="page-item">
+    <form method = "POST", action = "{{ url_for('search', page_number = page_number - 1)}}">
+        <span style="visibility: hidden;">{{form}}</span>
+        <button type="submit" class="page-link">Edellinen</button>
+    </form>
+    </li>
+
+        <li class="page-item">
+    <form method = "POST", action = "{{ url_for('search', page_number = page_number -1)}}">
+        <span style="visibility: hidden;">{{form}}</span>
+        <button type="submit" class="page-link">{{page_number - 1}}</button>
+    </form>
+    </li>
+
+        <li class="page-item">
+
+        <a class="page-link" href="#">{{page_number}}</a>
+    
+    </li>
+
+        <li class="page-item">
+    <form method = "POST", action = "{{ url_for('search', page_number = page_number +1)}}">
+        <span style="visibility: hidden;">{{form}}</span>
+        <button type="submit" class="page-link">{{ page_number + 1}}</button>
+    </form>
+    </li>
+
+        <li class="page-item">
+    <form method = "POST", action = "{{ url_for('search', page_number = page_number +1)}}">
+        <span style="visibility: hidden;">{{form}}</span>
+        <button type="submit" class="page-link">Seuraava</button>
+    </form>
+    </li>
+  </ul>
+</nav>
+
+
 
 {% endif %} {% endblock %}

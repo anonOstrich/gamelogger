@@ -2,6 +2,8 @@ from application import db
 from application.genres.models import GameGenre
 from application.tags.models import GameTag
 from application.models import Base
+from application.utilities import page_query
+from application.constants import GAME_RESULTS_PER_PAGE
 from sqlalchemy.sql import text
 from sqlalchemy import bindparam
 import os
@@ -131,7 +133,7 @@ class Game(Base):
     # dictionary with keyes being strings, e.g. "min_year":2000
 
     @staticmethod
-    def find_all_info(parameters):
+    def find_all_info(parameters, page_number = 1):
         name_query = ""
         if "name" in parameters:
             # || on tapa liittää merkkijonoja yhteen sqlitessä ja postgresql:ssä
@@ -252,11 +254,9 @@ class Game(Base):
             query = query + " AND ".join(having_filters)
             query = query + ")"
 
-        query = query + " ORDER BY Game.name;"
-        stmt = text(query)
-    
-        res = db.engine.execute(stmt, parameters)
+        query = query + " ORDER BY Game.name"
 
+        res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number)
         games_info = []
 
         for row in res:
