@@ -52,7 +52,7 @@ def auth_register():
         error_message = None
         if non_unique_username: 
             error_message = "Käyttäjätunnus " + form.username.data + " on valitettavasti varattu"
-        form.username.data = ""
+
         return render_template("/auth/registerform.html", form=form, non_unique_error = error_message)
      
 
@@ -60,6 +60,8 @@ def auth_register():
     db.session.add(user)
     db.session.commit()
     user.add_role(Role.query.filter_by(name="DEFAULT").first())
+
+    login_user(user)
 
     return redirect(url_for("index"))
     
