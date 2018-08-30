@@ -15,7 +15,8 @@ def developers_index():
 @app.route("/developers/<developer_name>", methods=["GET"])
 @app.route("/developers/<developer_name>/pages/<page_number>")
 def developers_view(developer_name, page_number = 1): 
+
     games_info = Game.find_all_info({"developer": developer_name}, page_number = int(page_number))
     base_url = "/developers/" + developer_name
     return render_template("games/list.html", games_info = games_info, title = "Kehittäjä: " + developer_name, 
-    page_number = int(page_number), last_page = len(games_info) < GAME_RESULTS_PER_PAGE)
+    page_number = int(page_number), last_page = len(games_info) < GAME_RESULTS_PER_PAGE, base_url = base_url)

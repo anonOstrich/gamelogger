@@ -148,10 +148,12 @@ class Game(Base):
 
         developer_query = ""
         if "developer" in parameters:
-            developer_query = "LOWER(Game.developer) LIKE '%' || :developer || '%'"
 
-        # TODO
-        #tag_query = ""
+            # Voidaan vaihtaa: LIKE, jolloin ei tarvitse tästämä täysin 
+            # ja lowercase, jolloin kirjotusasulla ei väliä
+            developer_query = "Game.developer == :developer "
+
+    
 
         average_query = ""
         if "min_average" in parameters or "max_average" in parameters:
