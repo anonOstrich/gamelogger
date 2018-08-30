@@ -151,7 +151,7 @@ class Game(Base):
 
             # Voidaan vaihtaa: LIKE, jolloin ei tarvitse tästämä täysin 
             # ja lowercase, jolloin kirjotusasulla ei väliä
-            developer_query = "Game.developer == :developer "
+            developer_query = "Game.developer LIKE :developer "
 
     
 
