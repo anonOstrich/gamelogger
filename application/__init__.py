@@ -83,7 +83,7 @@ from application.tags import models
 from application.tags import views
 
 from application.search import views
-
+from application.developers import views
 from application.auth.models import User, UserRole
 
 # kirjautumistoiminnallisuus 2

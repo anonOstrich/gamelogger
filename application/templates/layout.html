@@ -20,15 +20,18 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item dropdown" aria-labelledby="navbarDropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Selaa
+                        Selaa pelejä
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                     <a class="dropdown-item" href="{{ url_for('games_index') }}">Kaikki pelit</a>
                     <a class="dropdown-item" href="{{ url_for('genres_index') }}">Genret</a>
-                    <a class="dropdown-item" href="{{ url_for('users_index') }}">Käyttäjät</a>
-                    <a class="dropdown-item" href="">Kehittäjät</a>
+
+                    <a class="dropdown-item" href="{{ url_for('developers_index') }}">Kehittäjät</a>
                 </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('users_index') }}">Käyttäjät</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('search') }}">Haku</a>

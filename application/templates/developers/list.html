@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h1>Kehittäjät</h1>
+
+<ul class="list-group">
+                {% for developer_info in developers_info %}
+
+                <a href="{{ url_for('developers_view', developer_name=developer_info[0]) }}">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ developer_info[0] }}
+                    <span class="badge badge-primary badge-pill">{{ developer_info[1] }}</span>
+                </li>
+                </a>
+                {% endfor %}
+</ul>
+
+{% endblock %}
