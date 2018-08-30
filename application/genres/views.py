@@ -4,10 +4,12 @@ from application import app, db, login_required
 from application.genres.models import Genre, GameGenre
 from application.genres.forms import GenreCreationForm
 from application.games.models import Game
+from application.constants import GAME_RESULTS_PER_PAGE
 
 @app.route("/genres", methods = ["GET"])
-def genres_index(): 
+def genres_index(page_number = 1): 
     sorted_genres = Genre.find_genres_sorted_by_number_of_games()
+
     return render_template("genres/list.html", genres = sorted_genres, form = GenreCreationForm())
 
 @app.route("/genres", methods = ["POST"])
@@ -29,12 +31,16 @@ def genres_create():
 
 # Näkymä kaikille yhden genren peleille
 @app.route("/genres/<genre_id>", methods=["GET"])
-def genres_view(genre_id): 
+@app.route("/genres/<genre_id>/page/<page_number>", methods=["GET"])
+def genres_view(genre_id, page_number = 1): 
     genre = Genre.query.filter_by(id=genre_id).first()
+
 
     if genre is None: 
         return render_template("error.html", error = "Genreä ei ole olemassa")
+
+    games_info = Game.find_all_info({"genres": [genre.id]}, page_number = int(page_number))
+    base_url = "/genres/" + str(genre_id) + "/page"
     
-    return render_template("games/list.html", games = Game.query.join(Game.game_genres).filter(GameGenre.genre_id == genre_id).all(),
-                            review_numbers = Game.find_numbers_of_reviews_for_genre(genre_id),
-                        review_averages = Game.find_averages_of_reviews_for_genre(genre_id), title = ("Genre: " + genre.name))
+    return render_template("games/list.html", games_info = games_info, title = ("Genre: " + genre.name),
+     page_number = int(page_number), last_page = len(games_info) < GAME_RESULTS_PER_PAGE,  base_url = base_url)

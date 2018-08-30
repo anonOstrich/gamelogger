@@ -30,4 +30,35 @@
 </table>
 
 
+<div class="btn-group" role="group" aria-label="Search results navigation">
+
+  
+  <a href="{{ base_url}}/1" >
+  <button type="button" class="btn btn-secondary">Ensimmäinen</button>
+  </a>
+ 
+
+  {% if page_number > 1 %}   
+  <a href="{{ base_url }}/{{ page_number - 1}}">
+  <button type="button" class="btn btn-secondary">{{ page_number - 1 }}</button>
+  </a>
+  {% endif %}
+
+
+  {% if games_info|length > 0 %}
+
+  <a href="{{base_url}}/{{page_number}}">
+  <button type="button" class="btn btn-outline-secondary">{{ page_number }}</button>
+  </a>
+  {% endif %}
+
+{% if not last_page %}
+    <a href="{{ base_url }}/{{ page_number + 1}}">
+  <button type="button" class="btn btn-secondary">{{ page_number + 1}}</button>
+{% endif %}
+
+
+</div>
+
+
 {% endblock %}

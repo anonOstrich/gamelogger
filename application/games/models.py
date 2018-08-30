@@ -255,7 +255,7 @@ class Game(Base):
 
         for row in res:
             game_info = {}
-            game_info.update({"id": row[0], "name": shorten_if_longer_than(row[1]), "year": row[2], "developer": shorten_if_longer_than(row[3]),
+            game_info.update({"id": row[0], "name": shorten_if_longer_than(row[1]), "year": row[2], "developer": shorten_if_longer_than(row[3], max=20),
                               "number_of_reviews": row[4], "average_of_reviews": row[5]})
             games_info.append(game_info)
 

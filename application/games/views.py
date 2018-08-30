@@ -7,7 +7,7 @@ from application.games.forms import GameForm
 from application.reviews.models import Review
 from application.reactions.models import Reaction
 from application.reactions.forms import ReactionForm
-from application.constants import MAXIMUM_LENGTH_OF_LISTED_TITLE
+from application.constants import MAXIMUM_LENGTH_OF_LISTED_TITLE, GAME_RESULTS_PER_PAGE
 from application.utilities import shorten_if_longer_than
 from application.genres.models import Genre, GameGenre
 from application.genres.forms import GenreSelectionForm
@@ -24,13 +24,15 @@ def games_form():
 
 
 @app.route("/games/", methods=["GET"])
-def games_index(): 
-    # TODO:
+@app.route("/games/page/<page_number>")
+def games_index(page_number = 1): 
 
 
-    games_info = Game.find_all_info()
+    games_info = Game.find_all_info(page_number = int(page_number))
+    base_url = "/games/page"
     
-    return render_template("games/list.html", games_info = games_info, title="Kaikki pelit")
+    return render_template("games/list.html", games_info = games_info, title="Kaikki pelit",
+     page_number = int(page_number), last_page = len(games_info) < GAME_RESULTS_PER_PAGE, base_url = base_url)
 
 
 @app.route("/games/", methods=["POST"])
