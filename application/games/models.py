@@ -202,8 +202,8 @@ class Game(Base):
             query = query + ")"
 
         query = query + " ORDER BY Game.name"
-
         res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number)
+
         games_info = []
 
         for row in res:
@@ -222,3 +222,23 @@ class Game(Base):
         for row in res: 
             return [row[0], row[1]]
         return None
+    
+    @staticmethod
+    def find_top_five_games():
+        stmt = text("SELECT Game.id, Game.name, Game.developer, Game.year, COUNT(Review.id), AVG(Review.points)"
+        " FROM Game LEFT JOIN Review on Game.id = Review.game_id GROUP BY Game.id ORDER BY Count(Review.id) DESC LIMIT 5;")
+
+        res = db.engine.execute(stmt)
+
+        top_info = []
+        for row in res:
+            game_info = {}
+            game_info["id"] = row[0]
+            game_info["name"] = shorten_if_longer_than(row[1])
+            game_info["developer"] = shorten_if_longer_than(row[2])
+            game_info["year"] = row[3]
+            game_info["count"] = row[4]
+            game_info["average"] = format_average(row[5])
+            top_info.append(game_info)
+        return top_info 
+

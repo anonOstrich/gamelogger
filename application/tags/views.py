@@ -28,7 +28,6 @@ def tags_create(user_id):
 
     form = TagCreationForm(request.form)
     if not form.validate():
-        print("EI VALIDOI!")
         tags_info = Tag.find_all_tags_and_numbers_of_tagged_games(user_id)
         return render_template("tags/list.html", tag_owner=user, tags_info = tags_info, form = form)
 

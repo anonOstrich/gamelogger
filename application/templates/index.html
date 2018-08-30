@@ -23,19 +23,38 @@ Hei {{current_user.name }}, tässä pelit joita et ole arvioinut (kenties löyd�
     </div>
 </div>
 {% endif %}
+<div class="row">
+    <div class="col">
+        <h2>Sivuston eniten arvostellut pelit: </h2>
 
-{% if users is defined %}
-<div class="col">
-Käyttäjät, jotka eivät ole vielä arvioineet pelejä:
-    <div class="container">
-    <ul class="list-group list-group-flush">
-        {% for user in users %}
-            <li class="list-group-item">{{ user.username }}</li>
-        {% endfor %}
-    </ul>
+        <table class="table table-responsive table-striped">
+            <thead class="thead-dark">
+                <th scope="col">Nimi</th>
+                <th scope="col">Kehittäjä</th>
+                <th scope="col">Vuosi</th>
+                <th scope="col">Arvosteluja</th>
+                <th scope="col">Arvostelujen keskiarvo</th>
+            </thead>
+            <tbody>
+                {% for game in top_games %}
+                <tr>
+                    <td><a href="{{ url_for('games_view', game_id = game['id']) }}">{{ game["name"] }}</a></td>
+                    <td>{{ game["developer"] }}</td>
+                    <td>{{ game["year"] }}</td>
+                    <td>{{ game["count"] }}</td>
+                    <td>{{ game["average"] }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
     </div>
+
 </div>
-{% endif %}
+
 </div>
 </div>
 

@@ -13,8 +13,10 @@ def index():
   
 
     general_details = Game.find_general_details()
+
+    top_games = Game.find_top_five_games()
     
-    return render_template("index.html", unreviewed_games = unreviewed_games, general_details = general_details)
+    return render_template("index.html", unreviewed_games = unreviewed_games, general_details = general_details, top_games = top_games)
     
 
 
