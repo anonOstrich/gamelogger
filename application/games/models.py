@@ -25,6 +25,17 @@ class Game(Base):
         self.description = description
         self.year = year
 
+    def average(self):
+        stmt = text("SELECT AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id "
+        " WHERE Game.id = :game_id GROUP BY Game.id;").params(game_id = self.id)
+
+        res = db.engine.execute(stmt)
+
+        for row in res: 
+            return row[0]
+            
+        return None
+
     def update_genres(self, genre_ids):
         # voisiko tehdä vähemmällä tietokannan käytöllä kuin poistamalla aina kaikki?
         GameGenre.query.filter(GameGenre.game_id == self.id).delete()
@@ -98,6 +109,7 @@ class Game(Base):
                     avg = float(avg)
                 if avg.is_integer: 
                     avg = int(avg)
+
                 else: 
                     avg = format(avg, ".2f")
 

@@ -1,6 +1,7 @@
 from application import app, db
 from application.constants import MAXIMUM_LENGTH_OF_LISTED_TITLE
 from sqlalchemy.sql import text
+from decimal import Decimal, ROUND_DOWN
 import os
 
 # fetch contents of page page_number
@@ -19,9 +20,8 @@ def format_average(avg):
         return ""
         
     #postgresql:ssä tyyppi on decimal 
-    if os.environ.get("HEROKU"):
-        avg = float(avg)
-    if avg.is_integer: 
-        return  int(avg)
-    return format(avg, ".2f")
+    if  not os.environ.get("HEROKU"):
+        avg = Decimal(avg)
+
+    return avg.quantize(Decimal('.01'), rounding = ROUND_DOWN)
              

@@ -66,8 +66,11 @@ def games_view(game_id):
     tags = []
     if current_user.is_authenticated:
         tags = Tag.query.join(Tag.game_tags).filter(Tag.account_id==current_user.id, GameTag.game_id == game_id)
+
+    average = g.average() 
+     
     return render_template("/games/single.html", game = g, reviews = reviews, form = form,
-                             reactions = reactions, genres = genres, tags = tags)
+                             reactions = reactions, genres = genres, tags = tags, average = average)
 
     
 @app.route("/games/<game_id>/modify", methods=["GET", "POST"])

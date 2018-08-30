@@ -89,6 +89,11 @@
 </div>
 </div>
 
+{% if reviews %}
+<h2>Arvostelujen keskiarvo: {{ average }} / 10</h2>
+{% else %}
+Ei arvosteluja. {% if current_user.is_authenticated %}Ole ensimmäinen!{% endif %}
+{% endif %}
 <div class="row my-3">
     <table class="table table-responsive table-striped">
         <thead class="thead-dark">
