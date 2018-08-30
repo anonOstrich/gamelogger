@@ -8,7 +8,7 @@ from application.reviews.models import Review
 from application.reactions.models import Reaction
 from application.reactions.forms import ReactionForm
 from application.constants import MAXIMUM_LENGTH_OF_LISTED_TITLE, GAME_RESULTS_PER_PAGE
-from application.utilities import shorten_if_longer_than
+from application.utilities import shorten_if_longer_than, format_average
 from application.genres.models import Genre, GameGenre
 from application.genres.forms import GenreSelectionForm
 
@@ -67,7 +67,7 @@ def games_view(game_id):
     if current_user.is_authenticated:
         tags = Tag.query.join(Tag.game_tags).filter(Tag.account_id==current_user.id, GameTag.game_id == game_id)
 
-    average = g.average() 
+    average = format_average(g.average())
      
     return render_template("/games/single.html", game = g, reviews = reviews, form = form,
                              reactions = reactions, genres = genres, tags = tags, average = average)
