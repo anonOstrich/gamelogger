@@ -68,69 +68,8 @@ class Game(Base):
         db.session.add_all(game_tags)
         db.session.commit()
 
-    # yhdistetty toiminnallisuutta, voisi heittää erilliseen utilities-luokkaankin
 
-    @staticmethod
-    def find_all_numbers_of_reviews_with_having_condition(condition="", param_name=None, param_value=None):
-        query = "SELECT Game.id, COUNT(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id " + condition + ";"
 
-        stmt = text(query)
-
-        if param_value:
-            stmt = stmt.bindparams(
-                bindparam(param_name, value=param_value, )
-            )
-
-        res = db.engine.execute(stmt)
-        return {row[0]: row[1] for row in res}
-
-    @staticmethod
-    def find_all_numbers_of_reviews():
-        return Game.find_all_numbers_of_reviews_with_having_condition()
-
-    @staticmethod
-    def find_numbers_of_reviews_for_genre(genre_id):
-        return Game.find_all_numbers_of_reviews_with_having_condition("HAVING Game.id IN (SELECT game_id FROM Game_genre WHERE genre_id = :genre_id)", "genre_id", genre_id)
-
-    # samoin yhdistetty toiminnallisuutta
-
-    @staticmethod
-    def construct_review_averages_dictionary(res):
-        review_averages = {}
-
-        for row in res:
-            avg = row[1]
-
-            if avg is None:
-                avg = ""
-            else: 
-                #postgresql:ssä tyyppi on decimal 
-                if os.environ.get("HEROKU"):
-                    avg = float(avg)
-                if avg.is_integer: 
-                    avg = int(avg)
-
-                else: 
-                    avg = format(avg, ".2f")
-
-            review_averages[row[0]] = avg
-
-        return review_averages
-
-    @staticmethod
-    def find_all_averages_of_reviews():
-        stmt = text(
-            "SELECT Game.id, AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id;")
-        res = db.engine.execute(stmt)
-        return Game.construct_review_averages_dictionary(res)
-
-    @staticmethod
-    def find_averages_of_reviews_for_genre(genre_id):
-
-        stmt = text("SELECT Game.id, AVG(Review.points) FROM Game LEFT JOIN Review ON Game.id = Review.game_id GROUP BY Game.id"
-                    " HAVING Game.id IN (SELECT DISTINCT Game_genre.game_id FROM Game_genre WHERE Game_genre.genre_id = :genre_id);").params(genre_id=genre_id)
-        res = db.engine.execute(stmt)
-        return Game.construct_review_averages_dictionary(res)
 
     @staticmethod
     def find_all_unreviewed_games(user_id):
@@ -274,3 +213,12 @@ class Game(Base):
             games_info.append(game_info)
 
         return games_info
+
+
+    @staticmethod
+    def find_general_details(): 
+        stmt = text("SELECT COUNT(Game.id), COUNT(Review.id) FROM Game LEFT JOIN Review ON Game.id = Review.game_id;")
+        res = db.engine.execute(stmt)
+        for row in res: 
+            return [row[0], row[1]]
+        return None
