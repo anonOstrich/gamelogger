@@ -3,9 +3,11 @@ from flask_login import current_user
 
 from application import app, db, login_required
 from application.auth.models import User
-from application.tags.models import Tag
+from application.tags.models import Tag, GameTag
 from application.games.models import Game
 from application.tags.forms import TagCreationForm, TagSelectionForm
+
+from application.constants import GAME_RESULTS_PER_PAGE
 
 @app.route("/tags/<user_id>/", methods=["GET"])
 def tags_index(user_id): 
@@ -56,14 +58,32 @@ def tags_modify(game_id):
 
 @app.route("/tags/<tag_id>/delete", methods=["POST"])
 @login_required()
-def tasks_delete(tag_id):
+def tags_delete(tag_id):
     tag = Tag.query.get(tag_id)
     if not tag: 
         return render_template("error.html", error = "Tagia ei ole olemassa")
     if tag.account_id != current_user.id:
         return render_template("error.html", error = "Et voi poistaa toisen tagia")
     
-    GameTag.query.filter(GameTag.tag_id==tag_id).all().delete()
+    GameTag.query.filter(GameTag.tag_id==tag_id).delete()
     db.session.delete(tag)
     db.session.commit()
     return redirect(url_for("tags_index", user_id=current_user.id))
+
+
+
+@app.route("/tags/<tag_id>/games", methods=["GET"])
+@app.route("/tags/<tag_id>/games/page/<page_number>", methods=["GET"])
+def tag_games(tag_id, page_number = 1): 
+
+    tag = Tag.query.filter(Tag.id == tag_id).first()
+
+    if not tag: 
+        return render_template("error.html",  error = "Tagia ei ole olemassa")
+
+    games_info = Game.find_all_info({"tags": [int(tag_id)]}, page_number = int(page_number))
+
+    base_url = "/tags/" + tag_id + "/games/page"
+
+    return render_template("games/list.html", games_info = games_info, base_url = base_url, page_number = int(page_number), 
+    last_page = len(games_info) < GAME_RESULTS_PER_PAGE, title = "Tag: " + tag.name)
