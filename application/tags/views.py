@@ -15,6 +15,7 @@ def tags_index(user_id):
     tags_info = Tag.find_all_tags_and_numbers_of_tagged_games(user_id)
     return render_template("tags/list.html", tag_owner=tag_owner, tags_info = tags_info, form = TagCreationForm())
 
+
 @app.route("/tags/<user_id>", methods=["POST"])
 @login_required()
 def tags_create(user_id):
@@ -27,8 +28,11 @@ def tags_create(user_id):
 
     form = TagCreationForm(request.form)
     if not form.validate():
+        print("EI VALIDOI!")
         tags_info = Tag.find_all_tags_and_numbers_of_tagged_games(user_id)
         return render_template("tags/list.html", tag_owner=user, tags_info = tags_info, form = form)
+
+
 
     tag = Tag(form.name.data)
     tag.account_id = user_id

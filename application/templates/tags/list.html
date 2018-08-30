@@ -22,10 +22,10 @@
 
 
    {% if current_user.is_authenticated and current_user.id == tag_owner.id %}
-                <form method="POST" action = "{{ url_for('tags_delete', tag_id = tag.id) }}">
+        <form method="POST" action = "{{ url_for('tags_delete', tag_id = tag.id) }}">
                 <button type="submit" class="btn btn-danger">X</button>
-                <form>
-                {% endif %}
+        </form>
+    {% endif %}
                 
 
 
