@@ -11,7 +11,7 @@ import os
 
 class Game(Base):
     name = db.Column(db.String(200), nullable=False)
-    developer = db.Column(db.String(100), nullable=False)
+    developer = db.Column(db.String(100), nullable=False, index = True)
     description = db.Column(db.String(1000), nullable=False)
     year = db.Column(db.Integer, nullable=False)
 
