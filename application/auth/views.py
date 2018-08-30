@@ -4,7 +4,8 @@ from flask_login import login_user, logout_user, current_user
 from application import app, db, bcrypt, login_required
 from application.auth.models import Role, User, UserRole
 from application.auth.forms import LoginForm, RegisterForm, DescriptionForm
-
+from application.tags.models import Tag 
+from application.reviews.models import Review
 
 @app.route("/auth/login/", methods = ["GET", "POST"])
 def auth_login(): 
@@ -68,8 +69,17 @@ def users_view(user_id):
     user = User.query.get(user_id)
     if not user:
         render_template("error.html", error = "Käyttäjää ei ole olemassa")
+    reviews = Review.query.join(User).filter(User.id == user_id).order_by("review.date_modified DESC").limit(5).all()
 
-    return render_template("auth/single.html", user=user)
+    tags = Tag.query.join(User).filter(User.id == user_id).order_by("tag.name ASC").all()
+
+    return render_template("auth/single.html", user=user, tags=tags, reviews=reviews)
+
+
+
+
+
+
 
 @app.route("/users/modify", methods=["GET", "POST"])
 @login_required()

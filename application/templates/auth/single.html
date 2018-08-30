@@ -20,8 +20,49 @@
 {% else  %}
 <p style="white-space: pre-wrap; word-wrap: break-word;">{{user.description}}</p>
 {% endif%}
-Tagit: tulossa...
-Arvosteluyhteenvetoa: tulossa... 
+</div>
+
+<div class="container">
+<div class="row">
+
+
+<div class="col">
+{% if reviews %}
+
+    <h2>Tuoreimmat arviot</h2>
+    <ul>
+    {% for review in reviews %}
+        <li>
+            {{review.text}}
+        </li>
+    {% endfor %}
+    </ul>
+
+{% else %}
+Käyttäjä ei ole vielä kirjoittanut arvioita
+
+{% endif %}
+</div>
+
+
+<div class="col">
+    {% if tags %}
+    <h2>Tagit</h2>
+
+    <ul>
+    {% for tag in tags %}
+        <li>
+            {{tag.name}}
+        </li>
+    {% endfor %}
+    </ul>
+
+    {% else %}
+
+    {% endif%}
+</div>
+
+</div>
 </div>
 
 
