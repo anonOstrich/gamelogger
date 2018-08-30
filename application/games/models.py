@@ -2,7 +2,7 @@ from application import db
 from application.genres.models import GameGenre
 from application.tags.models import GameTag
 from application.models import Base
-from application.utilities import page_query, shorten_if_longer_than
+from application.utilities import page_query, shorten_if_longer_than, format_average
 from application.constants import GAME_RESULTS_PER_PAGE
 from sqlalchemy.sql import text
 from sqlalchemy import bindparam
@@ -91,16 +91,16 @@ class Game(Base):
             avg = row[1]
 
             if avg is None:
-                review_averages[row[0]] = ""
-                continue
-            # PostgreSQL:llä palautuskeskiarvojen tyyppi on decimal, jolla ei ole metodia is_integer()
-            if os.environ.get("HEROKU"):
-                avg = float(avg)
-
-            if avg is None:
                 avg = ""
-            else:
-                avg = format(row[1], ".2f")
+            else: 
+                #postgresql:ssä tyyppi on decimal 
+                if os.environ.get("HEROKU"):
+                    avg = float(avg)
+                if avg.is_integer: 
+                    avg = int(avg)
+                else: 
+                    avg = format(avg, ".2f")
+
             review_averages[row[0]] = avg
 
         return review_averages
@@ -258,7 +258,7 @@ class Game(Base):
         for row in res:
             game_info = {}
             game_info.update({"id": row[0], "name": shorten_if_longer_than(row[1]), "year": row[2], "developer": shorten_if_longer_than(row[3], max=20),
-                              "number_of_reviews": row[4], "average_of_reviews": row[5]})
+                              "number_of_reviews": row[4], "average_of_reviews": format_average(row[5])})
             games_info.append(game_info)
 
         return games_info

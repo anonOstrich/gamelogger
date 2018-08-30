@@ -33,13 +33,14 @@
     <ul>
     {% for review in reviews %}
         <li>
-            {{review.text}}
+          {{ review.date_created  }}
+          <div class="container" style="white-space: pre-wrap;">{{review.text}}</div>
         </li>
     {% endfor %}
     </ul>
 
 {% else %}
-Käyttäjä ei ole vielä kirjoittanut arvioita
+Käyttäjä ei ole arvioita
 
 {% endif %}
 </div>
@@ -49,16 +50,20 @@ Käyttäjä ei ole vielä kirjoittanut arvioita
     {% if tags %}
     <h2>Tagit</h2>
 
-    <ul>
+
+    
+    <div class="list-group">
     {% for tag in tags %}
-        <li>
+        
+        <a class="list-group-item" href="url_for('tags_view', tag_id = tag.id)">
             {{tag.name}}
-        </li>
+        </a>
+        
     {% endfor %}
-    </ul>
+    </div>
 
     {% else %}
-
+Käyttäjällä ei ole tageja
     {% endif%}
 </div>
 
