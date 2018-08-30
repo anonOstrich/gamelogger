@@ -61,7 +61,7 @@
                         </li>
                  
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth_logout') }}">
+                        <a class="nav-link" href="{{ url_for('auth_logout', next_path = request.path) }}">
                             Kirjaudu ulos
                         </a>
                     </li>

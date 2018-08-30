@@ -30,9 +30,14 @@ def auth_login():
           
 
 
-@app.route("/auth/logout")
+@app.route("/auth/logout/", methods=["GET"])
 def auth_logout():
     logout_user()
+    next = request.args.get("next_path")
+    print(next)
+    if next: 
+        return redirect(next)
+
     return redirect(url_for("index"))
 
 
