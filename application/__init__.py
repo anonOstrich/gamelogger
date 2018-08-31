@@ -94,7 +94,12 @@ def load_user(user_id):
 
 
 # tietokannan luonti
-try: 
+
+# materiaalin try - except johti ajoittain herokussa virheeseen kun dyno käynnistyy uudellen. 
+from sqlalchemy import MetaData
+metadata = MetaData(db.engine, reflect = True)
+
+if not metadata.tables:
     db.create_all()
     # Alustetaan tietokanta jos sitä ei ole vielä luotu 
     admin = User("Admin Hallitsija", "admin","admin_salasana", None)
@@ -106,10 +111,5 @@ try:
     # vasta nyt pääavaimet on luotu
     admin.add_roles(admin_role, default_role)
     normal.add_role(default_role)
-except: 
-    pass
 
 
-#we create here
-def initialize_from_randomized_data(path):
-    return "Jee"
