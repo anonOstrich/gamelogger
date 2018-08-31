@@ -40,4 +40,12 @@
     <button type="input" class="btn btn-info">Tallenna arvostelu</button>
 </form>
 
+{% if current_user.has_role("ADMIN")%}
+    <a href="{{  url_for('reviews_delete', review_id = review_id)}}">
+        <button type="button" class="btn btn-danger">
+            Poista arvostelu pysyvästi tietokannasta
+        </button>
+    </a>
+
+{% endif %}
 {% endblock %}

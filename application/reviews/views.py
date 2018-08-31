@@ -3,6 +3,7 @@ from flask_login import current_user
 
 from application import app, db, login_required
 from application.reviews.models import Review 
+from application.reactions.models import Reaction
 from application.reviews.forms import ReviewForm
 from application.games.models import Game
 
@@ -32,7 +33,7 @@ def reviews_create(game_id):
     return redirect(url_for("games_view", game_id = game_id))
 
 
-@app.route("/<review_id>/modify", methods=["GET", "POST"])
+@app.route("/review/<review_id>/modify", methods=["GET", "POST"])
 @login_required()
 def reviews_modify(review_id):
     r = Review.query.get(review_id)
@@ -54,3 +55,18 @@ def reviews_modify(review_id):
     r.points = form.points.data
     db.session.commit()
     return redirect(url_for("games_view", game_id = r.game_id))
+
+
+@app.route("/review/<review_id>/delete", methods = ["GET"])
+@login_required("ADMIN")
+def reviews_delete(review_id):
+    review = Review.query.get(review_id)
+    if not review:
+        return render_template("error.html", error = "Arvostelua ei ole olemassa")
+    Reaction.query.filter(Reaction.review_id == review.id).delete()
+    game_id = review.game_id
+    db.session.delete(review)
+    db.session.commit()
+    return redirect(url_for("games_view", game_id = game_id))
+
+
