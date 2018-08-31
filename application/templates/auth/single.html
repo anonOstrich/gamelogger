@@ -55,7 +55,7 @@ Käyttäjä ei ole arvioita
     <div class="list-group">
     {% for tag in tags %}
         
-        <a class="list-group-item" href="{{ url_for('tags_view', tag_id = tag.id) }}">
+        <a class="list-group-item" href="{{ url_for('tag_games', tag_id = tag.id) }}">
             {{tag.name}}
         </a>
         

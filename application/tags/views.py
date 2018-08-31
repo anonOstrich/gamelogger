@@ -8,6 +8,7 @@ from application.games.models import Game
 from application.tags.forms import TagCreationForm, TagSelectionForm
 
 from application.constants import GAME_RESULTS_PER_PAGE
+from application.utilities import parse_to_int
 
 @app.route("/tags/<user_id>/", methods=["GET"])
 def tags_index(user_id): 
@@ -77,16 +78,35 @@ def tags_delete(tag_id):
 
 @app.route("/tags/<tag_id>/games", methods=["GET"])
 @app.route("/tags/<tag_id>/games/page/<page_number>", methods=["GET"])
-def tag_games(tag_id, page_number = 1): 
+def tag_games(tag_id, page_number = 1, sort_column = 0, sort_direction="ASC"): 
 
     tag = Tag.query.filter(Tag.id == tag_id).first()
 
     if not tag: 
         return render_template("error.html",  error = "Tagia ei ole olemassa")
 
-    games_info = Game.find_all_info({"tags": [int(tag_id)]}, page_number = int(page_number))
+    columns = ["Game.id", "Game.name", "Game.developer", "Game.year", "COUNT(Review.points)", "AVG(Review.points)"]
+    possible_sort_column  = request.args.get("sort_column")
+    possible_sort_direction = request.args.get("sort_direction")
+    
+    if possible_sort_column: 
+        sort_column = possible_sort_column
+    if possible_sort_direction: 
+        sort_direction = possible_sort_direction
+
+    sort_column = parse_to_int(sort_column)
+    page_number = parse_to_int(page_number)
+    if not(page_number is not None and sort_column is not None and sort_direction in ["ASC", "DESC"]):
+        return render_template("error.html", error = "Yrität antaa vääränlaisia parametreja")
+
+
+
+    games_info = Game.find_all_info_sorted({"tags": [int(tag_id)]}, page_number = page_number,
+        order_column = columns[sort_column], order_direction = sort_direction
+    )
 
     base_url = "/tags/" + tag_id + "/games/page"
 
-    return render_template("games/list.html", games_info = games_info, base_url = base_url, page_number = int(page_number), 
-    last_page = len(games_info) < GAME_RESULTS_PER_PAGE, title = "Tag: " + tag.name)
+    return render_template("games/list.html", games_info = games_info, base_url = base_url, page_number = page_number, 
+    last_page = len(games_info) < GAME_RESULTS_PER_PAGE, title = "Tag: " + tag.name, sort_column = sort_column, 
+    sort_direction = sort_direction)

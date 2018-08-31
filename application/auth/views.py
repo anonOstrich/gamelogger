@@ -75,6 +75,7 @@ def users_view(user_id):
     user = User.query.get(user_id)
     if not user:
         render_template("error.html", error = "Käyttäjää ei ole olemassa")
+    
     reviews = Review.query.join(User).filter(User.id == user_id).order_by("review.date_modified DESC").limit(5).all()
 
     tags = Tag.query.join(User).filter(User.id == user_id).order_by("tag.name ASC").all()
