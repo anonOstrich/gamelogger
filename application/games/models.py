@@ -195,24 +195,13 @@ class Game(Base):
 
     @staticmethod
     def find_all_info(parameters={}, page_number = 1):
-        query = Game.construct_string_query(parameters)
-
-        res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number, 
-        order_column="Game.name", order_direction="ASC")
-
-        games_info = []
-
-        for row in res:
-            game_info = {}
-            game_info.update({"id": row[0], "name": shorten_if_longer_than(row[1]), "year": row[2], "developer": shorten_if_longer_than(row[3], max=20),
-                              "number_of_reviews": row[4], "average_of_reviews": format_average(row[5])})
-            games_info.append(game_info)
-
-        return games_info
+        return Game.find_all_info_sorted(parameters = parameters, 
+        page_number = page_number)
 
     @staticmethod
     def find_all_info_sorted(parameters = {}, page_number = 1, order_column="Game.name", order_direction = "ASC"):
         query  = Game.construct_string_query(parameters)
+
         res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number, 
         order_column = order_column, order_direction = order_direction)
 

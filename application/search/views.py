@@ -19,6 +19,8 @@ def search(page_number = 1):
     form = SearchForm(request.form)
     if current_user.is_authenticated:
         form.set_tags_info(current_user)
+    else: 
+        form.tags.choices = []
     # pitäisikö tarkastaa, että ei ole lisätty tageihin jonkun muun tageja? Halutaanko estää etsiminen?
 
     if not form.validate():
@@ -66,7 +68,9 @@ def search(page_number = 1):
     
 
     games_info = Game.find_all_info(search_parameters, page_number = int(page_number))
+
+
     return render_template("search/search.html", form=form, games_info = games_info, page_number = int(page_number), scroll="result_table", 
-        last_page =  len(games_info)< GAME_RESULTS_PER_PAGE)
+        last_page =  len(games_info) < GAME_RESULTS_PER_PAGE)
     
 

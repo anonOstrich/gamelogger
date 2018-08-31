@@ -7,23 +7,23 @@
     <div class="form-group row">
         {{ form.name.label(class="col-sm-2 col-form-label") }}
         <div class="col-sm-10">
-        {{ form.name(class="form-control") }}
+            {{ form.name(class="form-control") }}
         </div>
-  
-    <div class="container text-danger">
-        <ul class="list-inline">
-            {% for error in form.name.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+
+        <div class="container text-danger">
+            <ul class="list-inline">
+                {% for error in form.name.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
-        <div class="form-group row">
+    <div class="form-group row">
         {{ form.developer.label(class="col-sm-2 col-form-label") }}
         <div class="col-sm-10">
-         {{ form.developer(class="form-control") }}
-         </div>
+            {{ form.developer(class="form-control") }}
+        </div>
     </div>
 
     <div class="container text-danger">
@@ -38,154 +38,150 @@
     <div class="form-group row">
         {{ form.min_year.label(class="col-sm-2 col-form-label") }}
         <div class="col-sm-2">
-         {{ form.min_year(class="form-control") }}
-         </div>
-    
-    
-    <div class="col-sm-2 text-danger">
-        <ul class="list-inline">
-            {% for error in form.min_year.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-        
-    </div>
-    
-   
-    
+            {{ form.min_year(class="form-control") }}
+        </div>
+
+
+        <div class="col-sm-2 text-danger">
+            <ul class="list-inline">
+                {% for error in form.min_year.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+
+
         {{ form.max_year.label(class="col-sm-2 col-form-label") }}
         <div class="col-sm-2">
-         {{ form.max_year(class="form-control") }}
-         </div>
-    
-    <div class="col-sm-2 text-danger">
-        <ul class="list-inline">
-            {% for error in form.max_year.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
+            {{ form.max_year(class="form-control") }}
+        </div>
+
+        <div class="col-sm-2 text-danger">
+            <ul class="list-inline">
+                {% for error in form.max_year.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-    </div>
 
 
 
 
 
-   
+
 
     <div class="form-group row">
         {{ form.min_average.label(class="col-sm-2 col-form-label") }}
         <div class="col-sm-2">
-         {{ form.min_average(class="form-control") }}
-         </div>
- 
- 
-    <div class="col-sm-2 text-danger">
-        <ul class="list-inline">
-            {% for error in form.min_average.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    
-
-
-        {{ form.max_average.label(class="col-sm-2 col-form-label") }} 
-        <div class="col-sm-2">
-        {{form.max_average(class="form-control") }}
+            {{ form.min_average(class="form-control") }}
         </div>
-  
 
-    <div class="col-sm-2 text-danger">
-        <ul class="list-inline">
-            {% for error in form.max_average.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
+
+        <div class="col-sm-2 text-danger">
+            <ul class="list-inline">
+                {% for error in form.min_average.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+
+        {{ form.max_average.label(class="col-sm-2 col-form-label") }}
+        <div class="col-sm-2">
+            {{form.max_average(class="form-control") }}
+        </div>
+
+
+        <div class="col-sm-2 text-danger">
+            <ul class="list-inline">
+                {% for error in form.max_average.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-      </div>
 
     <div class="form-group row">
         {{ form.min_count.label(class="col-sm-2 col-form-label") }}
         <div class="col-sm-2">
-         {{ form.min_count(class="form-control") }}
-         </div>
-  
-    <div class="col-sm-2 text-danger">
-        <ul class="list-inline">
-            {% for error in form.min_count.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    
+            {{ form.min_count(class="form-control") }}
+        </div>
+
+        <div class="col-sm-2 text-danger">
+            <ul class="list-inline">
+                {% for error in form.min_count.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
         {{ form.max_count.label(class="col-sm-2 col-form-label") }}
-    <div class="col-sm-2">
-         {{form.max_count(class="form-control") }}
-    </div>
-    <div class="col-sm-2 text-danger">
-        <ul class="list-inline">
-            {% for error in form.max_count.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="col-sm-2">
+            {{form.max_count(class="form-control") }}
+        </div>
+        <div class="col-sm-2 text-danger">
+            <ul class="list-inline">
+                {% for error in form.max_count.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
 
 
     <div class="form-group-row">
-     <div class="col" id="{{ form.genres.id }}">
-        <h4>{{ form.genres.label }}</h4>
-        {% for genre in form.genres %}
-        <div class="form-check">
-            {{ genre(class="form-check-input") }} {{ genre.label }}
-        </div>
-        {% endfor %}
-    </div>
-
-
-
-
-    
-    <div class="container text-danger">
-        <ul class="list-inline">
-            {% for error in form.genres.errors %}
-            <li>{{ error }}</li>
+        <div class="col" id="{{ form.genres.id }}">
+            <h4>{{ form.genres.label }}</h4>
+            {% for genre in form.genres %}
+            <div class="form-check">
+                {{ genre(class="form-check-input") }} {{ genre.label }}
+            </div>
             {% endfor %}
-        </ul>
-    </div>
-
-
-    {% if current_user.is_authenticated %}
-    <div class="container" id="{{ form.tags.id }}">
-        <h4>{{ form.tags.label }}</h4>
-        {% for tag in form.tags %}
-        <div class="form-check">
-            {{ tag(class="form-check-input") }} {{ tag.label }}
         </div>
-        {% endfor %}
-    </div>
 
-    <div class="container text-danger">
-        <ul class="list-inline">
-            {% for error in form.tags.errors %}
-            <li>{{ error }}</li>
+
+
+
+
+        <div class="container text-danger">
+            <ul class="list-inline">
+                {% for error in form.genres.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+        {% if current_user.is_authenticated %}
+        <div class="container" id="{{ form.tags.id }}">
+            <h4>{{ form.tags.label }}</h4>
+            {% for tag in form.tags %}
+            <div class="form-check">
+                {{ tag(class="form-check-input") }} {{ tag.label }}
+            </div>
             {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
+        </div>
 
-    <button type="submit" class="btn btn-primary">Hae</button>
+        <div class="container text-danger">
+            <ul class="list-inline">
+                {% for error in form.tags.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Hae</button>
 </form>
 
-{% if games_info  %}
+{% if games_info %} {% if games_info|length == 0%} Ei enempää tuloksia {% endif %}
 
-{% if games_info|length == 0%}
-Ei enempää tuloksia
-{% endif %}
-
-<h2 id = "result_table">Hakutulokset</h2>
+<h2 id="result_table">Hakutulokset</h2>
 
 <table class="table table-responsive table-striped">
     <thead class="thead-dark">
@@ -201,7 +197,8 @@ Ei enempää tuloksia
         {% for game_info in games_info %}
         <tr>
             <td>
-                <a href="{{ url_for('games_view', game_id = game_info['id']) }}" style="white-space: pre-wrap; word-wrap: break-word;">{{ game_info["name"] }}</a>
+                <a href="{{ url_for('games_view', game_id = game_info['id']) }}" style="white-space: pre-wrap; word-wrap: break-word;">{{
+                    game_info["name"] }}</a>
             </td>
             <td>
                 <span style="white-space: pre-wrap; word-wrap: break-word;">{{ game_info["developer"] }}</span>
@@ -220,58 +217,48 @@ Ei enempää tuloksia
     </tbody>
 </table>
 
+
+
 <div class="btn-group" role="group" aria-label="Search results navigation">
 
-  
-  <form method = "POST", action = "{{ url_for('search', page_number = 1)}}">
-  
-<div style="display:none; visibility: hidden;">
-    {% for field in form %}
-    {{ field }}
-    {% endfor %}
-</div>
 
-  <button type="submit" class="btn btn-secondary">Ensimmäinen</button>
-  </form>
+    <form method="POST" , action="{{ url_for('search', page_number = 1)}}">
+
+        <div style="display:none; visibility: hidden;">
+            {% for field in form %} {{ field }} {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-secondary">Ensimmäinen</button>
+    </form>
 
 
     {% if page_number > 1 %}
-    <form method = "POST", action = "{{ url_for('search', page_number = page_number - 1)}}">
-
-            <div style="display:none; visibility: hidden;">
-                    {% for field in form %}
-                    {{ field }}
-                    {% endfor %}
-                </div>
-
-  <button type="submit" class="btn btn-secondary">{{ page_number - 1 }}</button>
-  </form>
-  {% endif%}
-
-  {% if games_info|length > 0 %}
-
-  <form method = "POST", action = "{{ url_for('search', page_number = page_number)}}">
- 
-        <div style="display:none; visibility: hidden;">
-                {% for field in form %}
-                {{ field }}
-                {% endfor %}
-            </div>
-  <button type="submit" class="btn btn-outline-secondary">{{ page_number }}</button>
-  </form>
-  {% endif %}
-
-{% if not last_page %}
-  <form method = "POST", action = "{{ url_for('search', page_number = page_number + 1)}}">
+    <form method="POST" , action="{{ url_for('search', page_number = page_number - 1)}}">
 
         <div style="display:none; visibility: hidden;">
-                {% for field in form %}
-                {{ field }}
-                {% endfor %}
-            </div>
-  <button type="submit" class="btn btn-secondary">{{ page_number + 1}}</button>
-  </form>
-{% endif %}
+            {% for field in form %} {{ field }} {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-secondary">{{ page_number - 1 }}</button>
+    </form>
+    {% endif%} {% if games_info|length > 0 %}
+
+    <form method="POST" , action="{{ url_for('search', page_number = page_number)}}">
+
+        <div style="display:none; visibility: hidden;">
+            {% for field in form %} {{ field }} {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-outline-secondary">{{ page_number }}</button>
+    </form>
+    {% endif %} {% if not last_page %}
+    <form method="POST" , action="{{ url_for('search', page_number = page_number + 1)}}">
+
+        <div style="display:none; visibility: hidden;">
+            {% for field in form %} {{ field }} {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-secondary">{{ page_number + 1}}</button>
+    </form>
+    {% endif %}
 
 </div>
 
