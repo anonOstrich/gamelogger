@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h1>{{genre.name}}</h1>
+    <form method="POST" action="{{ url_for('genres_modify', genre_id = genre.id) }}">
+        <div class="form-group">
+            {{ form.name.label(for="name") }} {{ form.name(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Tallenna</button>
+        <a href="{{ url_for('genres_delete', genre_id = genre.id)}}"><button type="button" class="btn btn-danger">Poista pysyvästi tietokannasta</button></a>
+        {% if form.name.errors %}
+        <ul>
+            {% for error in form.name.errors %}
+                <li>
+                    {{ error }}
+                </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </form>
+
+{% endblock %}

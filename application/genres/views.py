@@ -29,6 +29,38 @@ def genres_create():
     db.session.commit()
     return redirect(url_for("genres_index"))
 
+@app.route("/genres/<genre_id>/modify", methods = ["GET", "POST"])
+@login_required("ADMIN")
+def genres_modify(genre_id): 
+    genre = Genre.query.get(genre_id)
+    if not genre: 
+        return render_template("error.html", error = "Genreä ei ole olemassa")
+
+    if request.method == "GET":
+        form = GenreCreationForm()
+        form.name.data = genre.name
+        return render_template("/genres/modify.html", form = form, genre = genre)
+
+
+    form = GenreCreationForm(request.form)
+    if not form.validate(): 
+        return render_template("/genres/modify.html", form = form, genre = genre)
+    
+    genre.name = form.name.data
+    db.session.commit()
+    return redirec(url_for("genres_index"))
+
+@app.route("/genres/<genre_id>/delete")
+@login_required("ADMIN")
+def genres_delete(genre_id):
+    genre = Genre.query.get(genre_id)
+    if not genre: 
+        return render_template("error.html", error = "Genreä ei ole olemassa")
+
+    GameGenre.query.filter(GameGenre.genre_id == genre.id).delete()
+    db.session.delete(genre)
+    db.session.commit()
+    return redirect(url_for("genres_index"))
 
 # Näkymä kaikille yhden genren peleille
 @app.route("/genres/<genre_id>", methods=["GET"])
