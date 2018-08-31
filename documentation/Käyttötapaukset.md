@@ -7,8 +7,6 @@ Käyttötapaukset eritelty käyttäjäroolikohtaisesti. jokaisen käyttötapauks
 Vierailija (ei-kirjautunut selailija)
 -------------------------------------
 
-* Vierailijana haluan nähdä äskettäin lisättyjä arvosteluja, jotta huomaan uusia mahdollisesti itseäni kiinnostavia mielipiteitä.  
-`katsotaan toteutetaanko...`
 * Vierailijana haluan nähdä kaikki pelit valitsemallani rajauksella, jotta löydän haluamani kaltaisia pelejä 
    Esim. kaikki kauhupelit: 
 

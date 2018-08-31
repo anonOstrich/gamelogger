@@ -104,7 +104,9 @@ Admin-toiminnot
 
 ### Genrejen hallinnointi
 
-Genrejä voi järjestelmään lisätä ainoastaan käyttäjä, jolla on adminin rooli. Jos tällainen käyttäjä valitsee yläpalkista "Selaa pelejä" -> "Genret", näytetään avautuvalla sivulla hieman enemmän toiminnaliisuutta kuin normaalille käyttäjälle. Genrelistan alla on lomake, johon voi syöttää uuden genren niimen. Painamalla "Lisää" sivu päivittyy ja lisäys näkyy tagilistassa. Jokaisen genren yhteydessä on myös punainen painike, jota painamalla genre poistuu tietokannasta.  
+Genrejä voi järjestelmään lisätä ainoastaan käyttäjä, jolla on adminin rooli. Jos tällainen käyttäjä valitsee yläpalkista "Selaa pelejä" -> "Genret", näytetään avautuvalla sivulla hieman enemmän toiminnaliisuutta kuin normaalille käyttäjälle. Genrelistan alla on lomake, johon voi syöttää uuden genren niimen. Painamalla "Lisää" sivu päivittyy ja lisäys näkyy tagilistassa. 
+Jos on kirjautuneena admin-tunnuksilla, näkyy jokaisen genren alla linkki, josta tätä genreä pääsee muokkaamaan. Erillisellä muokkaussivulla pystyy nimeämään genren uudelleen, jos sen on vaikka luontivaiheessa kirjoittanut väärin. Muokkaussivulla on myös punainen poistonappula, jota painamalla genre poistetaan tietokannasta kokonaan. Muokkauksen/poistamisen jäleen sinut ohjataan takaisin genrelistasivulle. 
+
 Muut käyttäjät pystyvät vain valitsemaan adminin lisäämistä genreistä uutta peliä lisätessään tai hakiessaan pelejä.
 
 ### Pelin muokkaaminen/poistaminen
@@ -115,9 +117,8 @@ Jos taas haluat poistaa pelin, löytyy muokkaussivulta myös nappula "Poista pel
 
 ### Arvion muokkaaminen/poistaminen
 
-Siirry haluamasi pelin omalle sivulle. Alaosan taulukossa on kerättynä yhteen kaikki kyseisen pelin arviot. Arvion nimen yhteydessä on vihreä "Muokkaa arviota" -nappula, jota painamalla pääset muokkaamaan arviota, oli se sitten sinun tai kenen tahansa muun kirjoittama. Voit muuttaa valmiiksi täydennetyn lomakkeen tietoja ja painaa "Tallenna arvostelu", jolloin sen tiedot muutetaan vastaamaan toiveitasi. Vaihtoehtoisesti tallennusnappulan oikealla puolella on punainen "Poista arvostelu pysyvästi järjestelmästä"-nappula, jota painamalla arvostelu todella poistetaan. Kummassakin tapauksessa sinut ohjataan takaisin sen pelin sivulle, johon liittyvää arvostelua muokkasit. 
+Siirry haluamasi pelin omalle sivulle. Alaosan taulukossa on kerättynä yhteen kaikki kyseisen pelin arviot. Arvion nimen yhteydessä on vihreä "Muokkaa arviota" -nappula, jota painamalla pääset muokkaamaan arviota, oli se sitten sinun tai kenen tahansa muun kirjoittama. Voit muuttaa valmiiksi täydennetyn lomakkeen tietoja ja painaa "Tallenna arvostelu", jolloin sen tiedot muutetaan vastaamaan toiveitasi. Muokkaussivulla on myös punainen poistonappula, jolla arvostelun pystyy poistamaan tietokannasta. Kumpaa nappulaa painaakin, ohjataan sinut takaisin sille pelisivulle mihin arvostelu liittyy/liittyi. 
 
-### Käyttäjän muokkaaminen/poistaminen 
+### Käyttäjän  kuvaustekstin muokkaaminen
 
 Siirry haluamasi käyttäjän sivulle (paitsi omallesi - itseäsi et voi poistaa). Käyttäjän kuvauksen alla on harmaa painike, jossa lukee "Muokkaa kuvausta". Painamalla sitä pääset sivulle, jossa voit muuttaa olemassaolevaa kuvausta haluamaksesi. Paina lopuksi "Tallenna", ja sinut palautetaan käyttäjän sivulle, jossa voit varmistaa, että muutos on tallentunut. 
-Käyttäjn sivulla on käyttäjänimen oikealla puolella punainen painike, jossa lukee "Poista käyttäjän tiedot pysyvästi järjestelmästä". Sitä painamalla kaikki käyttäjän tiedot, myös tämän luomat tagit, poistetaan. Sinut ohjataan sivulle, jossa on lueteltu kaikki käyttäjät. 

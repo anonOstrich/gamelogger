@@ -11,5 +11,9 @@ Puuttuvat ominaisuudet
 
 * Trailerin/videon upottaminen pelisivulle
 
-* Pelialusta omana taulunaan. Käyttäjiä saattaa kiinnostaa millä laitteilla peliä voi pelata. 
+* Pelialusta/-konsoli omana taulunaan. Käyttäjiä saattaa kiinnostaa millä laitteilla peliä voi pelata. 
+
+* Arvostelujen selaaminen muuten kuin pelien yhteydessä. Etusivulla voisi olla mielenkiintoista näyttää uusimpia arvosteluja. 
+
+* Arvostelujen järjestäminen pelisivulla. Joku voi haluta nähdä uusimmat, joku toinen vaikka tykätyimmät.
 

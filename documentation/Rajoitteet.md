@@ -18,4 +18,5 @@ Muuta pelin tageja -> Hallinnoi tagejasi -> Lisää. Tältä sivulta ei ole help
 
 * Tietokantaa ei alusteta valmiiksi kootulla testidatalla jos tietokantaa ei ole olemassa. On hyvin työlästä sijoittaa komentorivilta / nettisivun kautta riittävä määrä dataa sivulle. 
 
+* Joitain näkymiä (esimerkiksi yksittäisen pelin sivua) luodessa tehdään aivan liian monta yksittäistä tietokantahakua, mikä hidastanee sivun toimintaa useilla samanaikaisilla selailijoilla. 
 
