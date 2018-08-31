@@ -1,0 +1,13 @@
+
+Käyttöohje:
+===========
+
+Etusivulla näet perustietoja sivusta ja käyttäjät, jotka eivät ole vielä arvioineet pelejä. Kirjautuneille on näkyvillä myös lista peleistä, joita he eivät ole arvioineet; listasta voi siirtyä suoraan pelin sivulle. Yläpalkki pysyy pääpiirteiltään samanlaisena kaikkialla sivustossa. Vasemmanpuolimmaista "Peliloki"-tekstiä painamalla pääset aina palaamaan etusivulle. 
+Halutessasi rekisteröityä paina oikealta ylhäältä "rekisteröidy", täytä tietosi ja valitse "Rekisteröidy". Nyt käytössäsi on kirjautumismahdollisuus, jota voit hyödyntää painamalla yläpalkin oikeammaisinta linkkiä, "Kirjaudu".  
+
+Ilmankin kirjautumista pystyy selaamaan tietokannan tietoja. Valitsemalla yläpalkista "Genret" saa näkyviin lisätyt genret ja niihin liittyvien pelien lukumäärät. Jos olet kirjautunut admin-tunnuksella, pystyt samalta sivulta myös lisäämään uuden genren. Klikkaamalla genreä saat näkyviin sivun, jolla on lueteltu kaikki kyseisen genren pelit. Pelistä on lueteltu perustiedot ja lisäksi sen arvioiden lukumäärä ja keskiarvo.  
+Hyvin samanlaisen näkymän saa painamalla yläpalkin "Kaikki pelit"-linkkiä; samat tiedot näytetään vain kaikista peleistä, eikä ainoastaan yhden genren. Kummasta tahansa listauksesta voi klikata pelin nimeä, jolloin pääsee kyseisen pelin omalle sivulle. Siellä näytetään pidempi kuvaus ja kaikki pelin arviot. Rekisteröityneet käyttäjät voivat tykätä tai olla pitämättä muiden arvioisa, ja kaikille sivun vierailijoille näytetään tiedot arvion saamista reaktioista arvion yhteydessä.  
+
+Rekisteröityneet käyttäjät pystyvät pelin omalla sivulla reagoimaan arvioihin painamalla taulukossa oikealla olevaa "tykkään"/"en tykkää"-painiketta. Reagointimahdollisuus poistuu yhden kerran jälkeen. He voivat myös kirjoittaa oman arvostelun painamalla pelin tietojen oikealla puolella olevaa arviointinäppäintä. Arvio kirjoitetaan omalla sivullaan, ja se koostuu tekstistä ja numeroarviosta 1-10. Arvion kirjoittamisen jälkeen käyttäjä palautetaan arviota koskeneen pelin omalle sivulle. Arvion yhteydessä näkyy muokkauslinkki sen kirjoittajalle tunnin verran kirjoittamisen jälkeen. Myös admineilla on mahdollisuus muokkaamiseen. 
+
+Kirjautuneet käyttäjät näkevät yläpalkissa uuden linkin, "Lisää peli". Sen painaminen johtaa erilliselle lomakesivulle jossa täydennetään pelin perustiedot. Samassa yhteydessä on mahdollista valita genret, joihin peli kuuluu. Kun uuden pelin on kerran lisännyt, eivät sitä pysty muokkaamaan kuin adminit, joille pelin sivulla näkyy sen tietojen vieressä muokkausnappula. He pystyvät muokkaamaan kaikkia pelin tietoja, joita sivuston kautta voi tarkastella. 
