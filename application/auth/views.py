@@ -34,7 +34,6 @@ def auth_login():
 def auth_logout():
     logout_user()
     next = request.args.get("next_path")
-    print(next)
     if next: 
         return redirect(next)
 

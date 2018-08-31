@@ -1,30 +1,68 @@
-{% extends "layout.html" %}
-
-{% block body %}
+{% extends "layout.html" %} {% block body %}
 
 <h1>{{ title }}</h1>
 
 <table class="table table-responsive table-striped">
     <thead class="thead-dark">
-    <tr>
-        <th scope="col">Peli</th>
-        <th scope="col">Kehittäjä</th>
-        <th scope="col">Julkaisuvuosi</th>
-        <th scope="col">Arvioiden lukumäärä</th>
-        <th scope="col">Arvioiden keskiarvo</th>
-    </tr>
+        <tr>
+            <th scope="col">
+                Peli
+                <div class="btn-group" role="group" aria-label="Järjestyssuunnan valinta">
+                    <a href="{{base_url}}/{{page_number}}?sort_column=1&sort_direction=DESC"><button type="button"
+                            class="btn btn-secondary btn-sm">L</button></a>
+                    <a href="{{base_url}}/{{page_number}}?sort_column=1&sort_direction=ASC"><button type="button" class="btn btn-secondary btn-sm">N</button></a>
+                </div>
+            </th>
+            <th scope="col">
+                Kehittäjä
+                <div class="btn-group" role="group" aria-label="Järjestyssuunnan valinta">
+                    <a href="{{base_url}}/{{page_number}}?sort_column=2&sort_direction=DESC"><button type="button"
+                            class="btn btn-secondary btn-sm">L</button></a>
+                    <a href="{{base_url}}/{{page_number}}?sort_column=2&sort_direction=ASC"><button type="button" class="btn btn-secondary btn-sm">N</button></a>
+                </div>
+            </th>
+
+            <th scope="col">
+                Julkaisuvuosi
+                <div class="btn-group" role="group" aria-label="Järjestyssuunnan valinta">
+                    <a href="{{base_url}}/{{page_number}}?sort_column=3&sort_direction=DESC"><button type="button"
+                            class="btn btn-secondary btn-sm">L</button></a>
+                    <a href="{{base_url}}/{{page_number}}?sort_column=3&sort_direction=ASC"><button type="button" class="btn btn-secondary btn-sm">N</button></a>
+                </div>
+            </th>
+
+            <th scope="col">
+                Arvioiden lukumäärä
+                <div class="btn-group" role="group" aria-label="Järjestyssuunnan valinta">
+                    <a href="{{base_url}}/{{page_number}}?sort_column=4&sort_direction=DESC"><button type="button"
+                            class="btn btn-secondary btn-sm">L</button></a>
+                    <a href="{{base_url}}/{{page_number}}?sort_column=4&sort_direction=ASC"><button type="button" class="btn btn-secondary btn-sm">N</button></a>
+                </div>
+            </th>
+
+            <th scope="col">
+                Arvioiden keskiarvo
+                <div class="btn-group" role="group" aria-label="Järjestyssuunnan valinta">
+                    <a href="{{base_url}}/{{page_number}}?sort_column=5&sort_direction=DESC"><button type="button"
+                            class="btn btn-secondary btn-sm">L</button></a>
+                    <a href="{{base_url}}/{{page_number}}?sort_column=5&sort_direction=ASC"><button type="button" class="btn btn-secondary btn-sm">N</button></a>
+                </div>
+            </th>
+
+        </tr>
     </thead>
     <tbody>
-    
-    {% for game_info in games_info %}
-    <tr>
-        <td><a style="white-space: pre-wrap; word-wrap: break-word" href="{{ url_for('games_view', game_id=game_info['id']) }}">{{ game_info['name'] }}</a></td>
-        <td style="word-wrap: break-word;">{{ game_info['developer'] }}</td>
-        <td>{{ game_info['year'] }}</td>
-        <td>{{ game_info['number_of_reviews'] }}</td>
-        <td>{{ game_info['average_of_reviews'] }}</td>
-    </tr>
-    {% endfor %}
+
+        {% for game_info in games_info %}
+        <tr>
+            <td><a style="white-space: pre-wrap; word-wrap: break-word" href="{{ url_for('games_view', game_id=game_info['id']) }}">{{
+                    game_info['name'] }}</a></td>
+            <td style="word-wrap: break-word;">{{ game_info['developer'] }}</td>
+            <td>{{ game_info['year'] }}</td>
+            <td>{{ game_info['number_of_reviews'] }}</td>
+            <td>{{ game_info['average_of_reviews'] }}</td>
+        </tr>
+        {% endfor %}
     </tbody>
 
 </table>
@@ -32,30 +70,25 @@
 
 <div class="btn-group" role="group" aria-label="Search results navigation">
 
-  
-  <a href="{{ base_url}}/1" >
-  <button type="button" class="btn btn-secondary">Ensimmäinen</button>
-  </a>
- 
 
-  {% if page_number > 1 %}   
-  <a href="{{ base_url }}/{{ page_number - 1}}">
-  <button type="button" class="btn btn-secondary">{{ page_number - 1 }}</button>
-  </a>
-  {% endif %}
+    <a href="{{ base_url}}/1?sort_column={{sort_column}}&sort_direction={{sort_direction}}">
+        <button type="button" class="btn btn-secondary">Ensimmäinen</button>
+    </a>
 
 
-  {% if games_info|length > 0 %}
+    {% if page_number > 1 %}
+    <a href="{{ base_url }}/{{ page_number - 1}}?sort_column={{sort_column}}&sort_direction={{sort_direction}}">
+        <button type="button" class="btn btn-secondary">{{ page_number - 1 }}</button>
+    </a>
+    {% endif %} {% if games_info|length > 0 %}
 
-  <a href="{{base_url}}/{{page_number}}">
-  <button type="button" class="btn btn-outline-secondary">{{ page_number }}</button>
-  </a>
-  {% endif %}
-
-{% if not last_page %}
-    <a href="{{ base_url }}/{{ page_number + 1}}">
-  <button type="button" class="btn btn-secondary">{{ page_number + 1}}</button>
-{% endif %}
+    <a href="{{base_url}}/{{page_number}}?sort_column={{sort_column}}&sort_direction={{sort_direction}}">
+        <button type="button" class="btn btn-outline-secondary">{{ page_number }}</button>
+    </a>
+    {% endif %} {% if not last_page %}
+    <a href="{{ base_url }}/{{ page_number + 1}}?sort_column={{sort_column}}&sort_direction={{sort_direction}}">
+        <button type="button" class="btn btn-secondary">{{ page_number + 1}}</button>
+        {% endif %}
 
 
 </div>

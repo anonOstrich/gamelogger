@@ -8,7 +8,7 @@ from application.reviews.models import Review
 from application.reactions.models import Reaction
 from application.reactions.forms import ReactionForm
 from application.constants import MAXIMUM_LENGTH_OF_LISTED_TITLE, GAME_RESULTS_PER_PAGE
-from application.utilities import shorten_if_longer_than, format_average
+from application.utilities import shorten_if_longer_than, format_average, parse_to_int
 from application.genres.models import Genre, GameGenre
 from application.genres.forms import GenreSelectionForm
 
@@ -24,15 +24,31 @@ def games_form():
 
 
 @app.route("/games/", methods=["GET"])
-@app.route("/games/page/<page_number>")
-def games_index(page_number = 1): 
+@app.route("/games/page/<page_number>", methods=["GET"])
+def games_index(page_number = 1, sort_column = 0, sort_direction = "ASC" ): 
+    columns = ["Game.id", "Game.name", "Game.developer", "Game.year", "COUNT(Review.points)", "AVG(Review.points)"]
+    possible_sort_column  = request.args.get("sort_column")
+    possible_sort_direction = request.args.get("sort_direction")
+    
+    if possible_sort_column: 
+        sort_column = possible_sort_column
+    if possible_sort_direction: 
+        sort_direction = possible_sort_direction
+
+    sort_column = parse_to_int(sort_column)
+    page_number = parse_to_int(page_number)
+    if not(page_number is not None and sort_column is not None and sort_direction in ["ASC", "DESC"]):
+        return render_template("error.html", error = "Yrität antaa vääränlaisia parametreja")
 
 
-    games_info = Game.find_all_info(page_number = int(page_number))
+    games_info = Game.find_all_info_sorted(page_number = page_number, order_column = columns[sort_column], 
+    order_direction = sort_direction)
+
     base_url = "/games/page"
     
     return render_template("games/list.html", games_info = games_info, title="Kaikki pelit",
-     page_number = int(page_number), last_page = len(games_info) < GAME_RESULTS_PER_PAGE, base_url = base_url)
+     page_number = page_number, last_page = len(games_info) < GAME_RESULTS_PER_PAGE, base_url = base_url, 
+     sort_column = sort_column, sort_direction = sort_direction)
 
 
 @app.route("/games/", methods=["POST"])

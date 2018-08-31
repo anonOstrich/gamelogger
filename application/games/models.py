@@ -71,20 +71,13 @@ class Game(Base):
 
 
 
-    @staticmethod
-    def find_all_unreviewed_games(user_id):
-        stmt = text("SELECT DISTINCT Game.id, Game.name FROM Game"
-                    " WHERE Game.id NOT IN (SELECT Game.id FROM Game JOIN Review ON Game.id = Review.game_id"
-                    " WHERE Review.account_id = :user_id); "
-                    ).params(user_id=user_id)
-
-        res = db.engine.execute(stmt)
-        return [{"id": row[0], "name":row[1]} for row in res]
-
     # dictionary with keyes being strings, e.g. "min_year":2000
 
+ 
+
+
     @staticmethod
-    def find_all_info(parameters={}, page_number = 1):
+    def construct_string_query(parameters = {}):
         name_query = ""
         if "name" in parameters:
             # || on tapa liittää merkkijonoja yhteen sqlitessä ja postgresql:ssä
@@ -92,8 +85,8 @@ class Game(Base):
 
         year_query = ""
         if "min_year" in parameters or "max_year" in parameters:
-            first = ":min_year" if parameters["min_year"] else 0
-            last = ":max_year" if parameters["max_year"] else 3000
+            first = ":min_year" if "min_year" in parameters else 0
+            last = ":max_year" if "max_year" in parameters else 3000
             year_query = "Game.year BETWEEN " + \
                 str(first) + "  AND " + str(last)
 
@@ -165,10 +158,6 @@ class Game(Base):
             parameters.update({"number_of_tags": len(parameters["tags"])})
 
 
-        
-
-
-
         where_filters = [name_query, year_query, developer_query, genre_where_query, tag_where_query]
         where_filters = [q for q in where_filters if q != ""]
         having_filters = [average_query, count_query, genre_having_query, tag_having_query]
@@ -201,8 +190,15 @@ class Game(Base):
             query = query + " AND ".join(having_filters)
             query = query + ")"
 
-        query = query + " ORDER BY Game.name"
-        res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number)
+
+        return query
+
+    @staticmethod
+    def find_all_info(parameters={}, page_number = 1):
+        query = Game.construct_string_query(parameters)
+
+        res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number, 
+        order_column="Game.name", order_direction="ASC")
 
         games_info = []
 
@@ -213,6 +209,32 @@ class Game(Base):
             games_info.append(game_info)
 
         return games_info
+
+    @staticmethod
+    def find_all_info_sorted(parameters = {}, page_number = 1, order_column="Game.name", order_direction = "ASC"):
+        query  = Game.construct_string_query(parameters)
+        res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number, 
+        order_column = order_column, order_direction = order_direction)
+
+        games_info = []
+        for row in res:
+            game_info = {}
+            game_info.update({"id": row[0], "name": shorten_if_longer_than(row[1]), "year": row[2], "developer": shorten_if_longer_than(row[3], max=20),
+                              "number_of_reviews": row[4], "average_of_reviews": format_average(row[5])})
+            games_info.append(game_info)
+
+        return games_info
+
+
+    @staticmethod
+    def find_all_unreviewed_games(user_id):
+        stmt = text("SELECT DISTINCT Game.id, Game.name FROM Game"
+                    " WHERE Game.id NOT IN (SELECT Game.id FROM Game JOIN Review ON Game.id = Review.game_id"
+                    " WHERE Review.account_id = :user_id); "
+                    ).params(user_id=user_id)
+
+        res = db.engine.execute(stmt)
+        return [{"id": row[0], "name":row[1]} for row in res]
 
 
     @staticmethod

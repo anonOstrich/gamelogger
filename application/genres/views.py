@@ -5,6 +5,7 @@ from application.genres.models import Genre, GameGenre
 from application.genres.forms import GenreCreationForm
 from application.games.models import Game
 from application.constants import GAME_RESULTS_PER_PAGE
+from application.utilities import parse_to_int
 
 @app.route("/genres", methods = ["GET"])
 def genres_index(page_number = 1): 
@@ -32,15 +33,30 @@ def genres_create():
 # Näkymä kaikille yhden genren peleille
 @app.route("/genres/<genre_id>", methods=["GET"])
 @app.route("/genres/<genre_id>/page/<page_number>", methods=["GET"])
-def genres_view(genre_id, page_number = 1): 
+def genres_view(genre_id, page_number = 1, sort_column = 0, sort_direction = "ASC"): 
     genre = Genre.query.filter_by(id=genre_id).first()
-
-
     if genre is None: 
         return render_template("error.html", error = "Genreä ei ole olemassa")
 
-    games_info = Game.find_all_info({"genres": [genre.id]}, page_number = int(page_number))
+    columns = ["Game.id", "Game.name", "Game.developer", "Game.year", "COUNT(Review.points)", "AVG(Review.points)"]
+    possible_sort_column  = request.args.get("sort_column")
+    possible_sort_direction = request.args.get("sort_direction")
+    
+    if possible_sort_column: 
+        sort_column = possible_sort_column
+    if possible_sort_direction: 
+        sort_direction = possible_sort_direction
+
+    sort_column = parse_to_int(sort_column)
+    page_number = parse_to_int(page_number)
+    if not(page_number is not None and sort_column is not None and sort_direction in ["ASC", "DESC"]):
+        return render_template("error.html", error = "Yrität antaa vääränlaisia parametreja")
+
+
+    games_info = Game.find_all_info_sorted({"genres": [genre.id]}, page_number = page_number, 
+    order_column = columns[sort_column], order_direction = sort_direction)
     base_url = "/genres/" + str(genre_id) + "/page"
     
     return render_template("games/list.html", games_info = games_info, title = ("Genre: " + genre.name),
-     page_number = int(page_number), last_page = len(games_info) < GAME_RESULTS_PER_PAGE,  base_url = base_url)
+     page_number = page_number, last_page = len(games_info) < GAME_RESULTS_PER_PAGE,  base_url = base_url
+     , sort_column = sort_column, sort_direction = sort_direction)
