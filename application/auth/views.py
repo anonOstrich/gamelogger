@@ -36,6 +36,7 @@ def auth_logout():
     logout_user()
     next = request.args.get("next_path")
     if next: 
+        # ohjataan sinne mistä klikattiin "logout"
         return redirect(next)
 
     return redirect(url_for("index"))
@@ -68,7 +69,6 @@ def auth_register():
 
 @app.route("/users/")
 def users_index():
-
     return render_template("/auth/list.html", users = User.query.all())
 
 @app.route("/users/<user_id>")

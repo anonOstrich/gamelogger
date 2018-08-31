@@ -87,8 +87,7 @@ class User(Base):
     def tags(self):
         return Tag.query.filter_by(account_id = self.id).all()
         
-    # metodit joilla selvitetään käyttäjän toimintaa sovelluksessa     
-    #        
+    # metodit joilla selvitetään käyttäjän toimintaa sovelluksessa      
     def has_reviewed(self, game):
         return Review.query.filter_by(account_id=self.id, game_id=game.id).first() is not None
         
@@ -106,21 +105,7 @@ class User(Base):
         now = datetime.utcnow()
         too_late = review.date_created + timedelta(minutes=constants.EDITING_TIME_LIMIT)
         return now < too_late
-
-    
-
-    @staticmethod
-    def find_users_with_no_reviews():
-        stmt = text("SELECT Account.username FROM Account"
-                    " WHERE Account.id NOT IN (SELECT DISTINCT Review.account_id FROM Review);")
-
-        res = db.engine.execute(stmt)
-        users = list(map(lambda row: {"username": row[0]}, res))
-        return users
-
-    @staticmethod 
-    def user_exists_with_username(username):
-        return User.query.filter_by(username=username).first() is not None    
+   
 
 
 class UserRole(Base):

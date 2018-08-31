@@ -37,7 +37,6 @@ class Game(Base):
         return None
 
     def update_genres(self, genre_ids):
-        # voisiko tehdä vähemmällä tietokannan käytöllä kuin poistamalla aina kaikki?
         GameGenre.query.filter(GameGenre.game_id == self.id).delete()
         db.session.commit()
         self.add_genres(genre_ids)
@@ -71,17 +70,20 @@ class Game(Base):
 
 
 
-    # dictionary with keyes being strings, e.g. "min_year":2000
-
- 
-
-
+    # Muodostaa kyselyn, mahdollisina rajauksina kaikki dictionaryssa annetut ehdot
+    # palautus on pythonin merkkijono, joihin on merkattu muuttujakohdat :muuttuja
+    # Myös dictionaryyn on saatettu tehdä lisäyksiä, jotta tiettyjen muuttujien kohdalle sijoitetaan sopivat arvot
     @staticmethod
     def construct_string_query(parameters = {}):
+
+        # Ensin määritellään parametrien velvoittavat pienet osat, jotka tulevat osaksi kyselyä
+        # Jos jokin parametri puuttuu kyselystä, sen osat kyselystä ovat tyhjää merkkijonoa
+
         name_query = ""
         if "name" in parameters:
-            # || on tapa liittää merkkijonoja yhteen sqlitessä ja postgresql:ssä
+            parameters["name"] = parameters["name"].lower()
             name_query = "LOWER(Game.name) LIKE '%' || :name ||'%'"
+
 
         year_query = ""
         if "min_year" in parameters or "max_year" in parameters:
@@ -92,10 +94,8 @@ class Game(Base):
 
         developer_query = ""
         if "developer" in parameters:
-
-            # Voidaan vaihtaa: LIKE, jolloin ei tarvitse tästämä täysin 
-            # ja lowercase, jolloin kirjotusasulla ei väliä
-            developer_query = "Game.developer LIKE :developer "
+            parameters["developer"] = parameters["developer"].lower()
+            developer_query = "LOWER(Game.developer) LIKE '%' || :developer  || '%' "
 
     
 
@@ -103,6 +103,7 @@ class Game(Base):
         if "min_average" in parameters or "max_average" in parameters:
             lowest_average = ":min_average" if "min_average" in parameters else 0
             highest_average = ":max_average" if "max_average" in parameters else 10
+            # jos ei vaadittu minimiä, käyvät myös pelit ilman arvioita
             no_average_addendum = "" if "min_average" in parameters else " OR AVG(Review.points) IS NULL"
             average_query = "AVG(Review.points) BETWEEN " + str(lowest_average) + \
                 " AND " + str(highest_average) + no_average_addendum
@@ -110,7 +111,7 @@ class Game(Base):
         count_query = ""
         if "min_count" in parameters or "max_count" in parameters:
             lowest_count = ":min_count" if "min_count" in parameters else 0
-            # ainakin postgreSQL:n integerin suurin arvo. Jos missään tulee vastaan niin herokussa, jossa ko tkhj käytössä
+            # ainakin postgreSQL:n integerin suurin arvo. Jos missään tulee vastaan niin herokussa, jossa se käytössä
             highest_count = ":max_count" if "max_count" in parameters else 2147483647
             no_count_addendum = "" if "min_count" in parameters else " OR COUNT(Review.points) IS NULL"
             count_query = "COUNT(Review.points) BETWEEN " + str(lowest_count) + \
@@ -129,13 +130,13 @@ class Game(Base):
                 genre_parameter_names.append(":genre_id" + str(genre_id))
                 parameters.update({"genre_id" + str(genre_id): genre_id})
             
-            genre_where_query = genre_where_query + ", ".join(genre_parameter_names)
-            genre_where_query  = genre_where_query + " ) "
+            genre_where_query += ", ".join(genre_parameter_names)
+            genre_where_query  +=  " ) "
 
 
         genre_having_query = ""
         if "genres" in parameters:
-            genre_having_query = genre_having_query + " COUNT(Game_genre.id) >= :number_of_genres"
+            genre_having_query +=  " COUNT(Game_genre.id) >= :number_of_genres"
             parameters.update({"number_of_genres": len(parameters["genres"])})
 
 
@@ -148,58 +149,58 @@ class Game(Base):
                 tag_parameter_names.append(":tag_id" + str(tag_id))
                 parameters.update({"tag_id" + str(tag_id): tag_id})
 
-            tag_where_query = tag_where_query + ", ".join(tag_parameter_names) + ") "
+            tag_where_query +=  ", ".join(tag_parameter_names) + ") "
 
  
         
         tag_having_query = ""
         if "tags" in parameters:
-            tag_having_query = tag_having_query + " COUNT(Game_tag.id) >= :number_of_tags"
+            tag_having_query += " COUNT(Game_tag.id) >= :number_of_tags"
             parameters.update({"number_of_tags": len(parameters["tags"])})
 
 
         where_filters = [name_query, year_query, developer_query, genre_where_query, tag_where_query]
-        where_filters = [q for q in where_filters if q != ""]
+        where_filters = [w_filter for w_filter in where_filters if w_filter != ""]
+
         having_filters = [average_query, count_query, genre_having_query, tag_having_query]
-        having_filters = [q for q in having_filters if q != ""]
+        having_filters = [h_filter for h_filter in having_filters if h_filter != ""]
+
+
+
+        # Seuraavaksi varsinainen SQL-kyselyn muotoilu
 
         query = "SELECT Game.id, Game.name, Game.year, Game.developer, COUNT(Review.points), AVG(Review.points)"
 
         if "genres" in parameters:
-            query = query + ", COUNT(Game_Genre.id)"
+            query += ", COUNT(Game_Genre.id)"
 
         if "tags"in parameters:
-            query = query + ", COUNT(Game_Tag.id)"
+            query += ", COUNT(Game_Tag.id)"
 
-        query = query + " From Game LEFT JOIN Review ON Game.id=Review.game_id "
+        query += " From Game LEFT JOIN Review ON Game.id=Review.game_id "
         
         if "genres" in parameters:
-            query = query +  "LEFT JOIN Game_genre ON Game_genre.game_id=Game.id "
+            query +=  "LEFT JOIN Game_genre ON Game_genre.game_id=Game.id "
         if "tags" in parameters:
-            query = query + " LEFT JOIN Game_tag ON Game_tag.game_id = Game.id "
+            query += " LEFT JOIN Game_tag ON Game_tag.game_id = Game.id "
 
         if len("".join(where_filters)) > 0:
-            query = query + " WHERE ("
-            query = query + " AND ".join(where_filters)
-            query = query + ") "
+            query += " WHERE ("
+            query += " AND ".join(where_filters)
+            query +=  ") "
 
-        query = query + " GROUP BY Game.id "
+        query +=  " GROUP BY Game.id "
 
         if len("".join(having_filters)) > 0:
-            query = query + "HAVING ("
-            query = query + " AND ".join(having_filters)
-            query = query + ")"
-
-
+            query +=  "HAVING ("
+            query +=  " AND ".join(having_filters)
+            query +=  ")"
         return query
 
-    @staticmethod
-    def find_all_info(parameters={}, page_number = 1):
-        return Game.find_all_info_sorted(parameters = parameters, 
-        page_number = page_number)
 
+    
     @staticmethod
-    def find_all_info_sorted(parameters = {}, page_number = 1, order_column="Game.name", order_direction = "ASC"):
+    def find_all_info(parameters = {}, page_number = 1, order_column="Game.name", order_direction = "ASC"):
         query  = Game.construct_string_query(parameters)
 
         res = page_query(query, parameters, limit = GAME_RESULTS_PER_PAGE, page_number = page_number, 
@@ -227,7 +228,7 @@ class Game(Base):
 
 
     @staticmethod
-    def find_general_details(): 
+    def find_total_numbers_of_games_and_reviews(): 
         stmt = text("SELECT COUNT(Game.id), COUNT(Review.id) FROM Game LEFT JOIN Review ON Game.id = Review.game_id;")
         res = db.engine.execute(stmt)
         for row in res: 
@@ -253,3 +254,11 @@ class Game(Base):
             top_info.append(game_info)
         return top_info 
 
+
+    @staticmethod
+    def find_general_details(): 
+        stmt = text("SELECT COUNT(Game.id), COUNT(Review.id) FROM Game LEFT JOIN Review ON Game.id = Review.game_id;")
+        res = db.engine.execute(stmt)
+        for row in res: 
+            return [row[0], row[1]]
+        return None

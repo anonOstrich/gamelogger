@@ -48,7 +48,7 @@ def genres_modify(genre_id):
     
     genre.name = form.name.data
     db.session.commit()
-    return redirec(url_for("genres_index"))
+    return redirect(url_for("genres_index"))
 
 @app.route("/genres/<genre_id>/delete")
 @login_required("ADMIN")
@@ -81,11 +81,11 @@ def genres_view(genre_id, page_number = 1, sort_column = 0, sort_direction = "AS
 
     sort_column = parse_to_int(sort_column)
     page_number = parse_to_int(page_number)
-    if not(page_number is not None and sort_column is not None and sort_direction in ["ASC", "DESC"]):
+    if page_number is None or sort_column is None or sort_direction not in ["ASC", "DESC"]:
         return render_template("error.html", error = "Yrität antaa vääränlaisia parametreja")
 
 
-    games_info = Game.find_all_info_sorted({"genres": [genre.id]}, page_number = page_number, 
+    games_info = Game.find_all_info({"genres": [genre.id]}, page_number = page_number, 
     order_column = columns[sort_column], order_direction = sort_direction)
     base_url = "/genres/" + str(genre_id) + "/page"
     

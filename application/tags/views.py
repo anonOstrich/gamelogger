@@ -103,7 +103,7 @@ def tag_games(tag_id, page_number = 1, sort_column = 0, sort_direction="ASC"):
 
 
 
-    games_info = Game.find_all_info_sorted({"tags": [int(tag_id)]}, page_number = page_number,
+    games_info = Game.find_all_info({"tags": [int(tag_id)]}, page_number = page_number,
         order_column = columns[sort_column], order_direction = sort_direction
     )
 

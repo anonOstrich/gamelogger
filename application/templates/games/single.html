@@ -124,7 +124,7 @@ Ei arvosteluja. {% if current_user.is_authenticated %}Ole ensimmäinen!{% endif 
                 <td>
 
                     {% if reactions[review.id] is defined %}
-                    <p
+                    <p>
                     <span class="text-success">+{{ reactions[review.id][0] }}</span>/
                      <span class="text-danger">-{{ reactions[review.id][1] }}</span>
                         </p>
@@ -147,7 +147,7 @@ Ei arvosteluja. {% if current_user.is_authenticated %}Ole ensimmäinen!{% endif 
                         {% for subfield in form.positivity %}
 
                         <div class="form-group">
-                            <button type="submit" class="btn btn-{{["danger ", "success "][subfield.data] }}" value="{{ subfield.data }}" name="{{ subfield.name }}">
+                            <button type="submit" class="btn btn-{{['danger ', 'success '][subfield.data] }}" value="{{ subfield.data }}" name="{{ subfield.name }}">
                                 {{ subfield.label.text }}
                             </button>
                         </div>

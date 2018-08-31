@@ -38,11 +38,11 @@ def games_index(page_number = 1, sort_column = 0, sort_direction = "ASC" ):
 
     sort_column = parse_to_int(sort_column)
     page_number = parse_to_int(page_number)
-    if not(page_number is not None and sort_column is not None and sort_direction in ["ASC", "DESC"]):
+    if page_number is None or sort_column is None or sort_direction not in ["ASC", "DESC"]:
         return render_template("error.html", error = "Yrität antaa vääränlaisia parametreja")
 
 
-    games_info = Game.find_all_info_sorted(page_number = page_number, order_column = columns[sort_column], 
+    games_info = Game.find_all_info(page_number = page_number, order_column = columns[sort_column], 
     order_direction = sort_direction)
 
     base_url = "/games/page"
