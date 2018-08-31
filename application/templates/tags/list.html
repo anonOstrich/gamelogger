@@ -21,7 +21,7 @@
                 </li>
 
 
-   {% if current_user.is_authenticated and current_user.id == tag_owner.id %}
+   {% if current_user.is_authenticated and (current_user.id == tag_owner.id or current_user.has_role("ADMIN")) %}
         <form method="POST" action = "{{ url_for('tags_delete', tag_id = tag.id) }}">
                 <button type="submit" class="btn btn-danger">X</button>
         </form>
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-   {% if current_user.is_authenticated and current_user.id == tag_owner.id %}
+   {% if current_user.is_authenticated and (current_user.id == tag_owner.id or current_user.has_role("ADMIN")) %}
     <div class="row">
         <div class="col">
             {{ error }}

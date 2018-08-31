@@ -4,8 +4,9 @@ from flask_login import login_user, logout_user, current_user
 from application import app, db, bcrypt, login_required
 from application.auth.models import Role, User, UserRole
 from application.auth.forms import LoginForm, RegisterForm, DescriptionForm
-from application.tags.models import Tag 
+from application.tags.models import Tag, GameTag
 from application.reviews.models import Review
+from application.reactions.models import Reaction
 
 @app.route("/auth/login/", methods = ["GET", "POST"])
 def auth_login(): 
@@ -85,19 +86,22 @@ def users_view(user_id):
 
 
 
-
-
-
-@app.route("/users/modify", methods=["GET", "POST"])
+@app.route("/users/<user_id>/modify", methods=["GET", "POST"])
 @login_required()
-def users_modify(): 
+def users_modify(user_id): 
+    user = User.query.get(user_id)
+    if not user: 
+        return render_template("error.html", error = "Käyttäjää ei ole olemassa")
+
+    if current_user.id != user_id and not current_user.has_role("ADMIN"): 
+        return render_template("error.html", error = "Sinulla ei ole oikeuksia muokata käyttäjän kuvausta")   
     if request.method == "GET":
         form = DescriptionForm()
-        form.description.data = current_user.description
-        return render_template("auth/single.html", form=form, user=current_user)
+        form.description.data = user.description
+        return render_template("auth/modify.html", form=form, user=user )
     form = DescriptionForm(request.form)
     if not form.validate():
-        return render_template("auth/single.html", form=form, user=current_user)
-    current_user.description = form.description.data
+        return render_template("auth/modify.html", form=form, user=user)
+    user.description = form.description.data
     db.session.commit()
-    return redirect(url_for("users_view", user_id=current_user.id))
+    return redirect(url_for("users_view", user_id=user.id))

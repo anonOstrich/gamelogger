@@ -24,7 +24,7 @@ def tags_create(user_id):
 
     if not user: 
         return render_template("error.html", error ="Käyttäjää ei  ole olemassa")
-    if current_user.id != user.id: 
+    if current_user.id != user.id and  not current_user.has_role("ADMIN"): 
         return render_template("error.html", error ="Sinulla ei ole oikeuksia lisätä tägejä toiselle käyttäjälle")  
 
     form = TagCreationForm(request.form)
@@ -66,13 +66,15 @@ def tags_delete(tag_id):
     tag = Tag.query.get(tag_id)
     if not tag: 
         return render_template("error.html", error = "Tagia ei ole olemassa")
-    if tag.account_id != current_user.id:
+    owner_id = tag.account_id
+    if owner_id != current_user.id and  not current_user.has_role("ADMIN"):
         return render_template("error.html", error = "Et voi poistaa toisen tagia")
+
     
     GameTag.query.filter(GameTag.tag_id==tag_id).delete()
     db.session.delete(tag)
     db.session.commit()
-    return redirect(url_for("tags_index", user_id=current_user.id))
+    return redirect(url_for("tags_index", user_id=owner_id))
 
 
 

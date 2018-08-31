@@ -5,9 +5,9 @@
 
 <h1>{{ user.username }}</h1>
 
-{% if current_user.is_authenticated %}
+{% if current_user.is_authenticated and ( current_user.id == user.id or current_user.has_role("ADMIN")) %}
 {% if form  %}
-<form method="POST" action="{{ url_for('users_modify')}}">
+<form method="POST" action="{{ url_for('users_modify', user_id = user.id)}}">
     <div class="form-group">
         {{ form.description(class="form-control") }}
     </div>
@@ -15,8 +15,9 @@
 </form>
 {% else %}
 <p style="white-space: pre-wrap; word-wrap: break-word;">{{user.description}}</p>
-<a href="{{ url_for('users_modify') }}" class="btn btn-secondary">Muokkaa kuvausta</a>
+<a href="{{ url_for('users_modify', user_id = user.id) }}" class="btn btn-secondary">Muokkaa kuvausta</a>
 {% endif %}
+
 {% else  %}
 <p style="white-space: pre-wrap; word-wrap: break-word;">{{user.description}}</p>
 {% endif%}
@@ -61,6 +62,7 @@ Käyttäjä ei ole arvioita
         
     {% endfor %}
     </div>
+    <a href="{{url_for('tags_index', user_id = user.id)}}"><button type="button" class="btn btn-secondary">Näytä kaikki tagit</button></a>
 
     {% else %}
 Käyttäjällä ei ole tageja
