@@ -4,6 +4,7 @@ from flask_login import current_user
 from application import app, db, login_required
 from application.games.models import Game
 from application.games.forms import GameForm
+from application.tags.models import GameTag
 from application.reviews.models import Review
 from application.reactions.models import Reaction
 from application.reactions.forms import ReactionForm
@@ -131,6 +132,9 @@ def games_delete(game_id):
 
     # poistetaan vain liitostaulun turhat tiedot, mutta genre jää
     GameGenre.query.filter(GameGenre.game_id == game_id).delete()
+    # Sama tageille
+    GameTag.query.filter(GameTag.game_id == game_id).delete()
+
     db.session.delete(poistettava)
     db.session.commit()
     return redirect(url_for("games_index")) 
